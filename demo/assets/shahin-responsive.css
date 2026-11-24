@@ -1,0 +1,62 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SHAHIN Wireframe Design System — Global Responsive Layer
+   Loaded AFTER shahin-components.css on every page. Pairs with
+   /assets/shahin-responsive.js (grid auto-collapse + ECharts resize; the
+   nav drawer moved to shahin-nav.js). Tokens only — no hardcoded colors.
+   Breakpoints: 1180 laptop · 1099 tablet · 767 mobile (nav drawer) · 520 small
+   — the nav breakpoints come from the design team's delivery; the drawer
+   itself lives in the GLOBAL SHELL section of shahin-components.css.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── always-on safety ── */
+.sh-table-wrap{overflow-x:auto}
+.sh-content img,.sh-content video{max-width:100%}
+
+/* hamburger (injected by shahin-nav.js, hidden on desktop; the drawer it
+   opens is styled in the GLOBAL SHELL section of shahin-components.css) */
+.sh-navburger{display:none;border:1px solid var(--sh-border);background:var(--sh-surface);
+  color:var(--sh-text);width:38px;height:38px;border-radius:10px;cursor:pointer;
+  align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.sh-navburger:hover{background:var(--sh-surface-2)}
+.sh-navburger svg{width:20px;height:20px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round}
+
+/* ── laptop ── */
+@media (max-width:1180px){
+  .sh-content{padding:16px}
+}
+
+/* ── tablet / mobile chrome ──
+   The nav drawer itself now lives in the GLOBAL SHELL section of
+   shahin-components.css (design-team delivery, mobile variant B: the
+   hamburger slides the whole .sh-railwrap in). Breakpoints there are the
+   delivery's — 1100 / 768 — so only page chrome is tuned here. */
+@media (max-width:1099px){
+  .sh-navburger{display:inline-flex}
+  .sh-topbar{flex-wrap:wrap;padding:8px 14px;row-gap:6px}
+  .sh-topbar-actions{flex-wrap:wrap;justify-content:flex-end}
+  .sh-versions{max-width:100%;overflow-x:auto}
+  .sh-content{padding:14px}
+  /* horizontal-overflow safety net — never on body/html (kills page scroll) */
+  .sh-main{overflow-x:clip}
+}
+
+/* ── mobile ── */
+@media (max-width:760px){
+  .sh-content{padding:12px;gap:12px}
+  .sh-page-title{font-size:14.5px}
+  .sh-crumb{font-size:10.5px}
+  .sh-filterbar{padding:8px 10px;gap:8px}
+  /* wide tables scroll inside their card instead of crushing columns */
+  .sh-table{min-width:560px}
+  .sh-grid.kpi{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .sh-story{flex-direction:row;padding:12px 14px}
+  .sh-charttable{grid-template-columns:1fr}
+}
+
+/* ── small phones ── */
+@media (max-width:520px){
+  .sh-panel{width:100vw;max-width:100vw}
+  .sh-topbar{padding:8px 10px}
+  .sh-content{padding:10px}
+}

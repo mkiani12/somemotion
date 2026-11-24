@@ -1,0 +1,133 @@
+# APPROVED 2026-10-29 (#61, #68–#72; engine-13.md). Video (pages/analytics/video.vue; FF_VIDEO_DASHBOARD). Data map VD-1…32;
+# wireframes video-dashboard v33–v36, events-video v3–v4, events-vod v3 (wireframe-inventory-g4.md). Every read is
+# content video from the TVideo* rollups (owner 2026-09-26). Search visibility (VD-4…6) is the SEO module's.
+
+query VideoSummary($p: ID!, $range: AnalyticsRangeInput!, $filters: [AnalyticsFilterInput!], $ctx: RequestContextInput) {
+  # hero, watch depth, funnel, playback health, ad KPIs (VD-1, 2, 7–11, 14, 17, 22; VW-41, 58–60, 76). Session-based
+  # completion (VW-28) is ÷ sessions with a play, not ÷ all sessions (decision #101 (issue #457)).
+  site: analyticsTraffic(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, compare: { mode: PREVIOUS_PERIOD } }) {
+    measures {
+      video {
+        videos impressionToPlayRate plays users avgCompletion avgWatchTimePerPlay avgDuration watchTime completionRate
+        sessionCompletionRate replayRate downloadRate progress25 progress50 progress75 completions stallRate errorRate
+        bufferRate exitBeforeStartRate rebufferRatio avgStartupTime adStarts adCompletionRate adSkipRate adDropOffRate
+      }
+    }
+    change { video { videos impressionToPlayRate avgCompletion avgWatchTimePerPlay watchTime completionRate stallRate errorRate adCompletionRate } }
+    freshness { hitsUntil }
+  }
+  # CLIENT RULE (engine-13.md N-1, team lead 2026-10-29): `site` and `sources` pass $filters, but several of their fields
+  # read rollups that hold no visit dimension (videos, progress, avgCompletion, avgDuration, downloadRate, rebufferRatio,
+  # avgStartupTime: video and page only; replayRate: video only; errorRate, exitBeforeStartRate, the ad fields and
+  # playbackCompletionRate: none or playback source only). Under any filter-bar filter (device, location, referrer, UTM,
+  # tag, playback source) the client drops those fields and hides their cards, so a filtered page never shows an
+  # unfiltered number; the server refuses them by name (`measure-not-available-for-dimension`).
+  # watch-time trend (VD-12) and buffer-rate trend (VW-42): video series are UTC days (ruling Q-P3)
+  trend: analyticsSeries(input: { projectId: $p, range: $range, filters: $filters, context: { timeZone: "UTC" }, granularity: DAY }) {
+    buckets { start end key }
+    series { values { video { avgWatchTimePerPlay playSessions bufferRate } } }
+  }
+  # how playback started (VD-13)
+  sources: analyticsVideos(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, limit: 10 }, groupBy: PLAYBACK_SOURCE) {
+    rows { key measures { video { plays playbackCompletionRate } } }
+  }
+  # completion by channel and by campaign, 100-play-session floor (VD-16, VW-37). sessionCompletionRate is sessions with a
+  # completion ÷ sessions WITH A PLAY (as legacy computes it), never ÷ all sessions: the card copy says "of the sessions
+  # that played a video" (decision #101 (issue #457)).
+  channels: analyticsReferrers(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, limit: 20,
+    sort: { measure: VIDEO_PLAY_SESSIONS, mode: DESC },
+    having: [{ measure: VIDEO_PLAY_SESSIONS, op: GTE, value: 100 }] }, groupBy: CHANNEL) {
+    rows { key measures { video { sessionCompletionRate playSessions } } }
+  }
+  campaigns: analyticsCampaigns(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, limit: 20,
+    having: [{ measure: VIDEO_PLAY_SESSIONS, op: GTE, value: 100 }] }, groupBy: [CAMPAIGN]) {
+    rows { utm { campaign } measures { video { sessionCompletionRate playSessions } } }
+  }
+  # renditions and automatic drops (VD-18, VD-19)
+  # CLIENT RULE (owner 2026-10-31, decision row l): `quality` returns the labels verbatim. The client removes the unknown
+  # renditions (`unknown`, `''`, `0p`) from the share base here and in VideoDetail's `quality`, so both cards share one rule
+  # (legacy kept them in this card's base and removed them in the panel's).
+  quality: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, limit: 20 }, groupBy: QUALITY) {
+    rows { key measures { video { watchTime downloads } } }
+  }
+  drops: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, limit: 20 }, groupBy: QUALITY_DROP) {
+    rows { key fromQuality toQuality measures { video { qualityDrops } } }
+  }
+  # ad breaks by position (VD-24)
+  adPositions: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, limit: 3 }, groupBy: AD_POSITION) {
+    rows { key measures { video { adStarts adCompletionRate adSkipRate adDropOffRate adClickRate } } }
+  }
+  # buffer rate by provider (VW-44)
+  providers: analyticsVideos(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, limit: 10,
+    having: [{ measure: VIDEO_PLAY_SESSIONS, op: GTE, value: 100 }] }, groupBy: ISP) {
+    rows { key measures { video { bufferRate playSessions } } }
+  }
+}
+
+# user environment: OS / browser / device / brand, versions, share change (VD-20, VD-21, VW-48). The share base is an
+# `analyticsTraffic` call of the same filters, not `summary.totals` (engine-13.md N-7, team lead 2026-10-29): the totals'
+# `video { … }` is six levels deep, past the depth limit (5, ADR-0049); the two are equal (readVideoBreakdown.test.ts).
+query VideoEnvironment($p: ID!, $range: AnalyticsRangeInput!, $filters: [AnalyticsFilterInput!], $ctx: RequestContextInput, $groupBy: DeviceGrouping!) {
+  analyticsDevices(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, compare: { mode: PREVIOUS_PERIOD },
+    limit: 20, sort: { measure: VIDEO_USERS, mode: DESC } }, groupBy: $groupBy) {
+    rows { key parent measures { video { users bufferRate } } previous { video { users } } }
+  }
+  share: analyticsTraffic(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, compare: { mode: PREVIOUS_PERIOD } }) {
+    measures { video { users } }
+    previous { video { users } }
+  }
+}
+
+# the videos table: search, sort by any column, growth (VD-25, VW-57). Growth floor (decision #102 (issue #458)): the
+# client shows growth (change.video.plays) as N/A, "fewer than 100 sessions", when previous.video.playSessions < 100.
+# Not a `having`: a floor there would drop every new or small video from the table (F-3: no floor inside `change`).
+# A growth sort ranks on the server's raw change; the client sorts the N/A rows last among the fetched rows.
+# CLIENT RULE (decision #144, issue #505): on a range longer than 90 days the replay rate is an estimate from 1 in 8
+# users. The client labels every replayRate of such a range "(est.)" (here, the hero's and the detail panel's) and shows a
+# null replayRate as "N/A, too few users" (fewer than 30 sampled users), like #102. A null over 90 days or less still
+# means no user started the video. "Longer than 90 days" is the server's: the range snapped to whole UTC days (a
+# Tehran range of N days is N UTC days), each window on its own (a CUSTOM comparison window of 90 days or less is exact).
+query VideoTable($p: ID!, $range: AnalyticsRangeInput!, $filters: [AnalyticsFilterInput!], $ctx: RequestContextInput,
+  $search: String, $sort: AnalyticsSortInput) {
+  analyticsVideos(input: { projectId: $p, range: $range, filters: $filters, context: $ctx, compare: { mode: PREVIOUS_PERIOD },
+    search: $search, sort: $sort, limit: 500 }, groupBy: VIDEO) {
+    summary { total }
+    rows {
+      key title
+      measures { video { plays completionRate avgWatchTimePerPlay bufferRate replayRate stallRate } }
+      previous { video { playSessions } }
+      change { video { plays } }
+    }
+  }
+  # the plays share base: the same filters without the search (engine-13.md N-7; a search never narrows the totals)
+  totals: analyticsTraffic(input: { projectId: $p, range: $range, filters: $filters, context: $ctx }) {
+    measures { video { plays } }
+  }
+}
+
+# the detail panel of video $v (VD-27…30, VD-32, VW-63)
+query VideoDetail($p: ID!, $range: AnalyticsRangeInput!, $ctx: RequestContextInput, $video: [AnalyticsFilterInput!], $v: String!) {
+  video: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, filters: $video, limit: 1 }, groupBy: VIDEO) {
+    rows {
+      key title url pageUrl duration hasValidSchema
+      measures { video { plays users completionRate avgCompletion avgWatchTimePerPlay bufferRate stallRate replayRate
+        downloadRate progress25 progress50 progress75 completions } }
+    }
+  }
+  trend: analyticsSeries(input: { projectId: $p, range: $range, context: { timeZone: "UTC" }, granularity: DAY,
+    split: { dimension: VIDEO, keys: [$v] } }) {
+    buckets { start end key }
+    series { key values { video { plays completionRate bufferRate } } }
+  }
+  # CLIENT RULE (decision row l): the unknown renditions leave the share base, as on the overview card. Legacy's fleet-wide
+  # 360p benchmark (`platformAvg360pSharePct`, other tenants' data) has no field and no call (owner 2026-10-31, row i).
+  quality: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, filters: $video, limit: 20 }, groupBy: QUALITY) {
+    rows { key measures { video { watchTime downloads } } }
+  }
+  devices: analyticsDevices(input: { projectId: $p, range: $range, context: $ctx, filters: $video, limit: 5 }, groupBy: DEVICE_TYPE) {
+    rows { key measures { video { playSessions } } }
+  }
+  providers: analyticsVideos(input: { projectId: $p, range: $range, context: $ctx, filters: $video, limit: 3 }, groupBy: ISP) {
+    rows { key measures { video { playSessions bufferRate } } }
+  }
+}

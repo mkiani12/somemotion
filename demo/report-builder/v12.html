@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>شاهین — گزارش‌ها</title>
+<link rel="stylesheet" href="/assets/shahin-tokens.css"/>
+<link rel="stylesheet" href="/assets/shahin-components.css"/>
+<link rel="stylesheet" href="/assets/shahin-responsive.css"/>
+<link rel="stylesheet" href="rb-shell.css"/>
+<link rel="stylesheet" href="rb-amp-builder.css"/>
+<style>
+/* ── report builder v4 (canonical merge, PM 2026-07-27): v2's reports hub as the landing + v1's side-panel builder + v3's plain-language footnote ── */
+.rb-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rb-head .sh-seg{flex-shrink:0}
+.rb-name{min-width:190px;flex:1;max-width:320px}
+.rb-grid{display:grid;grid-template-columns:minmax(264px,300px) minmax(0,1fr);gap:18px;align-items:start}
+.rb-panel{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:16px;display:flex;flex-direction:column;gap:16px;position:sticky;top:12px}
+.rb-canvas{display:flex;flex-direction:column;gap:14px;min-width:0}
+.rb-view{display:none;flex-direction:column;gap:14px}
+.rb-view.show{display:flex}
+.rb-pane{display:none;flex-direction:column;gap:16px}
+.rb-pane.show{display:flex}
+.rb-field{display:flex;flex-direction:column;gap:7px}
+.rb-lbl{font-size:11.5px;font-weight:800;color:var(--sh-text-2);display:flex;align-items:center;gap:5px}
+.rb-hint{font-size:10.5px;color:var(--sh-muted)}
+/* selected-event chips */
+.rb-chips{display:flex;flex-direction:column;gap:6px}
+.rb-chip{display:flex;align-items:center;gap:8px;border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:7px 10px;background:var(--sh-surface-2);font-size:11.5px}
+.rb-chip .sw{width:9px;height:9px;border-radius:3px;flex-shrink:0;filter:saturate(.72)}
+.rb-chip .en{font-family:var(--sh-font-en);direction:ltr;unicode-bidi:embed;font-weight:800;color:var(--sh-text);
+  font-size:11.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-chip .x{background:none;border:none;cursor:pointer;color:var(--sh-muted);font-size:13px;line-height:1;padding:2px}
+.rb-chip .x:hover{color:var(--sh-bad)}
+.rb-mark{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:5px;
+  white-space:nowrap;background:var(--sh-neutral-bg);color:var(--sh-text-2);border:1px solid var(--sh-border-2)}
+.rb-mark.custom{background:var(--sh-brand-soft);color:var(--sh-brand);border-color:var(--sh-brand-border)}
+/* breakdown chips — same language as the event chips above them */
+.rb-bdchip{display:flex;align-items:center;gap:8px;border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:7px 10px;background:var(--sh-surface-2);font-size:11.5px}
+.rb-bdchip .nm{font-weight:800;color:var(--sh-text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-bdchip.nest{margin-inline-start:14px}
+.rb-bdchip .arr{color:var(--sh-muted-2);font-weight:400;flex-shrink:0}
+.rb-bdchip .x{background:none;border:none;cursor:pointer;color:var(--sh-muted);font-size:13px;line-height:1;padding:2px}
+.rb-bdchip .x:hover{color:var(--sh-bad)}
+.rb-mark.bucket{background:var(--sh-info-bg);color:var(--sh-info);border:1px solid var(--sh-info-border)}
+/* drawer restructured to front-cp Overview sidebar (sizes/roles mirrored, values ours) */
+#shMega .sh-mega{width:460px;max-width:94vw}
+#shMega .sh-mega-sec{border:0;background:none;padding:18px 0 20px;border-top:1px solid var(--sh-border);border-radius:0}
+#shMega .sh-mega-sec:first-child{border-top:0;padding-top:6px}
+#shMega .sh-mega-label{font-size:13px;font-weight:700;color:var(--sh-text-2);margin-bottom:12px;display:block}
+#shMega .sh-mega-foot{display:flex;gap:12px;align-items:stretch}
+#shMega .sh-mega-foot>.sh-btn{flex:1}
+#shMega .sh-mega-foot-r{flex:1;display:flex}
+#shMega .sh-mega-foot-r .sh-btn{width:100%}
+.rb-clearall{background:none;border:none;cursor:pointer;font-size:11px;color:var(--sh-muted);padding:2px 6px}
+.rb-clearall:hover{color:var(--sh-brand)}
+/* combobox look: the field carries its own floating label (production pattern) */
+#shMega .rb-combo{position:relative;display:flex;width:100%}
+#shMega .rb-combo-lbl{position:absolute;top:-7px;inset-inline-start:10px;background:var(--sh-surface);
+  padding:0 6px;font-size:10.5px;color:var(--sh-muted);z-index:2;line-height:1.3}
+#shMega .rb-combo .sh-msel{width:100%}
+#shMega .rb-combo .sh-msel-trigger{width:100%;justify-content:space-between;min-height:44px}
+/* utm keys as toggle pills; per-key field reveals below */
+#shMega .rb-utmkeys{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+#shMega .rb-utmblock{margin-top:12px}
+/* drawer layout fixes: text blocks span the full row; dropdowns fill their cell */
+#shMega .sh-mega-cols{gap:14px 12px;align-items:start}
+#shMega .rb-tblock{grid-column:1/-1;display:flex;flex-direction:column;gap:7px}
+#shMega .rb-mblock{display:flex;flex-direction:column;gap:7px;min-width:0}
+#shMega .sh-mega-sublabel{margin:0}
+#shMega .rb-opseg{display:flex;width:100%}
+#shMega .rb-opseg .sh-seg-opt{flex:1;text-align:center;white-space:nowrap}
+#shMega [data-tval]{width:100%;box-sizing:border-box}
+#shMega .rb-mblock .sh-msel{display:flex;width:100%}
+#shMega .rb-mblock .sh-msel-trigger{width:100%;justify-content:space-between}
+#shMega .rb-mblock .sh-msel-menu{width:100%;min-width:0}
+#shMega .sh-mega-body{padding-bottom:84px}
+/* report identity — Mixpanel-style inline-editable title (click to rename) */
+.rb-title{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.rb-title-txt{font-size:15px;font-weight:800;color:var(--sh-text);cursor:text;
+  max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  border-bottom:1px dashed transparent}
+.rb-title:hover .rb-title-txt{border-bottom-color:var(--sh-border-2)}
+.rb-title-txt.unnamed{color:var(--sh-muted);font-weight:700}
+.rb-title-edit{background:none;border:none;cursor:pointer;padding:3px;display:inline-flex;
+  color:var(--sh-muted-2);border-radius:6px}
+.rb-title-edit:hover{color:var(--sh-brand);background:var(--sh-brand-soft)}
+.rb-title-edit svg{width:14px;height:14px;fill:currentColor;display:block}
+.rb-title-input{width:240px;font-weight:800}
+.rb-dirty{font-size:11px;font-weight:700;color:var(--sh-warn);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.rb-dirty[hidden]{display:none}
+.rb-dirty::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sh-warn)}
+/* trend KPI cards — canonical metric-card head (icon chip + name + auto-ⓘ) */
+.rb-kpis .sh-cmp-head{margin-bottom:6px;gap:8px}
+.rb-kpis .sh-mic{width:28px;height:28px;border-radius:8px}
+.rb-kpis .sh-mic svg{width:15px;height:15px}
+.rb-kpis .sh-mrow-label{font-size:11.5px;font-weight:800;color:var(--sh-text-2);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-kpival{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* combined-event field: separated from event picking */
+.rb-virfield{background:var(--sh-surface-2);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+ /* per-event profile — uniform bordered stat tiles (same language as the KPI cards) */
+.rb-evrow{cursor:pointer}
+.rb-evrow:hover td{background:var(--sh-neutral-bg)}
+.rb-profhint{font-size:10px;color:var(--sh-muted);font-weight:700;white-space:nowrap;margin-inline-start:6px}
+.rb-evrow:hover .rb-profhint,.rb-evrow.open .rb-profhint{color:var(--sh-brand)}
+.rb-evprofrow td{background:var(--sh-surface-2);padding:10px 14px}
+.rb-profgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.rb-profgrid .kpi-value{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rb-profgrid .sub{font-size:10.5px;color:var(--sh-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#trProfName{flex:0 0 auto;min-width:0;font-family:var(--sh-font-en);font-size:11px;font-weight:800;
+  background:var(--sh-neutral-bg);border:1px solid var(--sh-border-2);border-radius:5px;padding:2px 9px;color:var(--sh-text-2)}
+/* events-cap counter */
+.rb-evcap .cnt{font-weight:800;color:var(--sh-text-2);background:var(--sh-neutral-bg);
+  border:1px solid var(--sh-border-2);border-radius:var(--sh-radius-pill);padding:1px 8px;margin-inline-end:5px}
+.rb-evcap.full{color:var(--sh-warn)}
+.rb-evcap.full .cnt{background:var(--sh-warn-bg);color:var(--sh-warn);border-color:var(--sh-warn-border)}
+.rb-fbox{border:1px solid var(--sh-border);border-radius:var(--sh-radius);background:var(--sh-surface-2);
+  padding:9px 10px;display:flex;flex-direction:column;gap:8px}
+.rb-fbox-h{display:flex;align-items:center;gap:8px}
+.rb-fbox-h .nm{font-weight:800;color:var(--sh-text);font-size:11.5px;flex:1;min-width:0}
+.rb-fbox-h .x{background:none;border:none;cursor:pointer;color:var(--sh-muted);font-size:13px;line-height:1;padding:2px}
+.rb-fbox-h .x:hover{color:var(--sh-bad)}
+.rb-flogic{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rb-fvals{display:flex;flex-wrap:wrap;gap:6px}
+.rb-fval{font-size:11px;font-weight:700;color:var(--sh-text-2);background:var(--sh-neutral-bg);
+  border:1px solid var(--sh-border-2);border-radius:var(--sh-radius-pill);padding:4px 11px;cursor:pointer;transition:.12s}
+.rb-fval:hover{border-color:var(--sh-brand)}
+.rb-fval.on{background:var(--sh-brand-soft);color:var(--sh-brand);border-color:var(--sh-brand);font-weight:800}
+.rb-fval.custom{border-style:dashed;direction:ltr;unicode-bidi:embed}
+.rb-fsearch{font-size:11.5px}
+/* funnel steps */
+.rb-steps{display:flex;flex-direction:column;gap:6px}
+.rb-step{display:flex;align-items:center;gap:7px}
+.rb-step .n{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-weight:800;background:var(--sh-neutral-bg);color:var(--sh-muted);border:1px solid var(--sh-border-2)}
+.rb-step select{flex:1;min-width:0}
+.rb-step .x{background:none;border:none;cursor:pointer;color:var(--sh-muted);font-size:13px;line-height:1;padding:2px}
+.rb-step .x:hover{color:var(--sh-bad)}
+.rb-add{align-self:flex-start}
+/* canvas cards */
+.rb-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:1100px){.rb-kpis{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}}
+.rb-kpis .kpi-value{font-size:24px}
+.rb-kpis .sub{font-size:10.5px;color:var(--sh-muted);margin-top:3px}
+.rb-chartcard{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--sh-shadow-1)}
+.rb-cc-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rb-cc-title{font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:5px}
+.rb-cc-note{font-size:10.5px;color:var(--sh-muted);flex:1;min-width:140px}
+.ec{width:100%;filter:saturate(.72)}
+/* retention curve sits under the heatmap */
+.rb-retwrap{display:flex;flex-direction:column;gap:4px}
+/* details table */
+.rb-tbl td,.rb-tbl th{white-space:nowrap}
+.rb-tbl td:first-child{white-space:normal;min-width:150px}
+.rb-tbl .en{font-family:var(--sh-font-en);direction:ltr;unicode-bidi:embed;font-weight:800}
+.rb-drop{color:var(--sh-bad);font-weight:800}
+.rb-keep{color:var(--sh-good);font-weight:800}
+/* empty state — global convention: illustration + title + body + conditional CTA */
+.rb-empty{display:none;flex-direction:column;align-items:center;gap:10px;padding:38px 20px;text-align:center}
+.rb-empty.show{display:flex}
+.rb-empty svg{width:74px;height:74px;stroke:var(--sh-muted-2);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.rb-empty .t{font-size:14px;font-weight:800}
+.rb-empty .b{font-size:12px;color:var(--sh-muted);max-width:380px;line-height:1.9}
+/* loading skeleton — marching-dash, gray only */
+.rb-skel{display:none;flex-direction:column;gap:14px}
+.rb-skel.show{display:flex}
+.rb-skelrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rb-skelbox{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);padding:16px}
+.rb-skelbar{height:11px;border-radius:6px;background:var(--sh-neutral-bg);overflow:hidden;position:relative}
+.rb-skelbar::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,var(--sh-border),transparent);animation:rbShimmer 1.4s infinite}
+@keyframes rbShimmer{100%{transform:translateX(100%)}}
+.rb-skelchart{height:220px;display:flex;align-items:stretch}
+.rb-skelchart svg{width:100%;height:100%}
+.rb-skelchart path{fill:none;stroke:var(--sh-border-2);stroke-width:2;stroke-dasharray:7 6;animation:rbMarch 1.1s linear infinite}
+@keyframes rbMarch{to{stroke-dashoffset:-13}}
+.rb-savedwrap{display:flex;align-items:center;gap:8px}
+
+/* hub landing (from v2) */
+.rb-hub{display:flex;flex-direction:column;gap:16px}
+/* ══ custom-events surface (v6) — the home of «ایونت‌های اختصاصی».
+   Moved out of events-settings, which is now inventory only. ══ */
+.rb-ev{display:flex;flex-direction:column;gap:16px}
+.rb-evgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
+.rb-evcard{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:14px 16px;display:flex;flex-direction:column;gap:11px;box-shadow:var(--sh-shadow-1)}
+.rb-evt{font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:8px}
+.rb-evsub{font-size:11.5px;color:var(--sh-muted);line-height:1.9}
+.rb-snippet{background:var(--sh-neutral-bg);border:1px solid var(--sh-border-2);border-radius:var(--sh-radius);
+  padding:13px 15px;font-family:var(--sh-font-en);direction:ltr;text-align:left;
+  font-size:11.5px;line-height:1.8;color:var(--sh-text-2);overflow-x:auto;white-space:pre}
+.rb-snippet .k{color:var(--sh-brand)}
+.rb-evname{font-family:var(--sh-font-en);direction:ltr;unicode-bidi:isolate;font-size:11.5px;font-weight:700;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-evmeta{font-size:10.5px;color:var(--sh-muted);flex:1;min-width:0}
+.rb-evform{display:flex;flex-direction:column;gap:8px}
+
+/* ── custom-events table (v7) ──
+   NOTE: `.rb-evrow` is ALSO the funnel step-table's clickable <tr> (see the profile-row block
+   near the top of this stylesheet). v6 declared a second, later `.rb-evrow{display:flex;…}` for
+   the old combined-event strip, which silently overrode the <tr> one — harmless only because
+   funnel steps currently render without `data-evprof`. That strip is gone in v7 and the rule with
+   it, so `.rb-evrow` means one thing again: a clickable table row. */
+/* v8 header: title + one primary action, replacing v7's back-button bar */
+.rb-evtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rb-evtitle{font-size:15px;font-weight:800;color:var(--sh-text)}
+.rb-evref{margin-top:4px}
+.rb-evref .rb-evcard{max-width:560px}
+.rb-evformcard{border-color:var(--sh-brand);box-shadow:0 0 0 3px var(--sh-brand-soft)}
+.rb-evformgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+/* copyable snippet — the whole point of this block is handing it to a developer */
+.rb-snipwrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rb-snipwrap .rb-snippet{flex:1;min-width:0;overflow-x:auto;display:block}
+.rb-copy{flex-shrink:0}
+.rb-evtable{gap:12px}
+.rb-evhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rb-evhead:empty{display:none}
+.rb-evfilter{display:inline-flex;background:var(--sh-surface-2);border:1px solid var(--sh-border-2);
+  border-radius:var(--sh-radius);overflow:hidden;flex-shrink:0}
+.rb-evfilter button{border:none;background:transparent;padding:5px 12px;min-height:28px;font-size:11.5px;
+  color:var(--sh-muted);cursor:pointer;font-family:inherit;transition:background .12s,color .12s}
+.rb-evfilter button.on{background:var(--sh-brand-soft);color:var(--sh-brand);font-weight:700}
+.rb-evsum{font-size:11.5px;color:var(--sh-muted);line-height:1.9}
+.rb-evsum b{color:var(--sh-text-2);font-weight:800}
+.rb-inlink{color:var(--sh-brand);font-weight:700;text-decoration:none}
+.rb-inlink:hover{text-decoration:underline}
+/* the name cell: code-name, then its human name, then origin/health badges */
+.rb-evcell{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.rb-evdn{font-size:11.5px;color:var(--sh-muted)}
+.rb-evchev{color:var(--sh-muted-2);transition:transform .15s;flex-shrink:0}
+.rb-evchev svg{width:15px;height:15px;display:block}
+.rb-evrow.open .rb-evchev{transform:rotate(180deg);color:var(--sh-brand)}
+/* rows are keyboard-operable in v8, so they need a visible focus ring */
+.rb-evrow:focus-visible{outline:2px solid var(--sh-brand);outline-offset:-2px}
+/* volume that is inherited rather than measured, so «—» does not read as broken */
+.rb-evinherit{font-size:10.5px;color:var(--sh-muted-2)}
+/* unsaved-changes affordance — v7 discarded edits silently on collapse */
+.rb-evdirty{font-size:11px;color:var(--sh-warn);font-weight:700}
+/* expanded drawer — where the user "specifies" the event */
+.rb-evdrawer td{background:var(--sh-surface-2);padding:14px 16px}
+.rb-evfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px}
+.rb-evfield{display:flex;flex-direction:column;gap:5px;min-width:0}
+.rb-evfield label{font-size:11px;font-weight:700;color:var(--sh-text-2)}
+.rb-evfield .sh-input{width:100%}
+.rb-evmetagrid{display:flex;flex-wrap:wrap;gap:18px;font-size:11px;color:var(--sh-muted);line-height:1.9}
+.rb-evmetagrid b{color:var(--sh-text-2);font-weight:800}
+.rb-evprops{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rb-evprop{font-family:var(--sh-font-en);direction:ltr;unicode-bidi:isolate;font-size:10.5px;font-weight:700;
+  background:var(--sh-neutral-bg);border:1px solid var(--sh-border-2);border-radius:var(--sh-radius-pill);
+  padding:2px 9px;color:var(--sh-text-2)}
+.rb-evacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+/* PM 2026-10-28, WS-19: the note on a card computed without a dashboard filter its events don't carry */
+.rbx-skipnote{display:flex;align-items:flex-start;gap:6px;margin-top:4px;color:var(--sh-text-2);line-height:1.7}
+.rbx-skipnote svg{width:14px;height:14px;flex:none;margin-top:2px;fill:currentColor}
+/* PM 2026-10-28, WS-8: archived spaces live in Project settings; the Spaces page links there */
+.rbx-arcnote{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:6px}
+.rbx-arcnote svg{width:14px;height:14px;flex:none;fill:currentColor}
+.rbx-arcnote .rbx-link{display:inline-flex;align-items:center;gap:4px;color:var(--sh-brand);font-weight:700;text-decoration:none}
+.rbx-arcnote .rbx-link:hover{text-decoration:underline}
+.rb-hubhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rb-hubtitle{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
+.rb-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.rb-card{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  padding:14px 16px;display:flex;flex-direction:column;gap:9px;cursor:pointer;text-align:start;
+  box-shadow:var(--sh-shadow-1);transition:border-color .12s}
+.rb-card:hover{border-color:var(--sh-brand)}
+.rb-card .tt{font-size:13px;font-weight:800;line-height:1.7}
+.rb-card .ds{font-size:11px;color:var(--sh-muted);line-height:1.8}
+.rb-card .row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.rb-typechip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;
+  padding:2px 9px;border-radius:var(--sh-radius-pill);border:1px solid var(--sh-border-2);
+  background:var(--sh-neutral-bg);color:var(--sh-text-2)}
+.rb-typechip.trend{background:var(--sh-info-bg);color:var(--sh-info);border-color:var(--sh-info-border)}
+.rb-typechip.funnel{background:var(--sh-brand-soft);color:var(--sh-brand);border-color:var(--sh-brand-border)}
+.rb-typechip.exp,.rb-typechip.impact,.rb-typechip.stick,.rb-typechip.life,.rb-typechip.comp,.rb-typechip.emx{background:var(--sh-neutral-bg);color:var(--sh-text);border-color:var(--sh-border)}
+.rb-typechip.mex{background:var(--sh-primary-bg,var(--sh-info-bg));color:var(--sh-primary);border-color:var(--sh-border)}
+.rb-typechip.table{background:var(--sh-info-bg);color:var(--sh-info);border-color:var(--sh-info-border)}
+.rb-typechip.retention{background:var(--sh-good-bg);color:var(--sh-good);border-color:var(--sh-good-border)}
+.rb-card .who{font-size:10px;color:var(--sh-muted-2)}
+.rb-card.new{border-style:dashed;align-items:center;justify-content:center;gap:8px;min-height:112px;color:var(--sh-muted)}
+.rb-card.new:hover{color:var(--sh-brand)}
+.rb-card.new .plus{font-size:22px;font-weight:800;line-height:1}
+.rb-builder{display:none;flex-direction:column;gap:14px}
+.rb-builder.show{display:flex}
+/* single-select dropdown (Mixpanel-style control) — measurement chip, viz/fn/gran pickers */
+.rb-dd{position:relative;display:inline-flex}
+.rb-dd-t{font-family:inherit;font-size:11.5px;font-weight:800;color:var(--sh-text-2);background:var(--sh-surface);
+  border:1px solid var(--sh-border-2);border-radius:var(--sh-radius);padding:5px 10px;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.rb-dd-t .caret{font-size:10px;color:var(--sh-muted-2)}
+.rb-dd-t.chip{background:var(--sh-brand-soft);color:var(--sh-brand);border-color:var(--sh-brand-border);font-size:12px}
+.rb-dd-t.chip .hash{opacity:.7;font-family:var(--sh-font-en)}
+.rb-dd.open .rb-dd-t{border-color:var(--sh-focus)}
+.rb-dd-m{position:absolute;top:calc(100% + 6px);inset-inline-start:0;min-width:215px;z-index:540;
+  background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);
+  box-shadow:var(--sh-shadow-2);padding:6px;display:none;max-height:350px;overflow:auto}
+.rb-dd.open .rb-dd-m{display:block}
+.rb-dd-h{font-size:10px;font-weight:800;color:var(--sh-muted);padding:7px 10px 4px}
+.rb-dd-i{display:flex;align-items:center;gap:9px;width:100%;text-align:start;background:none;border:none;cursor:pointer;
+  font-family:inherit;font-size:12px;color:var(--sh-text);padding:8px 10px;border-radius:calc(var(--sh-radius) - 3px)}
+.rb-dd-i:hover{background:var(--sh-neutral-bg)}
+.rb-dd-i.on{background:var(--sh-brand-soft);color:var(--sh-brand);font-weight:800}
+.rb-dd-i.sub{padding-inline-start:30px;font-size:11.5px}
+.rb-dd-i:disabled{opacity:.4;cursor:default}
+.rb-dd-i .grow{flex:1;text-align:start}
+.rb-dd-i .chev{font-size:10px;color:var(--sh-muted-2)}
+.rb-dd-i svg{width:15px;height:15px;fill:currentColor;flex-shrink:0}
+.rb-dd-g .subwrap{display:none}
+.rb-dd-g.open .subwrap{display:block}
+/* aggregate views (Mixpanel's Metric / Table visualizations) */
+.rb-metricview{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:7px}
+.rb-metricview .v{font-size:46px;font-weight:800;color:var(--sh-text);line-height:1.1}
+.rb-metricview .l{font-size:13px;font-weight:800;color:var(--sh-text-2)}
+.rb-metricview .s{font-size:11px;color:var(--sh-muted)}
+.rb-tblwrap{overflow-x:auto;min-height:300px}
+.rb-viztable th,.rb-viztable td{white-space:nowrap}
+.rb-tblleg{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:7px;vertical-align:middle}
+/* inline text-link button (combined-event opener) */
+.rb-linkbtn{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--sh-brand);
+  background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+.rb-linkbtn:hover{text-decoration:underline}
+/* plain-language footnote (from v3) — spells out the defaults the panel hides */
+.rb-plainnote{font-size:10.5px;color:var(--sh-muted);line-height:1.9;border-top:1px dashed var(--sh-border-2);padding-top:10px}
+
+@media (max-width:980px){
+  .rb-grid{grid-template-columns:1fr}
+  .rb-panel{position:static}
+}
+@media (max-width:760px){
+  .rb-skelrow{grid-template-columns:1fr}
+}
+
+/* ══ dashboard builder (v5) ══ */
+[hidden]{display:none!important}
+.rb-board{display:flex;flex-direction:column;gap:16px}
+.rb-bhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rb-bname{font-size:16px;font-weight:800;min-width:0}
+.rb-bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.rb-tile{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:var(--sh-radius);padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rb-tile-h{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.rb-tile-t{font-size:13px;font-weight:700;flex:1;min-width:0;line-height:1.5}
+.rb-tile-x{flex:0 0 24px;height:24px;border-radius:6px;border:1px solid var(--sh-border);background:transparent;color:var(--sh-muted);cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
+.rb-tile-x:hover{color:var(--sh-bad);border-color:var(--sh-bad-border)}
+.rb-tile-v{font-size:22px;font-weight:800;line-height:1.2}
+.rb-tile-sub{font-size:11px;color:var(--sh-muted)}
+.rb-tile-viz{min-height:74px}
+.rb-tile-f{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px;border-top:1px dashed var(--sh-border)}
+.rb-tile-open{font-size:11.5px;color:var(--sh-brand);text-decoration:none;font-weight:700}
+.rb-tile-open:hover{text-decoration:underline}
+.rb-bars{display:flex;flex-direction:column;gap:6px}
+.rb-barrow{display:grid;grid-template-columns:1fr 46px;gap:8px;align-items:center}
+.rb-barlbl{font-size:10.5px;color:var(--sh-muted);unicode-bidi:isolate;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-bartrack{grid-column:1/-1;height:7px;border-radius:var(--sh-radius-pill);background:var(--sh-bar-track);overflow:hidden}
+.rb-bartrack i{display:block;height:100%;border-radius:var(--sh-radius-pill);background:var(--sh-c2)}
+.rb-cohort{display:flex;gap:3px;flex-wrap:wrap}
+.rb-cell{width:22px;height:18px;border-radius:3px;background:var(--sh-c3);font-size:0}
+.rb-picker{display:flex;flex-direction:column;gap:0}
+.rb-pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px dashed var(--sh-border);cursor:pointer;background:transparent;border-inline:0;border-top:0;width:100%;text-align:start;font:inherit;color:inherit}
+.rb-pick:last-child{border-bottom:0}
+.rb-pick:hover{background:var(--sh-neutral-bg)}
+.rb-pick-t{flex:1;min-width:0;font-size:12.5px;font-weight:700}
+.rb-pick.added{opacity:.45;cursor:default}
+/* PM 2026-10-25, RB-12 / UC-13: the shared Jalali calendar (RBShell.datePicker) */
+.rbx-cal{display:flex;flex-direction:column;gap:10px;min-width:min(300px,100%)}
+.rbx-cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rbx-cal-t{font-size:13.5px;font-weight:700}
+.rbx-cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.rbx-cal-w{font-size:11px;color:var(--sh-muted);text-align:center;padding:4px 0}
+.rbx-cal-d{height:34px;border:1px solid transparent;border-radius:var(--sh-radius);background:transparent;color:var(--sh-text);font:inherit;font-size:12.5px;cursor:pointer}
+.rbx-cal-d:hover:not(:disabled){background:var(--sh-neutral-bg)}
+.rbx-cal-d:focus-visible{outline:2px solid var(--sh-focus);outline-offset:1px}
+.rbx-cal-d.empty{cursor:default}
+.rbx-cal-d:disabled{color:var(--sh-muted-2);cursor:not-allowed}
+.rbx-cal-d.today{border-color:var(--sh-brand-border)}
+.rbx-cal-d.in{background:var(--sh-brand-soft);border-radius:0}
+.rbx-cal-d.on{background:var(--sh-brand);color:var(--sh-on-brand);font-weight:700}
+.rbx-cal-sum{display:flex;flex-direction:column;gap:4px;padding-top:8px;border-top:1px solid var(--sh-border)}
+/* PM 2026-10-31, outcome 1: B10 — the hint keeps two lines' height, so the centred modal doesn't move the grid between the start and end clicks */
+.rbx-cal-sum>.rbx-note:first-of-type{min-height:3.6em}
+/* PM 2026-10-25, WS-18: «همهٔ محتوا» paging */
+.rbx-pager{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:12px}
+/* PM 2026-10-25, WS-6a / WS-7: an archived or deleted chart's card */
+.rbx-tilegone{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+</style>
+</head>
+<body class="sh-layout">
+
+<!-- ═══ GLOBAL NAV — injected by /assets/shahin-nav.js ═══ -->
+
+<main class="sh-main">
+
+  <header class="sh-topbar">
+    <div>
+      <div class="sh-page-title" data-fa="گزارش‌ها" data-en="Reports">گزارش‌ها</div>
+      <div class="sh-crumb" data-fa="گزارش‌ها" data-en="Reports"></div>
+    </div>
+    <div class="sh-topbar-spacer"></div>
+    <div class="sh-topbar-actions"></div>
+  </header>
+
+  <div class="sh-content">
+
+    <!-- ═══ LOADING SKELETON (?state=loading keeps it) ═══ -->
+    <div class="rb-skel" id="rbSkel">
+      <div class="rb-skelrow">
+        <div class="rb-skelbox"><div class="rb-skelbar" style="width:55%"></div><div class="rb-skelbar" style="width:80%;margin-top:12px"></div></div>
+        <div class="rb-skelbox"><div class="rb-skelbar" style="width:45%"></div><div class="rb-skelbar" style="width:70%;margin-top:12px"></div></div>
+        <div class="rb-skelbox"><div class="rb-skelbar" style="width:60%"></div><div class="rb-skelbar" style="width:75%;margin-top:12px"></div></div>
+      </div>
+      <div class="rb-skelbox rb-skelchart">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+          <path d="M0 160 C60 150 90 120 150 118 S260 140 320 96 S460 60 600 44"/>
+          <path d="M0 185 C80 180 130 168 200 150 S380 128 600 96" style="animation-delay:.3s"/>
+        </svg>
+      </div>
+    </div>
+
+
+    <!-- ═══ HUB — the landing: team reports first (v2 concept) ═══ -->
+    <div id="rbGrid" style="display:none">
+
+      <div class="rb-hub" id="rbHub">
+        <!-- shell (rb-shell.js) renders home / content / boards here; variant = window.RB_VARIANT -->
+        <div id="rbxRoot"></div>
+        <!-- kept as hidden hooks: the custom-events surface binds to them -->
+        <button id="rbEvCard" type="button" hidden></button><span id="rbEvCardSub" hidden></span>
+      </div>
+
+      <div id="rbBoard" hidden></div>
+
+      <!-- custom-events surface removed 2026-10-11 (PM): it returns with the event-definition / lexicon concept -->
+      <!-- PM 2026-10-28, LX-23: it does not come back here; custom and combined events live only on the events page (events-settings/v13.html), with its side panels -->
+
+      <!-- report picker panel -->
+      <div class="sh-panel-overlay" id="rbPickOv"></div>
+      <aside class="sh-panel" id="rbPickPanel">
+        <div class="sh-panel-head">
+          <span class="sh-panel-title" data-fa="افزودن گزارش به داشبورد" data-en="Add a report to this dashboard">افزودن گزارش به داشبورد</span>
+          <button class="sh-panel-close" id="rbPickClose" aria-label="close">×</button>
+        </div>
+        <div style="padding:16px">
+          <div class="rb-picker" id="rbPickList"></div>
+          <div class="sh-state" id="rbPickEmpty" hidden style="padding-top:24px">
+            <div class="sh-state-title" data-fa="گزارش ذخیره‌شده‌ای نمانده" data-en="No saved reports left">گزارش ذخیره‌شده‌ای نمانده</div>
+            <div class="sh-state-hint" data-fa="همه گزارش‌های ذخیره‌شده در این داشبورد هستند. گزارش تازه‌ای بسازید تا این‌جا اضافه شود." data-en="Every saved report is already on this dashboard. Build a new one and it shows up here.">همه گزارش‌های ذخیره‌شده در این داشبورد هستند. گزارش تازه‌ای بسازید تا این‌جا اضافه شود.</div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="rb-builder" id="rbBuilder">
+
+        <!-- canonical unified filter bar: date range (start) + Filters drawer (end) -->
+        <div data-shahin-filter></div>
+    <!-- ═══ HEADER ROW: editable report title + type context + save ═══ -->
+    <div class="rb-head">
+      <div class="rb-title" id="rbTitleWrap">
+        <span class="rb-title-txt unnamed" id="rbTitleTxt">گزارش بی‌نام</span>
+        <button class="rb-title-edit" id="rbTitleEdit" type="button"
+          data-tip-fa="<span class='tip-title'>نام گزارش</span>روی نام کلیک کنید و نام دلخواه را بنویسید — با Enter ثبت می‌شود. گزارش ذخیره‌شده با همین نام برای کل تیم فهرست می‌شود."
+          data-tip-en="<span class='tip-title'>Report name</span>Click the name and type your own — Enter commits. The saved report is listed under this name for the whole team.">
+          <svg viewBox="0 0 256 256"><path d="m227.31 73.37l-44.68-44.69a16 16 0 0 0-22.63 0L36.69 152A15.86 15.86 0 0 0 32 163.31V208a16 16 0 0 0 16 16h44.69a15.86 15.86 0 0 0 11.31-4.69L227.31 96a16 16 0 0 0 0-22.63M92.69 208H48v-44.69l88-88L180.69 120ZM192 108.68L147.31 64l24-24L216 84.68Z"/></svg>
+        </button>
+        <input class="sh-input rb-title-input" id="rbTitleInput" style="display:none" data-ph-fa="نام گزارش…" data-ph-en="Report name…" placeholder="نام گزارش…"/>
+      </div>
+      <span class="rb-typechip trend" id="rbTypeChip">روند</span>
+      <span class="info-icon" role="button" id="rbTypeInfo"
+        data-tip-fa="<span class='tip-title'>روند</span>تغییر ایونت‌ها در طول زمان."
+        data-tip-en="<span class='tip-title'>Trend</span>How events change over time.">ⓘ</span>
+      <div class="sh-topbar-spacer"></div>
+      <span class="rb-dirty" id="rbDirty" data-fa="تغییرات ذخیره‌نشده" data-en="Unsaved changes" hidden>تغییرات ذخیره‌نشده</span>
+      <button class="sh-btn primary compact" id="rbSaveBtn" data-fa="ذخیره" data-en="Save">ذخیره</button>
+    </div>
+
+    <div class="rb-grid">
+
+      <!-- ═══ QUERY PANEL ═══ -->
+      <aside class="rb-panel">
+
+        <!-- ── TREND pane ── -->
+        <div class="rb-pane show" data-pane="trend">
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="ایونت‌ها" data-en="Events"
+              data-tip-fa="<span class='tip-title'>ایونت‌ها</span>هر ایونتی که شاهین برای سایت شما جمع می‌کند این‌جاست — ایونت‌های خودکار، ایونت‌های پک‌ها و ایونت‌های اختصاصی که دولوپر شما ساخته. تا ۵ ایونت را هم‌زمان مقایسه کنید."
+              data-tip-en="<span class='tip-title'>Events</span>Every event Shahin collects for your site is here — auto events, pack events, and the custom events your developer created. Compare up to 5 at once.">ایونت‌ها</span>
+            <select class="sh-select" id="rbTrendAdd"></select>
+            <div class="rb-chips" id="rbTrendChips"></div>
+            <span class="rb-hint rb-evcap" id="rbEvCap"></span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="تفکیک" data-en="Breakdown"
+              data-tip-fa="<span class='tip-title'>تفکیک</span>روند را به سهم مقادیر هر ویژگی بشکنید — ویژگی‌های خود ایونت + همهٔ ویژگی‌های خودکار شاهین. تا دو تفکیک تودرتو (مثلا کد تخفیف ↳ نوع دستگاه): نمودار روی تفکیک اول می‌ماند و جدول جزئیات هر دو سطح را نشان می‌دهد. ویژگی عددی مثل مبلغ خودکار در چند گروه خلاصه می‌شود و ویژگی پرمقدار به پنج مقدار برتر + «سایر» جمع می‌شود."
+              data-tip-en="<span class='tip-title'>Breakdown</span>Split the trend by any property — the event's own properties plus every Shahin auto-property. Up to two nested breakdowns (e.g. discount code ↳ device): the chart stays on the first, the details table shows both levels. A numeric property is summarized into a few groups; a many-valued one collapses to its top 5 + Other.">تفکیک</span>
+            <div class="rb-chips" id="rbBreakChips"></div>
+            <select class="sh-select" id="rbBreakAdd"></select>
+            <span class="rb-hint" id="rbBreakHint" data-fa="تفکیک فقط با یک ایونت انتخاب‌شده فعال است." data-en="Breakdown needs exactly one selected event.">تفکیک فقط با یک ایونت انتخاب‌شده فعال است.</span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="اندازه‌گیری" data-en="Measuring"
+              data-tip-fa="<span class='tip-title'>اندازه‌گیری</span>چه چیزی شمرده شود؟ هر حالت یک خط:<br><b>کل ایونت‌ها:</b> هر بار وقوع یک‌بار.<br><b>کاربران:</b> هر نفر یک‌بار — با DAU/WAU/MAU در واحد روز/هفته/ماه.<br><b>کل نشست‌ها:</b> نشست‌هایی که ایونت در آن‌ها رخ داده.<br><b>تکرار بر کاربر:</b> هر کاربر به‌طور معمول چند بار انجامش می‌دهد.<br><b>مجموع ویژگی:</b> جمع (یا میانگین و…) یک ویژگی عددی ایونت، در صورت نیاز به ازای هر کاربر."
+              data-tip-en="<span class='tip-title'>Measuring</span>What gets counted? One line each:<br><b>Total events:</b> every occurrence once.<br><b>Unique users:</b> each person once — DAU/WAU/MAU switch the unit to day/week/month.<br><b>Total sessions:</b> sessions containing the event.<br><b>Frequency per user:</b> how often a typical user does it.<br><b>Aggregate property:</b> the sum (or average, …) of a numeric event property, optionally per user.">اندازه‌گیری</span>
+            <div class="rb-dd" id="rbMeasure">
+              <button class="rb-dd-t chip" id="rbMeasureT" type="button"><span class="hash">#</span><span class="lbl">کل رویدادها</span><span class="caret">⌄</span></button>
+              <div class="rb-dd-m" id="rbMeasureM"></div>
+            </div>
+            <span class="rb-hint" id="rbSumWrap" style="display:none"><span id="rbSumMsg"></span></span>
+          </div>
+        </div>
+
+        <!-- ── FUNNEL pane ── -->
+        <div class="rb-pane" data-pane="funnel">
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="قدم‌های قیف" data-en="Funnel steps"
+              data-tip-fa="<span class='tip-title'>قدم‌های قیف</span>مسیر را قدم‌به‌قدم بچینید — هر قدم یک ایونت است و ترتیب مهم است. ایونت‌های پک و ایونت‌های اختصاصی را می‌توانید در یک قیف کنار هم بگذارید."
+              data-tip-en="<span class='tip-title'>Funnel steps</span>Lay the path out step by step — each step is one event and order matters. Pack events and custom events can sit in the same funnel.">قدم‌های قیف</span>
+            <div class="rb-steps" id="rbSteps"></div>
+            <button class="sh-btn ghost compact rb-add" id="rbAddStep" data-fa="+ افزودن قدم" data-en="+ Add step">+ افزودن قدم</button>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="پنجرهٔ تبدیل" data-en="Conversion window"
+              data-tip-fa="<span class='tip-title'>پنجرهٔ تبدیل</span>کاربر از اولین قدم چقدر فرصت دارد به قدم آخر برسد. بعد از این مهلت، رسیدنش دیگر تبدیل حساب نمی‌شود."
+              data-tip-en="<span class='tip-title'>Conversion window</span>How long a user has from step 1 to reach the last step. Arriving after this window no longer counts as a conversion.">پنجرهٔ تبدیل</span>
+            <select class="sh-select" id="rbWindow"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="شمارش" data-en="Counting"
+              data-tip-fa="<span class='tip-title'>شمارش قیف</span><b>کاربران:</b> هر کاربر یک‌بار وارد قیف می‌شود.<br><b>کل ورودها:</b> کاربر بعد از تکمیل یا انصراف، دوباره می‌تواند وارد شود.<br><b>نشست‌ها:</b> هر نشست واجد شرایط یک ورود جداست."
+              data-tip-en="<span class='tip-title'>Funnel counting</span><b>Users:</b> each user enters once.<br><b>Total entries:</b> users can re-enter after converting or dropping.<br><b>Sessions:</b> each qualifying session is its own entry.">شمارش</span>
+            <span class="sh-seg" id="rbFunnelCount">
+              <button class="sh-seg-opt on" data-val="uniques" data-fa="کاربران" data-en="Users">کاربران</button>
+              <button class="sh-seg-opt" data-val="totals" data-fa="کل ورودها" data-en="Totals">کل ورودها</button>
+              <button class="sh-seg-opt" data-val="sessions" data-fa="نشست‌ها" data-en="Sessions">نشست‌ها</button>
+            </span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="گام حذفی" data-en="Exclusion step"
+              data-tip-fa="<span class='tip-title'>گام حذفی</span>کاربری که بین قدم اول و آخر این ایونت را انجام دهد از قیف کنار گذاشته می‌شود — مثلا «درخواست پشتیبانی» را حذف کنید تا فقط مسیر بی‌مانع بماند."
+              data-tip-en="<span class='tip-title'>Exclusion step</span>A user who performs this event between the first and last step is removed from the funnel — e.g. exclude Support chat to keep only the friction-free path.">گام حذفی</span>
+            <select class="sh-select" id="rbExclude"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="ثابت‌ماندن ویژگی" data-en="Hold property constant"
+              data-tip-fa="<span class='tip-title'>ثابت‌ماندن ویژگی</span>کاربر باید در همهٔ قدم‌ها همان مقدار این ویژگی را داشته باشد — مثلا با «کد تخفیف» یعنی همان کدی که وارد کرده با همان کد خرید کرده باشد."
+              data-tip-en="<span class='tip-title'>Hold property constant</span>The user must keep the same value of this property across all steps — e.g. with Discount code, the code they applied must be the one they purchased with.">ثابت‌ماندن ویژگی</span>
+            <select class="sh-select" id="rbHold"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="تفکیک قیف" data-en="Funnel breakdown"
+              data-tip-fa="<span class='tip-title'>تفکیک قیف</span>نرخ تبدیل کل قیف را برای هر مقدار یک ویژگی جدا حساب می‌کند — مثلا موبایل در برابر دسکتاپ — و در جدول «مقایسهٔ سگمنت‌ها» زیر قیف نشان می‌دهد."
+              data-tip-en="<span class='tip-title'>Funnel breakdown</span>Computes the funnel's overall conversion per value of a property — e.g. mobile vs desktop — in the segment-comparison table under the funnel.">تفکیک قیف</span>
+            <select class="sh-select" id="rbFunnelBreak"></select>
+          </div>
+        </div>
+
+        <!-- ── RETENTION pane ── -->
+        <div class="rb-pane" data-pane="retention">
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="ایونت شروع (تولد کوهورت)" data-en="Birth event"
+              data-tip-fa="<span class='tip-title'>ایونت شروع</span>کاربرانی که در یک هفته برای اولین بار این کار را می‌کنند، یک «کوهورت» می‌شوند و از همان‌جا دنبالشان می‌کنیم."
+              data-tip-en="<span class='tip-title'>Birth event</span>Users who first do this in a given week form one cohort, and we follow them from that point.">ایونت شروع (تولد کوهورت)</span>
+            <select class="sh-select" id="rbBirth"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="ایونت بازگشت" data-en="Return event"
+              data-tip-fa="<span class='tip-title'>ایونت بازگشت</span>«برگشتن» یعنی انجام همین ایونت در هفته‌های بعد. می‌تواند خود ایونت شروع یا ایونت دیگری باشد — مثلا شروع: کد تخفیف، بازگشت: خرید."
+              data-tip-en="<span class='tip-title'>Return event</span>“Coming back” means doing this event in later weeks. It can be the birth event itself or another one — e.g. birth: discount code, return: purchase.">ایونت بازگشت</span>
+            <select class="sh-select" id="rbReturn"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="دانه‌بندی" data-en="Granularity">دانه‌بندی</span>
+            <span class="sh-seg" id="rbGran">
+              <button class="sh-seg-opt on" data-val="week" data-fa="هفتگی" data-en="Weekly">هفتگی</button>
+              <button class="sh-seg-opt" data-val="day" data-fa="روزانه" data-en="Daily">روزانه</button>
+            </span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="معیار بازگشت" data-en="Return criteria"
+              data-tip-fa="<span class='tip-title'>معیار بازگشت</span><b>از این دوره به بعد:</b> کاربری که در دورهٔ ۳ یا هر وقت بعدش برگردد، در دورهٔ ۳ شمرده می‌شود — تصویر ماندگاری بلندمدت.<br><b>دقیقا در همین دوره:</b> فقط اگر در خود دورهٔ ۳ برگشته باشد — تصویر عادت دوره‌به‌دوره."
+              data-tip-en="<span class='tip-title'>Return criteria</span><b>On or after:</b> a user returning in period 3 or any time later counts for period 3 — the long-term retention picture.<br><b>Exactly on:</b> only if they returned within period 3 itself — the period-by-period habit picture.">معیار بازگشت</span>
+            <span class="sh-seg" id="rbCrit">
+              <button class="sh-seg-opt on" data-val="oa" data-fa="از این دوره به بعد" data-en="On or after">از این دوره به بعد</button>
+              <button class="sh-seg-opt" data-val="on" data-fa="دقیقا در همین دوره" data-en="Exactly on">دقیقا در همین دوره</button>
+            </span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="تفکیک ریتنشن" data-en="Retention breakdown"
+              data-tip-fa="<span class='tip-title'>تفکیک ریتنشن</span>بازگشت دورهٔ ۱ و ۴ را برای هر مقدار یک ویژگی جدا حساب می‌کند — مثلا کاربر جدید در برابر بازگشتی — در جدول مقایسه زیر نقشه."
+              data-tip-en="<span class='tip-title'>Retention breakdown</span>Computes period-1 and period-4 retention per property value — e.g. new vs returning — in the comparison table under the map.">تفکیک ریتنشن</span>
+            <select class="sh-select" id="rbRetBreak"></select>
+          </div>
+        </div>
+
+        <!-- ── FLOWS pane ── -->
+        <div class="rb-pane" data-pane="flows">
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="ایونت مبنا" data-en="Anchor event"
+              data-tip-fa="<span class='tip-title'>ایونت مبنا</span>نقطهٔ لنگر تحلیل مسیر: می‌بینید کاربران بعد (یا قبل) از این ایونت، واقعا چه ایونت‌هایی انجام می‌دهند — بدون این‌که مسیری را از قبل فرض کرده باشید."
+              data-tip-en="<span class='tip-title'>Anchor event</span>The anchor of the path analysis: see what users actually do after (or before) this event — without assuming any path in advance.">ایونت مبنا</span>
+            <select class="sh-select" id="rbFlowAnchor"></select>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="جهت" data-en="Direction"
+              data-tip-fa="<span class='tip-title'>جهت</span><b>بعد از ایونت:</b> کاربر بعدش کجا می‌رود؟<br><b>قبل از ایونت:</b> از کجا به این ایونت می‌رسد؟"
+              data-tip-en="<span class='tip-title'>Direction</span><b>After:</b> where do users go next?<br><b>Before:</b> how do they arrive at this event?">جهت</span>
+            <span class="sh-seg" id="rbFlowDir">
+              <button class="sh-seg-opt on" data-val="after" data-fa="بعد از ایونت" data-en="After">بعد از ایونت</button>
+              <button class="sh-seg-opt" data-val="before" data-fa="قبل از ایونت" data-en="Before">قبل از ایونت</button>
+            </span>
+          </div>
+          <div class="rb-field">
+            <span class="rb-lbl" data-fa="عمق مسیر" data-en="Path depth">عمق مسیر</span>
+            <span class="sh-seg" id="rbFlowDepth">
+              <button class="sh-seg-opt" data-val="2" data-fa="۲ قدم" data-en="2 steps">۲ قدم</button>
+              <button class="sh-seg-opt on" data-val="3" data-fa="۳ قدم" data-en="3 steps">۳ قدم</button>
+            </span>
+          </div>
+        </div>
+
+        <!-- v6: the combined-event form used to sit here as a cramped side field.
+             It moved to the «ایونت‌های اختصاصی» surface; this is now only a way in,
+             so the same control never exists in two places. -->
+        
+
+        <div class="rb-plainnote" id="rbPlainNote"></div>
+
+      </aside>
+
+      <!-- ═══ CANVAS ═══ -->
+      <div class="rb-canvas">
+
+        <!-- ── TREND view ── -->
+        <section class="rb-view show" data-view="trend">
+          <div class="rb-kpis" data-min-track="128">
+            <div class="sh-card">
+              <div class="sh-cmp-head">
+                <span class="sh-mic"><svg viewBox="0 0 256 256"><path d="M240 128a8 8 0 0 1-8 8h-27.06l-37.78 75.58A8 8 0 0 1 160 216h-.4a8 8 0 0 1-7.08-5.14L95.35 60.76L61.16 131.5A8 8 0 0 1 54 136H24a8 8 0 0 1 0-16h25l36.84-76.25a8 8 0 0 1 14.62.49l57.51 151.06l32.88-65.77A8 8 0 0 1 198 124h34a8 8 0 0 1 8 4Z"/></svg></span>
+                <span class="sh-mrow-label" data-fa="مجموع رویدادها" data-en="Total events"
+                  data-tip-fa="<span class='tip-title'>مجموع رویدادها</span>جمع همهٔ وقوع‌های ایونت‌های انتخابی در بازه — هر بار رخ‌دادن یک‌بار شمرده می‌شود."
+                  data-tip-en="<span class='tip-title'>Total events</span>All occurrences of the selected events in the range — every firing counts once.">مجموع رویدادها</span>
+              </div>
+              <div class="rb-kpival"><span class="kpi-value" id="kTrTotal">۰</span><span class="sh-delta" id="kTrTotalD">—</span></div>
+              <div class="sub" id="kTrTotalSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-cmp-head">
+                <span class="sh-mic"><svg viewBox="0 0 256 256"><path d="M117.25 157.92a60 60 0 1 0-66.5 0a95.83 95.83 0 0 0-47.22 37.71a8 8 0 1 0 13.4 8.74a80 80 0 0 1 134.14 0a8 8 0 0 0 13.4-8.74a95.83 95.83 0 0 0-47.22-37.71M40 108a44 44 0 1 1 44 44a44.05 44.05 0 0 1-44-44m210.14 98.7a8 8 0 0 1-11.07-2.33A79.83 79.83 0 0 0 172 168a8 8 0 0 1 0-16a44 44 0 1 0-16.34-84.87a8 8 0 1 1-5.94-14.85a60 60 0 0 1 55.53 105.64a95.83 95.83 0 0 1 47.22 37.71a8 8 0 0 1-2.33 11.07"/></svg></span>
+                <span class="sh-mrow-label" data-fa="کاربران" data-en="Users"
+                  data-tip-fa="<span class='tip-title'>کاربران</span>چند کاربر متفاوت حداقل یک‌بار ایونت‌های انتخابی را انجام داده‌اند — تکرارهای یک نفر یک‌بار شمرده می‌شود."
+                  data-tip-en="<span class='tip-title'>Users</span>How many distinct users did the selected events at least once — one person's repeats count once.">کاربران</span>
+              </div>
+              <div class="rb-kpival"><span class="kpi-value" id="kTrUniq">۰</span><span class="sh-delta" id="kTrUniqD">—</span></div>
+              <div class="sub" id="kTrUniqSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-cmp-head">
+                <span class="sh-mic"><svg viewBox="0 0 256 256"><path d="M88 104H40a8 8 0 0 1-8-8V48a8 8 0 0 1 16 0v28.69l14.63-14.63A95.43 95.43 0 0 1 130 33.94h.53a95.36 95.36 0 0 1 67.07 27.33a8 8 0 0 1-11.18 11.44a79.52 79.52 0 0 0-55.89-22.77h-.45a79.56 79.56 0 0 0-56.14 23.43L59.31 88H88a8 8 0 0 1 0 16m128 48h-48a8 8 0 0 0 0 16h28.69l-14.63 14.63a79.56 79.56 0 0 1-56.13 23.43h-.45a79.52 79.52 0 0 1-55.89-22.77a8 8 0 1 0-11.18 11.44a95.36 95.36 0 0 0 67.07 27.33h.52a95.43 95.43 0 0 0 67.36-28.12L208 179.31V208a8 8 0 0 0 16 0v-48a8 8 0 0 0-8-8"/></svg></span>
+                <span class="sh-mrow-label" data-fa="کاربران بازگشتی" data-en="Returning users"
+                  data-tip-fa="<span class='tip-title'>کاربران بازگشتی</span>از میان همین کاربران، آن‌هایی که پیش از این بازه هم به سایت آمده بودند — مقابلِ کاربر جدید."
+                  data-tip-en="<span class='tip-title'>Returning users</span>Of these users, the ones who had visited before this range — the opposite of a new user.">کاربران بازگشتی</span>
+              </div>
+              <div class="rb-kpival"><span class="kpi-value" id="kTrRet">۰</span><span class="sh-delta" id="kTrRetD">—</span></div>
+              <div class="sub" id="kTrRetSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-cmp-head">
+                <span class="sh-mic"><svg viewBox="0 0 256 256"><path d="M208 40H48a24 24 0 0 0-24 24v112a24 24 0 0 0 24 24h160a24 24 0 0 0 24-24V64a24 24 0 0 0-24-24m8 136a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8V64a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8Zm-48 48a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8"/></svg></span>
+                <span class="sh-mrow-label" data-fa="نشست‌ها" data-en="Sessions"
+                  data-tip-fa="<span class='tip-title'>نشست‌ها</span>تعداد نشست‌هایی که دست‌کم یکی از ایونت‌های انتخابی در آن‌ها رخ داده است."
+                  data-tip-en="<span class='tip-title'>Sessions</span>The number of sessions in which at least one of the selected events occurred.">نشست‌ها</span>
+              </div>
+              <div class="rb-kpival"><span class="kpi-value" id="kTrSess">۰</span><span class="sh-delta" id="kTrSessD">—</span></div>
+              <div class="sub" id="kTrSessSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-cmp-head">
+                <span class="sh-mic"><svg viewBox="0 0 256 256"><path d="M208 32h-24v-8a8 8 0 0 0-16 0v8H88v-8a8 8 0 0 0-16 0v8H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16M72 48v8a8 8 0 0 0 16 0v-8h80v8a8 8 0 0 0 16 0v-8h24v32H48V48Zm136 160H48V96h160z"/></svg></span>
+                <span class="sh-mrow-label" data-fa="میانگین روزانه" data-en="Daily average"
+                  data-tip-fa="<span class='tip-title'>میانگین روزانه</span>مجموع رویدادها تقسیم بر روزهای بازه — برای مقایسهٔ بازه‌های کوتاه و بلند با هم."
+                  data-tip-en="<span class='tip-title'>Daily average</span>Total events divided by the days in range — makes short and long ranges comparable.">میانگین روزانه</span>
+              </div>
+              <div class="rb-kpival"><span class="kpi-value" id="kTrAvg">۰</span><span class="sh-delta" id="kTrAvgD">—</span></div>
+              <div class="sub" id="kTrAvgSub"></div>
+            </div>
+          </div>
+          <div class="rb-chartcard" id="trProfCard" style="display:none">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="پروفایل ایونت" data-en="Event profile"
+                data-tip-fa="<span class='tip-title'>پروفایل ایونت</span>شناسنامهٔ رفتاری ایونت انتخابی: در چند نشست رخ می‌دهد، چه سهمی از انجام‌دهنده‌ها کاربر جدیدند، کیفیت نشست‌هایش، کاربر چند دقیقه بعد از ورود به آن می‌رسد، ساعت اوج، و پرتکرارترین صفحه و منبع. با چند ایونت انتخابی، پروفایل هر کدام با کلیک روی ردیفش در جدول جزئیات باز می‌شود."
+                data-tip-en="<span class='tip-title'>Event profile</span>The selected event's behavioral ID card: how many sessions it occurs in, the new-user share, session quality, how many minutes after arrival users reach it, peak hour, and top page &amp; source. With multiple events, open each profile by clicking its row in the details table.">پروفایل ایونت</span>
+              <span class="rb-cc-note" id="trProfName" style="direction:ltr;unicode-bidi:embed"></span>
+            </div>
+            <div id="trProfBody"></div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="روند در طول زمان" data-en="Trend over time"
+                data-tip-fa="<span class='tip-title'>روند</span>شمار روزانهٔ ایونت‌های انتخابی. با تفکیک، سهم هر مقدارِ ویژگی جدا رسم می‌شود و جمعشان همان کل است."
+                data-tip-en="<span class='tip-title'>Trend</span>Daily counts of the selected events. With a breakdown, each property value is drawn separately and they sum to the total.">روند در طول زمان</span>
+              <span class="rb-cc-note" id="trNote"></span>
+              <div class="sh-topbar-spacer"></div>
+              <button class="rb-linkbtn" id="rbAnnBtn" type="button"
+                data-tip-fa="<span class='tip-title'>یادداشت روی چارت</span>یک رویداد واقعی — انتشار نسخه، شروع کمپین — را روی تاریخش پین کنید تا هر جهشی توضیح داشته باشد. یادداشت برای کل تیم دیده می‌شود."
+                data-tip-en="<span class='tip-title'>Chart annotation</span>Pin a real-world moment — a release, a campaign start — to its date so every spike has an explanation. Annotations are visible to the whole team.">+ یادداشت</button>
+              <div class="rb-dd" id="rbFnDD">
+                <button class="rb-dd-t" type="button"><span class="lbl">خطی</span><span class="caret">⌄</span></button>
+                <div class="rb-dd-m"></div>
+              </div>
+              <div class="rb-dd" id="rbGranDD">
+                <button class="rb-dd-t" type="button"><span class="lbl">روز</span><span class="caret">⌄</span></button>
+                <div class="rb-dd-m"></div>
+              </div>
+              <div class="rb-dd" id="rbVizDD">
+                <button class="rb-dd-t" type="button"><span class="lbl">خطی</span><span class="caret">⌄</span></button>
+                <div class="rb-dd-m"></div>
+              </div>
+            </div>
+            <div class="rb-empty" id="trEmpty">
+              <svg viewBox="0 0 24 24"><path d="M4 18V8 M9 18v-6 M14 18v-9 M19 18v-4 M3 21h18"/></svg>
+              <div class="t" data-fa="هنوز ایونتی انتخاب نشده" data-en="No event selected yet">هنوز ایونتی انتخاب نشده</div>
+              <div class="b" data-fa="از فهرست ایونت‌ها یکی را انتخاب کنید تا روندش همین‌جا رسم شود — ایونت‌های اختصاصی سایت شما هم در همان فهرست‌اند." data-en="Pick an event from the list and its trend draws right here — your site's custom events are in the same list.">از فهرست ایونت‌ها یکی را انتخاب کنید تا روندش همین‌جا رسم شود.</div>
+              <button class="sh-btn primary compact" id="trEmptyCta" data-fa="انتخاب ایونت" data-en="Pick an event">انتخاب ایونت</button>
+            </div>
+            <div class="ec" id="ecTrend" style="height:300px"></div>
+            <div id="trAggView" style="display:none"></div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="جزئیات" data-en="Details"
+                data-tip-fa="<span class='tip-title'>جزئیات</span>عدد دقیق هر سری: مجموع، کاربران، تکرار هر کاربر، تغییر نسبت به دورهٔ قبل و سهم از کل. روی هر ایونت کلیک کنید تا پروفایل کاملش باز شود: نشست‌ها، سهم کاربر جدید، نشست‌های فعال، زمان تا وقوع، ساعت اوج، صفحه و منبع برتر."
+                data-tip-en="<span class='tip-title'>Details</span>The exact numbers: totals, uniques, per-user frequency, change vs the previous period and share. Click an event to open its full profile: sessions, new-user share, engaged sessions, time-to-event, peak hour, top page and source.">جزئیات</span>
+            </div>
+            <div class="sh-table-wrap"><table class="sh-table rb-tbl" id="trTable"></table></div>
+          </div>
+        </section>
+
+        <!-- ── FUNNEL view ── -->
+        <section class="rb-view" data-view="funnel">
+          <div class="rb-kpis">
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="نرخ تبدیل کل" data-en="Overall conversion"
+                data-tip-fa="<span class='tip-title'>نرخ تبدیل کل</span>از واردشدگان به قدم ۱، چند درصد در پنجرهٔ تبدیل به قدم آخر رسیدند. مخرج همیشه قدم ۱ است، نه کل کاربران سایت."
+                data-tip-en="<span class='tip-title'>Overall conversion</span>Of those entering step 1, what share reached the last step within the window. The denominator is always step 1, not all site users.">نرخ تبدیل کل</div>
+              <div class="kpi-value" id="kFuRate">۰</div>
+              <div class="sub" id="kFuRateSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="بزرگ‌ترین ریزش" data-en="Biggest drop-off"
+                data-tip-fa="<span class='tip-title'>بزرگ‌ترین ریزش</span>گذاری که بیشترین کاربر را از دست می‌دهد — بهترین جای شروع برای بهبود مسیر."
+                data-tip-en="<span class='tip-title'>Biggest drop-off</span>The transition losing the most users — the best place to start improving the path.">بزرگ‌ترین ریزش</div>
+              <div class="kpi-value" id="kFuDrop">—</div>
+              <div class="sub" id="kFuDropSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="میانهٔ زمان تبدیل" data-en="Median time to convert"
+                data-tip-fa="<span class='tip-title'>میانهٔ زمان تبدیل</span>نصف تبدیل‌شده‌ها کل مسیر را سریع‌تر از این زمان رفته‌اند. میانه است، نه میانگین — چند کاربر خیلی کند آن را خراب نمی‌کنند."
+                data-tip-en="<span class='tip-title'>Median time to convert</span>Half of converters finished the whole path faster than this. It's the median, not the mean — a few very slow users can't distort it.">میانهٔ زمان تبدیل</div>
+              <div class="kpi-value" id="kFuTime">—</div>
+              <div class="sub" id="kFuTimeSub"></div>
+            </div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="ریزش قدم‌به‌قدم" data-en="Step-by-step drop-off"
+                data-tip-fa="<span class='tip-title'>ریزش قدم‌به‌قدم</span>طول هر نوار یعنی چند نفر به آن قدم رسیدند؛ درصد کنارش یعنی چه سهمی از قدم قبل باقی ماندند."
+                data-tip-en="<span class='tip-title'>Step-by-step drop-off</span>Each bar's length is how many reached that step; the percentage beside it is the share kept from the previous step.">ریزش قدم‌به‌قدم</span>
+              <span class="rb-cc-note" id="fuNote"></span>
+            </div>
+            <div class="rb-empty" id="fuEmpty">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16l-6 7v5l-4 2v-7z"/></svg>
+              <div class="t" data-fa="قیف حداقل دو قدم می‌خواهد" data-en="A funnel needs at least two steps">قیف حداقل دو قدم می‌خواهد</div>
+              <div class="b" data-fa="مسیرتان را بچینید: قدم اول کجاست و مقصد کجا؟ مثلا مشاهدهٔ سبد ← استفاده از کد تخفیف ← خرید." data-en="Lay out your path: where does it start and where does it end? E.g. cart viewed → discount code applied → purchase.">مسیرتان را بچینید.</div>
+              <button class="sh-btn primary compact" id="fuEmptyCta" data-fa="افزودن قدم" data-en="Add a step">افزودن قدم</button>
+            </div>
+            <div class="ec" id="ecFunnel" style="height:270px"></div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="جدول قدم‌ها" data-en="Step table"
+                data-tip-fa="<span class='tip-title'>جدول قدم‌ها</span>چیزهایی که نمودار نمی‌گوید: عدد دقیق هر قدم، سهم از قدم اول و میانهٔ زمان رسیدن از قدم قبل."
+                data-tip-en="<span class='tip-title'>Step table</span>What the chart doesn't say: each step's exact number, its share of step 1, and the median time from the previous step.">جدول قدم‌ها</span>
+            </div>
+            <div class="sh-table-wrap"><table class="sh-table rb-tbl" id="fuTable"></table></div>
+          </div>
+          <div class="rb-chartcard" id="fuSegCard" style="display:none">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="مقایسهٔ سگمنت‌ها" data-en="Segment comparison"
+                data-tip-fa="<span class='tip-title'>مقایسهٔ سگمنت‌ها</span>همین قیف، جدا برای هر مقدار ویژگی انتخابی — مخرج هر ردیف، واردشدگان همان سگمنت به قدم ۱ است."
+                data-tip-en="<span class='tip-title'>Segment comparison</span>The same funnel computed per value of the chosen property — each row's denominator is that segment's own step-1 entrants.">مقایسهٔ سگمنت‌ها</span>
+              <span class="rb-cc-note" id="fuSegNote"></span>
+            </div>
+            <div class="sh-table-wrap"><table class="sh-table rb-tbl" id="fuSegTable"></table></div>
+          </div>
+        </section>
+
+        <!-- ── RETENTION view ── -->
+        <section class="rb-view" data-view="retention">
+          <div class="rb-kpis">
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="میانگین اندازهٔ کوهورت" data-en="Avg cohort size"
+                data-tip-fa="<span class='tip-title'>اندازهٔ کوهورت</span>به‌طور متوسط در هر دوره چند کاربر برای اولین بار ایونت شروع را انجام داده‌اند. کوهورت کوچک یعنی درصدها را محتاطانه بخوانید."
+                data-tip-en="<span class='tip-title'>Cohort size</span>On average, how many users first did the birth event in each period. Small cohorts mean read the percentages cautiously.">میانگین اندازهٔ کوهورت</div>
+              <div class="kpi-value" id="kReSize">۰</div>
+              <div class="sub" id="kReSizeSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="بازگشت دورهٔ ۱" data-en="Period-1 retention"
+                data-tip-fa="<span class='tip-title'>بازگشت دورهٔ ۱</span>میانگین وزنی سهم کاربرانی که یک دوره بعد از تولد برگشتند — فقط از کوهورت‌هایی که دوره‌شان کامل شده."
+                data-tip-en="<span class='tip-title'>Period-1 retention</span>Weighted average share of users returning one period after birth — computed only from cohorts whose period is complete.">بازگشت دورهٔ ۱</div>
+              <div class="kpi-value" id="kReP1">۰</div>
+              <div class="sub" id="kReP1Sub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="بازگشت دورهٔ ۴" data-en="Period-4 retention"
+                data-tip-fa="<span class='tip-title'>بازگشت دورهٔ ۴</span>همان سنجه در افق بلندتر — ماندگاری واقعی این‌جا معلوم می‌شود، نه در دورهٔ اول."
+                data-tip-en="<span class='tip-title'>Period-4 retention</span>The same measure on a longer horizon — real stickiness shows here, not in period 1.">بازگشت دورهٔ ۴</div>
+              <div class="kpi-value" id="kReP4">۰</div>
+              <div class="sub" id="kReP4Sub"></div>
+            </div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="نقشهٔ بازگشت کوهورت‌ها" data-en="Cohort retention map"
+                data-tip-fa="<span class='tip-title'>نقشهٔ کوهورت</span>هر ردیف یک کوهورت (با اندازه‌اش)، هر ستون یک دوره بعد از تولد؛ عدد هر خانه درصد برگشتن است. خانه‌های خالی یعنی آن دوره هنوز کامل نشده — عمدا خالی‌اند تا عدد ناقص گمراه نکند."
+                data-tip-en="<span class='tip-title'>Cohort map</span>Each row is a cohort (with its size), each column a period after birth; the cell number is the return share. Blank cells mean that period isn't complete yet — left blank on purpose so partial numbers can't mislead.">نقشهٔ بازگشت کوهورت‌ها</span>
+              <span class="rb-cc-note" id="reNote"></span>
+            </div>
+            <div class="rb-retwrap">
+              <div class="ec" id="ecRetHeat" style="height:310px"></div>
+              <div class="ec" id="ecRetCurve" style="height:190px"></div>
+            </div>
+          </div>
+          <div class="rb-chartcard" id="reSegCard" style="display:none">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="مقایسهٔ سگمنت‌ها" data-en="Segment comparison"
+                data-tip-fa="<span class='tip-title'>مقایسهٔ سگمنت‌ها</span>بازگشت دورهٔ ۱ و ۴، جدا برای هر مقدار ویژگی انتخابی — فقط از کوهورت‌های کامل."
+                data-tip-en="<span class='tip-title'>Segment comparison</span>Period-1 and period-4 retention per value of the chosen property — complete cohorts only.">مقایسهٔ سگمنت‌ها</span>
+            </div>
+            <div class="sh-table-wrap"><table class="sh-table rb-tbl" id="reSegTable"></table></div>
+          </div>
+        </section>
+
+        <!-- ── FLOWS view ── -->
+        <section class="rb-view" data-view="flows">
+          <div class="rb-kpis">
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="نشست‌های مبنا" data-en="Anchor sessions"
+                data-tip-fa="<span class='tip-title'>نشست‌های مبنا</span>چند نشست در بازه، ایونت مبنا را داشته‌اند — مخرج همهٔ درصدهای این گزارش همین عدد است."
+                data-tip-en="<span class='tip-title'>Anchor sessions</span>How many sessions in range contained the anchor event — the denominator of every percentage in this report.">نشست‌های مبنا</div>
+              <div class="kpi-value" id="kFlTotal">۰</div>
+              <div class="sub" id="kFlTotalSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="پرتکرارترین قدم بعدی" data-en="Most common next step"
+                data-tip-fa="<span class='tip-title'>پرتکرارترین قدم بعدی</span>رایج‌ترین ایونتی که بلافاصله بعد از ایونت مبنا رخ می‌دهد."
+                data-tip-en="<span class='tip-title'>Most common next step</span>The most frequent event right after the anchor.">پرتکرارترین قدم بعدی</div>
+              <div class="kpi-value" id="kFlTop" style="font-size:17px;direction:ltr">—</div>
+              <div class="sub" id="kFlTopSub"></div>
+            </div>
+            <div class="sh-card">
+              <div class="sh-card-title" data-fa="خروج بلافاصله" data-en="Immediate exit"
+                data-tip-fa="<span class='tip-title'>خروج بلافاصله</span>سهم نشست‌هایی که بعد از ایونت مبنا هیچ ایونت دیگری ندارند — پایان مسیر همان‌جا بوده."
+                data-tip-en="<span class='tip-title'>Immediate exit</span>The share of sessions with no further event after the anchor — the path ended right there.">خروج بلافاصله</div>
+              <div class="kpi-value" id="kFlExit">۰</div>
+              <div class="sub" id="kFlExitSub"></div>
+            </div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="جریان مسیرها" data-en="Path flow"
+                data-tip-fa="<span class='tip-title'>جریان مسیرها</span>پهنای هر نوار یعنی چند نشست آن گذار را رفته‌اند؛ در هر سطح فقط ۴ ایونت برتر جدا دیده می‌شوند و بقیه «سایر»اند. «خروج» یعنی مسیر همان‌جا تمام شده. جهت جریان همیشه چپ‌به‌راست است."
+                data-tip-en="<span class='tip-title'>Path flow</span>Each band's width is how many sessions took that transition; per level only the top-4 events show separately, the rest group as Other. Exit means the path ended there. The flow always reads left-to-right.">جریان مسیرها</span>
+              <span class="rb-cc-note" id="flNote"></span>
+            </div>
+            <div class="ec" id="ecFlows" style="height:340px;direction:ltr"></div>
+          </div>
+          <div class="rb-chartcard">
+            <div class="rb-cc-head">
+              <span class="rb-cc-title" data-fa="پرتکرارترین مسیرها" data-en="Top paths"
+                data-tip-fa="<span class='tip-title'>پرتکرارترین مسیرها</span>پنج مسیر کامل پرتکرار با عدد دقیق — چیزی که نمودار جریان فقط شکل کلی‌اش را نشان می‌دهد."
+                data-tip-en="<span class='tip-title'>Top paths</span>The five most common full paths with exact numbers — what the flow chart only shows the shape of.">پرتکرارترین مسیرها</span>
+            </div>
+            <div class="sh-table-wrap"><table class="sh-table rb-tbl" id="flTable"></table></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+      </div><!-- /rb-builder -->
+    </div><!-- /#rbGrid wrapper -->
+
+  </div>
+</main>
+
+<div id="gtt"></div>
+<script src="versions.js"></script>
+<script>
+/* PM 2026-11-03: the milestone-1 version is this same page with ?m=1 (no copy, so it can never drift); rb-m1.js only hides scope */
+window.SHAHIN_M = (new URLSearchParams(location.search)).get('m');
+window.SHAHIN_PAGE = Object.assign({}, window.SHAHIN_PAGE_META, { version: window.SHAHIN_M === '1' ? 'm1' : window.SHAHIN_M === '2' ? 'm2' : 'v12' });
+/* PM 2026-11-15: milestone 2 has its own version ?m=2 = milestone 1 plus milestone 2's parts, each with a «مایل‌استون ۲» badge; ?m=1 stays as it was
+   while the team builds milestone 1 (the two merge when milestone 1 is done). The 2026-11-04 redirect of ?m=2 to ?m=1 is gone. */
+window.RB_VARIANT = 'amplitude';
+window.RB_AMP_V2 = true;
+window.RB_AMP_BUILDER = true;   /* Amplitude-like Event Segmentation builder (rb-amp-builder.js) */   /* team-space pages: overview, pinned, archive, settings and members, all spaces */
+</script>
+<script src="/assets/shahin-nav.js"></script>
+<script src="/assets/shahin-filter.js"></script>
+<script src="/assets/shahin.js"></script>
+<script src="/assets/echarts.min.js"></script>
+<script src="rb-engine-v12.js"></script>
+<script src="rb-data-defs.js"></script>
+<script src="rb-shell.js"></script>
+<script src="rb-amp-builder.js"></script>
+<script src="rb-amp-cohort.js"></script>
+<script src="rb-amp-notebook.js"></script>
+<script src="rb-amp-alerts.js"></script>
+<script src="rb-amp-ai.js"></script>
+<script src="rb-tpl-catalog.js"></script>
+<script src="rb-amp-templates.js"></script>
+<script src="rb-amp-users.js"></script>
+<script src="rb-amp-identity.js"></script>
+<script src="rb-amp-predict.js"></script>
+<script>
+/* ── v4 layer: hub landing (v2) + side-panel builder (v1) + plain-language footnote (v3) ── */
+(function(){
+'use strict';
+function L(){ return document.documentElement.lang || localStorage.getItem('shahin-lang') || 'fa'; }
+function T(f,e){ return L()==='fa'?f:e; }
+var hub=document.getElementById('rbHub'), builder=document.getElementById('rbBuilder');
+
+var TPL=[
+  { fa:'قیف خرید فروشگاه', en:'Store purchase funnel', type:'funnel',
+    dsFa:'مشاهدهٔ سبد ← شروع پرداخت ← اطلاعات پرداخت ← خرید', dsEn:'Cart → checkout → payment info → purchase',
+    q:{ funnel:{ steps:['cart_viewed','begin_checkout','payment_info_submitted','purchase'], win:'7d', count:'uniques', exclude:'', hold:'' } } },
+  { fa:'روند یک ایونت اختصاصی', en:'A custom event’s trend', type:'trend',
+    dsFa:'ایونتی که دولوپر شما ساخته، به تفکیک هر ویژگی‌اش', dsEn:'An event your developer created, split by any property',
+    q:{ trend:{ events:['discount_code_applied'], breakdown:'code', count:'events', kind:'line' } } },
+  { fa:'بازگشت خریداران', en:'Buyer retention', type:'retention',
+    dsFa:'خریداران هر هفته، در هفته‌های بعد باز هم می‌خرند؟', dsEn:'Do each week’s buyers purchase again in later weeks?',
+    q:{ ret:{ birth:'purchase', ret:'purchase', gran:'week', crit:'oa' } } },
+  { fa:'مسیر کاربران بعد از کد تخفیف', en:'User paths after the discount code', type:'flows',
+    dsFa:'بعد از زدن کد، واقعا کجا می‌روند؟ کشف مسیر بدون پیش‌فرض', dsEn:'Where do they actually go after applying the code? Discovery, no assumptions',
+    q:{ flows:{ anchor:'discount_code_applied', dir:'after', depth:3 } } }
+];
+/* PM 2026-10-28, AC-11: Compass and Personas left the demo (labels, intros and chip colours removed) */
+var TYPE_LBL={ trend:['روند','Trend'], funnel:['قیف','Funnel'], retention:['ریتنشن','Retention'], flows:['مسیرها','Flows'], table:['جدول متریک‌ها','Data table'], mex:['کاوشگر متریک','Metric explorer'], stick:['چسبندگی','Stickiness'], life:['چرخهٔ عمر','Lifecycle'], comp:['ترکیب کاربران','User composition'], emx:['ماتریس تعامل','Engagement matrix'], impact:['تحلیل اثر','Impact analysis'], exp:['نتایج آزمایش','Experiment results'] };
+
+function card(item, isTpl, idx){
+  return '<button class="rb-card" data-'+(isTpl?'tpl':'saved')+'="'+idx+'">'+
+    '<span class="row"><span class="rb-typechip '+item.type+'">'+T(TYPE_LBL[item.type][0],TYPE_LBL[item.type][1])+'</span>'+
+    (isTpl?'<span class="rb-mark">'+T('قالب','Template')+'</span>':'')+'</span>'+
+    '<span class="tt">'+T(item.fa,item.en)+'</span>'+
+    (item.dsFa?'<span class="ds">'+T(item.dsFa,item.dsEn)+'</span>':'')+
+    (!isTpl?'<span class="who">'+T('ذخیره‌شده برای کل تیم','Saved for the whole team')+'</span>':'')+
+  '</button>';
+}
+/* ── report identity — Mixpanel document model: inline-editable title + Save ──
+   research grounding: Mixpanel opens every report as “Untitled report” with a
+   click-to-rename title and a single Save action (update-in-place); saved
+   reports are switched from the list (our hub + menu), not from a header
+   dropdown. Amplitude uses the same editable-chart-title pattern. */
+var UNNAMED_FA='گزارش بی‌نام', UNNAMED_EN='Untitled report';
+var REP={ idx:-1, nameFa:UNNAMED_FA, nameEn:UNNAMED_EN };
+var TYPE_META={
+  trend:{ fa:'روند', en:'Trend',
+    tf:"<span class='tip-title'>روند</span>تغییر ایونت‌ها در طول زمان: هر ایونتی را انتخاب کنید و ببینید روز به روز چطور کم و زیاد می‌شود — با تفکیک، مقایسه با دورهٔ قبل و فیلتر.",
+    te:"<span class='tip-title'>Trend</span>How events change over time: pick any event and watch it rise and fall day by day — with breakdowns, previous-period compare and filters." },
+  funnel:{ fa:'قیف', en:'Funnel',
+    tf:"<span class='tip-title'>قیف</span>از یک مسیر چندقدمی که خودتان می‌چینید، چند نفر تا آخر می‌رسند و کجا می‌ریزند؟ درصدها همیشه نسبت به واردشدگان به قدم ۱ است.",
+    te:"<span class='tip-title'>Funnel</span>Of a multi-step path you define, how many make it to the end and where do they drop? Percentages are always relative to step-1 entrants." },
+  retention:{ fa:'ریتنشن', en:'Retention',
+    tf:"<span class='tip-title'>ریتنشن</span>کسانی که کاری را کردند، بعدا برمی‌گردند و دوباره انجامش می‌دهند؟ نقشهٔ کوهورت‌ها بازگشت هر گروه را هفته به هفته نشان می‌دهد.",
+    te:"<span class='tip-title'>Retention</span>Do people who did something come back and do it again? The cohort map shows each group's return week by week." },
+  table:{ fa:'جدول متریک‌ها', en:'Data table',
+    tf:"<span class='tip-title'>جدول متریک‌ها</span>چند متریک کنار هم، به تفکیک مقدارهای یک ویژگی؛ مثلاً کاربران سایت، نرخ پرش و خرید اشتراک به تفکیک منبع کمپین.",
+    te:"<span class='tip-title'>Data table</span>Several metrics side by side, broken down by a property’s values; e.g. visitors, bounce rate and subscriptions by campaign source." },
+  mex:{ fa:'کاوشگر متریک', en:'Metric explorer',
+    tf:"<span class='tip-title'>کاوشگر متریک</span>متریک‌های ایونت، نشست و فرمول‌های ترکیبی روی یک نمودار زمانی؛ هر متریک سنجش و تنظیمات خودش را دارد و واحدش محورش را تعیین می‌کند.",
+    te:"<span class='tip-title'>Metric explorer</span>Event metrics, session metrics and hybrid formulas on one time chart; each metric keeps its own measure and settings, and its unit decides its axis." },
+  stick:{ fa:'چسبندگی', en:'Stickiness', tf:"<span class='tip-title'>چسبندگی</span>کاربران در هر هفته یا ماه چند روز متفاوت برمی‌گردند و این ایونت را انجام می‌دهند.", te:"<span class='tip-title'>Stickiness</span>How many different days a week or month people come back and do this event." },
+  life:{ fa:'چرخهٔ عمر', en:'Lifecycle', tf:"<span class='tip-title'>چرخهٔ عمر</span>کاربران فعال هر بازه: جدید، فعلی و بازگشته، و کسانی که غیرفعال شده‌اند.", te:"<span class='tip-title'>Lifecycle</span>Each interval’s active users as new, current and resurrected, and those who went dormant." },
+  comp:{ fa:'ترکیب کاربران', en:'User composition', tf:"<span class='tip-title'>ترکیب کاربران</span>کاربران فعال به تفکیک مقدار یک ویژگی، مثل نوع دستگاه یا شهر.", te:"<span class='tip-title'>User composition</span>Active users by the value of one property, such as device type or city." },
+  emx:{ fa:'ماتریس تعامل', en:'Engagement matrix', tf:"<span class='tip-title'>ماتریس تعامل</span>هر ایونت بر اساس گستردگی و تکرار در یکی از چهار بخش: اصلی، حرفه‌ای، یک‌باره، یا نیازمند بازبینی.", te:"<span class='tip-title'>Engagement matrix</span>Each event placed by breadth and frequency in one of four quadrants: core, power, once-off, or needs review." },
+  impact:{ fa:'تحلیل اثر', en:'Impact analysis', tf:"<span class='tip-title'>تحلیل اثر</span>رفتار کاربران پیش و پس از اولین باری که یک قابلیت را به کار بردند؛ همبستگی، نه علت.", te:"<span class='tip-title'>Impact analysis</span>How users behave before and after they first use a feature; correlation, not causation." },
+  exp:{ fa:'نتایج آزمایش', en:'Experiment results', tf:"<span class='tip-title'>نتایج آزمایش</span>نتیجهٔ آزمایشی که با ابزار دیگری اجرا شده: هر واریانت با کنترل مقایسه می‌شود.", te:"<span class='tip-title'>Experiment results</span>The results of a test run in another tool: each variant is compared with the control." },
+  flows:{ fa:'مسیرها', en:'Flows',
+    tf:"<span class='tip-title'>مسیرها</span>بعد از (یا قبل از) یک ایونت، کاربران واقعا کجا می‌روند؟ برخلاف قیف که مسیر فرضی شما را می‌سنجد، مسیرها راه واقعی کاربر را کشف می‌کند.",
+    te:"<span class='tip-title'>Flows</span>Where do users actually go after (or before) an event? Unlike a funnel, which tests your assumed path, Flows discovers the real one." }
+};
+function typeIntro(t){
+  var m=TYPE_META[t]||TYPE_META.trend;
+  var chip=document.getElementById('rbTypeChip');
+  if(chip){ chip.className='rb-typechip '+t; chip.textContent=T(m.fa,m.en); }
+  var info=document.getElementById('rbTypeInfo');
+  if(info){ info.setAttribute('data-tip-fa',m.tf); info.setAttribute('data-tip-en',m.te); }
+}
+function renderTitle(){
+  var el=document.getElementById('rbTitleTxt');
+  if(!el) return;
+  var unnamed=REP.nameFa===UNNAMED_FA;
+  el.textContent=T(REP.nameFa,REP.nameEn);
+  el.classList.toggle('unnamed',unnamed);
+}
+function repSetCurrent(idx, nameFa, nameEn){
+  REP.idx=idx;
+  REP.nameFa=nameFa||(idx>=0?RB.SAVED[idx].fa:UNNAMED_FA);
+  REP.nameEn=nameEn||(idx>=0?RB.SAVED[idx].en:UNNAMED_EN);
+  renderTitle();
+}
+/* dirty flag — set by any panel/filter interaction after boot, cleared on save/open */
+var booted=false;
+function dirty(v){ var el=document.getElementById('rbDirty'); if(v && window.RBAmp && RBAmp.isEmpty && RBAmp.isEmpty() && !(window.RBShell && RBShell.draftDesc && RBShell.draftDesc())) v=false; /* an empty new report has nothing to lose; PM 2026-10-31, outcome 1: B17 — a description typed on the draft is something to lose */ if(el) el.hidden=!v; }
+['click','change'].forEach(function(evt){
+  document.addEventListener(evt, function(e){
+    if(!booted || !builder.classList.contains('show')) return;
+    /* only genuine user input — component init fires synthetic events */
+    if(!e.isTrusted && !e.__rbUser) return;
+    if(e.target.closest('.info-icon,#gtt,.rb-title,#rbSaveBtn')) return;
+    if(e.target.closest('.rb-panel,[data-shahin-filter],#shMega,.rb-cc-head .rb-dd')) dirty(true);
+  }, true);
+});
+(function wireTitleSave(){
+  var txt=document.getElementById('rbTitleTxt'), inp=document.getElementById('rbTitleInput');
+  if(!txt||!inp) return;
+  var pendingSave=false;
+  function startEdit(){
+    inp.value=REP.nameFa===UNNAMED_FA?'':T(REP.nameFa,REP.nameEn);
+    txt.style.display='none'; inp.style.display='';
+    inp.focus(); inp.select();
+  }
+  function stopEdit(){ inp.style.display='none'; txt.style.display=''; }
+  function commit(){
+    var v=inp.value.trim();
+    stopEdit();
+    if(v){
+      REP.nameFa=v; REP.nameEn=v;
+      if(REP.idx>=0){ RB.SAVED[REP.idx].fa=v; RB.SAVED[REP.idx].en=v; renderHubSoft(); }
+      renderTitle();
+      if(pendingSave){ pendingSave=false; doSave(); return; }
+      if(REP.idx>=0 && window.Shahin) Shahin.toast('نام گزارش به «'+v+'» تغییر کرد','Renamed to “'+v+'”');
+    }
+    pendingSave=false;
+  }
+  txt.addEventListener('click', startEdit);
+  document.getElementById('rbTitleEdit').addEventListener('click', startEdit);
+  inp.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); commit(); }
+    if(e.key==='Escape'){ pendingSave=false; stopEdit(); }
+  });
+  inp.addEventListener('blur', function(){ setTimeout(commit, 120); });
+  function doSave(){
+    var q={ trend:JSON.parse(JSON.stringify(RB.Q.trend)), funnel:JSON.parse(JSON.stringify(RB.Q.funnel)),
+            ret:JSON.parse(JSON.stringify(RB.Q.ret)), flows:JSON.parse(JSON.stringify(RB.Q.flows)),
+            filters:JSON.parse(JSON.stringify(RB.Q.filters)), filterLogic:RB.Q.filterLogic };
+    if(REP.idx>=0){
+      RB.SAVED[REP.idx].q=q; RB.SAVED[REP.idx].type=RB.Q.type;
+      if(window.Shahin) Shahin.toast('گزارش «'+REP.nameFa+'» به‌روزرسانی شد','“'+REP.nameEn+'” updated');
+    } else {
+      RB.SAVED.push({ fa:REP.nameFa, en:REP.nameEn, type:RB.Q.type, q:q });
+      repSetCurrent(RB.SAVED.length-1);
+      if(window.Shahin) Shahin.toast('گزارش «'+REP.nameFa+'» برای کل تیم ذخیره شد','“'+REP.nameEn+'” saved for the whole team');
+    }
+    dirty(false);
+  }
+  document.getElementById('rbSaveBtn').addEventListener('click', function(){
+    if(window.RBShell){ RBShell.save(); return; }   /* v9/v10: the shell owns where a report is saved */
+    if(REP.idx<0 && REP.nameFa===UNNAMED_FA){
+      pendingSave=true;
+      startEdit();
+      if(window.Shahin) Shahin.toast('نام گزارش را بنویسید — با Enter ذخیره می‌شود','Type the report name — Enter saves it');
+      return;
+    }
+    doSave();
+  });
+})();
+/* hub cards may be stale after a rename while the hub is hidden */
+function renderHubSoft(){ if(hub.style.display!=='none') renderHub(); }
+
+function renderHub(){ if(window.RBShell) RBShell.renderHome(); }
+/* v12 fix (2026-10-18): the saved type is set before the query is applied, because the Amplitude builder converts a legacy
+   query by RB.Q.type; otherwise a legacy funnel opened right after a trend loaded as a one-step funnel */
+function applyQ(q, type){
+  if(type) RB.Q.type=type;
+  if(q.trend)  RB.Q.trend=JSON.parse(JSON.stringify(q.trend));
+  if(q.funnel) RB.Q.funnel=JSON.parse(JSON.stringify(q.funnel));
+  if(q.ret)    RB.Q.ret=JSON.parse(JSON.stringify(q.ret));
+  if(q.flows)  RB.Q.flows=JSON.parse(JSON.stringify(q.flows));
+  RB.Q.filters=JSON.parse(JSON.stringify(q.filters||[]));
+  RB.Q.filterLogic=q.filterLogic||'and';
+  /* sync the filter drawer's checkboxes with the restored filters */
+  var mega=document.getElementById('shMega');
+  if(mega) [].forEach.call(mega.querySelectorAll('input[type=checkbox]'), function(c){
+    c.checked=RB.Q.filters.some(function(f){ return (f.vals||[]).some(function(v){ return c.value===f.prop+'::'+v; }); }); });
+  /* the range lives in the unified bar: select it there so its label follows */
+  RB.Q.range=q.range||'7d';
+  var r=document.querySelector('input[name="drRange"][value="'+RB.Q.range+'"]');
+  if(r && !r.checked){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
+  /* PM 2026-10-25, RB-12: a range picked on the Jalali calendar has no radio of its own; show it on «بازهٔ دلخواه» without reopening the calendar */
+  if(!r && window.RBCal) RBCal.show(RB.Q.range);
+  /* v12: the Amplitude builder owns the trend query (events, measure, chart type, interval) */
+  if(window.RBAmp) RBAmp.load(q.amp||null, q);
+}
+function snapQ(){
+  return { trend:JSON.parse(JSON.stringify(RB.Q.trend)), funnel:JSON.parse(JSON.stringify(RB.Q.funnel)),
+           ret:JSON.parse(JSON.stringify(RB.Q.ret)), flows:JSON.parse(JSON.stringify(RB.Q.flows)),
+           filters:JSON.parse(JSON.stringify(RB.Q.filters)), filterLogic:RB.Q.filterLogic, range:RB.Q.range,
+           amp:window.RBAmp?RBAmp.state():undefined };
+}
+/* bridge for rb-shell.js */
+window.RBH={
+  current:function(){ return REP.idx; },
+  name:function(){ return T(REP.nameFa,REP.nameEn); },
+  unnamed:function(){ return REP.nameFa===UNNAMED_FA; },
+  openSaved:function(i){ var s=RB.SAVED[i]; applyQ(s.q, s.type); repSetCurrent(i); openBuilder(s.type); },
+  openNew:function(type){ repSetCurrent(-1); if(window.RBAmp) RBAmp.reset(); openBuilder(type||'trend'); },
+  typeIntro:function(t){ typeIntro(t); },  /* v12: the builder's own type tabs keep the title chip in sync */
+  dirty:function(v){ dirty(v); },
+  /* phase 4 (Decision 7): a dashboard card opened through ?q= — its query, range and filters, under the card's own title */
+  apply:function(q, type){ applyQ(q, type); }, rename:function(fa, en){ repSetCurrent(REP.idx, fa, en); },
+  /* opened from a board: overlay the board's range/filters (marks the report unsaved) */
+  carry:function(range, filters){
+    var q=snapQ(); if(range) q.range=range;
+    q.filters=(q.filters||[]).concat(JSON.parse(JSON.stringify(filters||[])));
+    applyQ(q); RB.renderActive(); dirty(true);
+  },
+  commit:function(i){ RB.SAVED[i].q=snapQ(); RB.SAVED[i].type=RB.Q.type; dirty(false); },
+  create:function(name){ RB.SAVED.push({ fa:name, en:name, type:RB.Q.type, q:snapQ() }); repSetCurrent(RB.SAVED.length-1); dirty(false); return RB.SAVED.length-1; }
+};
+function plainNote(){
+  var el=document.getElementById('rbPlainNote');
+  if(!el) return;
+  if(RB.Q.type==='trend'){
+    el.textContent=T('به زبان ساده: هر بار وقوع ایونت یک‌بار شمرده می‌شود؛ با «کاربران» هر نفر در روز فقط یک‌بار.',
+                     'In plain words: every occurrence counts once; with Users, each person counts once per day.');
+  } else if(RB.Q.type==='funnel'){
+    el.textContent=T('به زبان ساده: درصدها همیشه نسبت به واردشدگان به قدم ۱ است، و فقط رسیدن در «پنجرهٔ تبدیل» تبدیل حساب می‌شود.',
+                     'In plain words: percentages are always relative to step-1 entrants, and only arrivals within the conversion window count.');
+  } else if(RB.Q.type==='flows'){
+    el.textContent=T('به زبان ساده: قیف مسیری را که «شما فرض کرده‌اید» می‌سنجد؛ مسیرها راهی را که «کاربر واقعا رفته» کشف می‌کند. درصدها نسبت به نشست‌های شامل ایونت مبناست.',
+                     'In plain words: a funnel measures the path you assumed; Flows discovers the path users actually took. Percentages are relative to sessions containing the anchor.');
+  } else {
+    el.textContent=T('به زبان ساده: خانه‌های خالی نقشه یعنی آن دوره هنوز تمام نشده — عمدا خالی‌اند تا عدد ناقص گمراه نکند.',
+                     'In plain words: blank map cells mean the period is not over yet — left blank on purpose so partial numbers can’t mislead.');
+  }
+}
+function openBuilder(type){
+  hub.style.display='none';
+  builder.style.display='';
+  var ev=document.getElementById('rbEvents'); if(ev) ev.hidden=true;
+  builder.classList.add('show');
+  RB.refreshPanel();
+  RB.setType(type);
+  typeIntro(type);
+  plainNote();
+  dirty(false);
+}
+function wireHub(){
+  hub.querySelectorAll('[data-saved]').forEach(function(c){
+    c.addEventListener('click', function(){
+      var i=Number(c.getAttribute('data-saved'));
+      var s=RB.SAVED[i];
+      applyQ(s.q, s.type);
+      repSetCurrent(i);
+      openBuilder(s.type);
+      if(window.Shahin) Shahin.toast('گزارش «'+s.fa+'» باز شد','Opened “'+s.en+'”');
+    });
+  });
+  hub.querySelectorAll('[data-tpl]').forEach(function(c){
+    c.addEventListener('click', function(){
+      var s=TPL[Number(c.getAttribute('data-tpl'))];
+      applyQ(s.q, s.type);
+      repSetCurrent(-1, s.fa, s.en);
+      openBuilder(s.type);
+    });
+  });
+  var nw=hub.querySelector('[data-newreport]');
+  if(nw) nw.addEventListener('click', function(){
+    repSetCurrent(-1);
+    openBuilder('trend');
+  });
+}
+/* ═══ CUSTOM EVENTS surface (v6, list rebuilt in v7) ═══
+   The «ایونت اختصاصی چطور ساخته می‌شود؟» box came from events-settings, which is
+   inventory only now. Combined-event creation (Mixpanel's Custom Event mechanism)
+   was promoted out of the trend pane and lives here too — one home, two routes. */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function L(){ return document.documentElement.lang || localStorage.getItem('shahin-lang') || 'fa'; }
+  function T(f,e){ return L()==='fa'?f:e; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function num(n){ return Number(n).toLocaleString(L()==='fa'?'fa-IR':'en-US'); }
+  var surface=$('rbEvents');
+  if(!surface) return;
+
+  /* In-code custom events. Mirrors the same five records the project-events inventory shows,
+     because both surfaces read the same project — this page just narrows to what is *yours*
+     and lets you edit it, while the inventory stays read-only and covers pack events too. */
+  var CODE_EVENTS = [
+    { id:'podcast_played', dn:'پخش پادکست', dnEn:'Podcast played', desc:'', descEn:'',
+      st:'ok', vol30:2680, lastFa:'۳ دقیقه پیش', lastEn:'3 min ago', firstFa:'۱۴۰۵/۰۳/۱۸', firstEn:'2026-06-08',
+      props:['episode_id','duration_sec','device_type','referrer_type','utm_source'] },
+    { id:'discount_code_applied', dn:'استفاده از کد تخفیف', dnEn:'Discount code applied',
+      desc:'کاربر کد تخفیف را با موفقیت اعمال کرد', descEn:'User successfully applied a discount code',
+      st:'ok', vol30:1250, lastFa:'۱ دقیقه پیش', lastEn:'1 min ago', firstFa:'۱۴۰۵/۰۴/۰۲', firstEn:'2026-06-23',
+      props:['code','amount','device_type','referrer_type','utm_source'] },
+    { id:'support_chat_opened', dn:'', dnEn:'', desc:'', descEn:'',
+      st:'ok', vol30:148, lastFa:'۱۲ دقیقه پیش', lastEn:'12 min ago', firstFa:'دیروز', firstEn:'Yesterday',
+      props:['page_url','device_type','referrer_type'], isNew:true },
+    { id:'promoBannerClick', dn:'', dnEn:'', desc:'', descEn:'',
+      st:'ok', vol30:96, lastFa:'۲ ساعت پیش', lastEn:'2 hrs ago', firstFa:'۱۴۰۵/۰۴/۰۹', firstEn:'2026-06-30',
+      props:['banner_id','page_url'], std:'case' },
+    { id:'podcast_play', dn:'', dnEn:'', desc:'', descEn:'',
+      st:'merged', vol30:12, lastFa:'۹ روز پیش', lastEn:'9 days ago', firstFa:'۱۴۰۵/۰۳/۱۸', firstEn:'2026-06-08',
+      props:['episode_id','device_type'], mergedInto:'podcast_played' }
+  ];
+
+  /* One vocabulary for the whole column. v7 said «در حال دریافت» for in-code events but «فعال»
+     for combined ones — two different words for the same column, which forced the reader to
+     learn two scales. The column answers exactly one question now: is data flowing? A combined
+     event flows when its members flow, so it uses the same word. */
+  var ST = {
+    ok:     { fa:'در حال دریافت', en:'Receiving',  cls:'good' },
+    merged: { fa:'ادغام‌شده',      en:'Merged',     cls:'off'  },
+    quiet:  { fa:'بدون دادهٔ اخیر', en:'No recent data', cls:'warn' }
+  };
+
+  var evFilter='all', openRow=null;
+  /* user edits live here so a re-render (filter switch, language flip) keeps them */
+  var edits={};
+
+  /* Combined events are projected into the same row shape as in-code ones, so the table has a
+     single renderer. They have no volume of their own — they inherit whatever their members
+     send — so those cells read «—» rather than a fabricated number. */
+  function rows(){
+    var out=[];
+    if(evFilter==='all'||evFilter==='code'){
+      CODE_EVENTS.forEach(function(e){ out.push({ kind:'code', e:e }); });
+    }
+    if(evFilter==='all'||evFilter==='virtual'){
+      ((window.RB&&RB.VIRTUALS)||[]).forEach(function(v){ out.push({ kind:'virtual', v:v }); });
+    }
+    return out;
+  }
+
+  function badge(fa,en,cls){ return '<span class="sh-chip '+(cls||'')+'">'+T(fa,en)+'</span>'; }
+
+  function rowHtml(r,i){
+    var open = (openRow===i);
+    var id, dn, st, vol, last, badges='';
+    if(r.kind==='code'){
+      var e=r.e, ed=edits[e.id]||{};
+      id=e.id;
+      dn = (ed.dn!=null?ed.dn:T(e.dn,e.dnEn));
+      st = ST[e.st]||ST.ok;
+      vol = num(e.vol30); last = T(e.lastFa,e.lastEn);
+      badges += badge('اختصاصی','Custom','');
+      if(e.isNew) badges += badge('تازه‌متولد','Newborn','good');
+      if(e.std==='case') badges += badge('خلاف قاعده نام‌گذاری','Breaks naming rule','warn');
+      if(e.mergedInto) badges += '<span class="sh-chip info">'+T('ادغام در ','Merged into ')+
+        '<span class="rb-evname">'+esc(e.mergedInto)+'</span></span>';
+    } else {
+      var v=r.v, vd=edits[v.id]||{};
+      id=v.id;
+      dn = (vd.dn!=null?vd.dn:T(v.fa,v.en));
+      st = ST.ok;                    /* same word as in-code events — it flows via its members */
+      /* A combined event has no volume of its own: it is a definition over other events, and
+         those members include pack events whose counts are not on this surface. v7 printed a
+         bare «—», which reads as broken data. Say why instead of inventing a number. */
+      vol='<span class="rb-evinherit">'+T('از اعضا','from members')+'</span>';
+      last='<span class="rb-evinherit">'+T('از اعضا','from members')+'</span>';
+      badges += badge('ترکیبی','Combined','info');
+    }
+    var h='<tr class="rb-evrow'+(open?' open':'')+'" data-evrow="'+i+'"'+
+      ' tabindex="0" role="button" aria-expanded="'+(open?'true':'false')+'">'+
+      '<td><span class="rb-evcell"><span class="rb-evname">'+esc(id)+'</span>'+
+        (dn?'<span class="rb-evdn">'+esc(dn)+'</span>':'')+badges+'</span></td>'+
+      '<td><span class="sh-chip '+st.cls+'">'+T(st.fa,st.en)+'</span></td>'+
+      '<td class="num">'+vol+'</td>'+
+      '<td>'+last+'</td>'+
+      '<td><span class="rb-evchev"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">'+
+        '<path d="M213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32"/>'+
+        '</svg></span></td></tr>';
+    if(open) h += drawerHtml(r,i);
+    return h;
+  }
+
+  /* The drawer is the «مشخص کردن» half of the PM's ask: name and description are the two fields
+     a human actually owns (everything else is measured, not chosen), so they are inputs; the
+     measured facts sit beside them as read-only context. */
+  function drawerHtml(r,i){
+    var id, dnVal, descVal, props, first, extra='';
+    if(r.kind==='code'){
+      var e=r.e, ed=edits[e.id]||{};
+      id=e.id;
+      dnVal = (ed.dn!=null?ed.dn:T(e.dn,e.dnEn));
+      descVal = (ed.desc!=null?ed.desc:T(e.desc,e.descEn));
+      props=e.props||[]; first=T(e.firstFa,e.firstEn);
+      /* v7 flagged the naming problem but offered nothing to do about it — a warning you cannot
+         act on is just noise. Renaming needs a code change, so give the exact name to hand over. */
+      if(e.std==='case'){
+        var snake=e.id.replace(/([a-z0-9])([A-Z])/g,'$1_$2').toLowerCase();
+        extra='<div class="rb-evsum" style="margin-top:10px">'+
+          T('نام این ایونت با بقیه هم‌قاعده نیست؛ بقیه <span class="rb-evname">snake_case</span>‌اند. تغییر نام از کد دولوپر شروع می‌شود، پس شاهین خودش عوضش نمی‌کند. نام هم‌قاعده‌اش این است:',
+            'This name does not follow the same rule as the rest, which are <span class="rb-evname">snake_case</span>. A rename starts in your developer\'s code, so Shahin will not do it for you. The conforming name is:')+
+          '</div><div class="rb-snipwrap" style="margin-top:8px">'+
+          '<code class="rb-snippet" id="rbFix'+i+'">'+esc(snake)+'</code>'+
+          '<button class="sh-btn ghost compact rb-copy" data-copy="rbFix'+i+'">'+T('کپی','Copy')+'</button></div>';
+      }
+      /* the obvious follow-up question a merged row raises: is this 12 also inside the 2,680? */
+      if(e.mergedInto) extra='<div class="rb-evsum" style="margin-top:10px">'+
+        T('این ایونت در <span class="rb-evname">'+esc(e.mergedInto)+'</span> ادغام شده و در سلکتور گزارش‌ها جدا نمی‌آید. حجمِ این ردیف <b>داخل</b> حجم <span class="rb-evname">'+esc(e.mergedInto)+'</span> شمرده شده، پس این دو را با هم جمع نکنید.',
+          'This event is merged into <span class="rb-evname">'+esc(e.mergedInto)+'</span> and does not appear separately in report selectors. This row\'s volume is already counted <b>inside</b> that of <span class="rb-evname">'+esc(e.mergedInto)+'</span>, so do not add the two together.')+'</div>';
+    } else {
+      var v=r.v, vd=edits[v.id]||{};
+      id=v.id;
+      dnVal = (vd.dn!=null?vd.dn:T(v.fa,v.en));
+      descVal = (vd.desc!=null?vd.desc:'');
+      props=[]; first='—';
+      var parts=v.comps.map(function(c){ var e2=RB.evById(c); return e2?e2.id:c; });
+      extra='<div class="rb-evsum" style="margin-top:10px">'+T('ساخته‌شده از: ','Built from: ')+
+        parts.map(function(p){ return '<span class="rb-evname">'+esc(p)+'</span>'; }).join(' + ')+
+        '. '+T('حجم و آخرین دریافتش را جدا نمی‌شماریم چون داده‌ای از خودش ندارد؛ هرچه اعضایش بفرستند، همان است.',
+               'We do not count its own volume or last-seen because it has no data of its own — it is whatever its members send.')+'</div>';
+    }
+    var h='<tr class="rb-evdrawer"><td colspan="5">'+
+      '<div class="rb-evfields">'+
+        '<div class="rb-evfield"><label>'+T('نام نمایشی','Display name')+'</label>'+
+          '<input class="sh-input" data-evdn="'+i+'" value="'+esc(dnVal)+'" placeholder="'+
+          T('مثلا: پخش پادکست','e.g. Podcast played')+'"/></div>'+
+        '<div class="rb-evfield"><label>'+T('توضیح','Description')+'</label>'+
+          '<input class="sh-input" data-evdesc="'+i+'" value="'+esc(descVal)+'" placeholder="'+
+          T('این ایونت دقیقا کِی فرستاده می‌شود؟','When exactly is this event sent?')+'"/></div>'+
+      '</div>'+
+      '<div class="rb-evmetagrid">'+
+        '<span>'+T('نام فنی','Technical name')+': <span class="rb-evname">'+esc(id)+'</span></span>'+
+        '<span>'+T('اولین دریافت','First seen')+': <b>'+esc(first)+'</b></span>'+
+      '</div>'+
+      (props.length?'<div class="rb-evprops">'+props.map(function(p){
+        return '<span class="rb-evprop">'+esc(p)+'</span>'; }).join('')+'</div>':'')+
+      extra+
+      '<div class="rb-evacts">'+
+        '<button class="sh-btn primary compact" data-evsave="'+i+'">'+T('ذخیره','Save')+'</button>'+
+        (r.kind==='virtual'?'<button class="sh-btn ghost compact" data-evdel="'+i+'">'+
+          T('حذف ایونت ترکیبی','Delete combined event')+'</button>':'')+
+        '<span class="rb-evdirty" data-evdirty="'+i+'" hidden>'+T('ذخیره نشده','Unsaved')+'</span>'+
+      '</div>'+
+    '</td></tr>';
+    return h;
+  }
+
+  function renderList(){
+    var host=$('rbEvList'); if(!host) return;
+    var rs=rows();
+    host.innerHTML = rs.map(rowHtml).join('');
+
+    var codeN=CODE_EVENTS.length, virN=((window.RB&&RB.VIRTUALS)||[]).length;
+    var totalN=codeN+virN;
+    var tbl=$('rbEvTable'), empty=$('rbEvEmpty'), noMatch=$('rbEvNoMatch');
+    if(tbl) tbl.parentNode.hidden = rs.length===0;
+    /* v7 showed one empty state for both cases, so filtering to a category you happen to have
+       none of announced «you have no custom events yet» while five sat one click away. Split. */
+    if(empty)   empty.hidden   = !(rs.length===0 && totalN===0);
+    if(noMatch) noMatch.hidden = !(rs.length===0 && totalN>0);
+    if(rs.length===0 && totalN>0){
+      var hint=$('rbEvNoMatchHint');
+      if(hint) hint.textContent = T(
+        'در این دسته چیزی نیست، ولی '+num(totalN)+' ایونت اختصاصی دیگر دارید.',
+        'Nothing here, but you have '+num(totalN)+' other custom events.');
+    }
+    /* a 3-way filter over a handful of rows is chrome, not help — show it once it earns its place */
+    var flt=$('rbEvFilter');
+    if(flt) flt.hidden = totalN<8 && evFilter==='all';
+
+    /* summary reads off the unfiltered set — it describes the project, not the current filter */
+    var live=CODE_EVENTS.filter(function(e){ return e.st==='ok'; }).length;
+    var attn=CODE_EVENTS.filter(function(e){ return e.std==='case'||e.st==='merged'; }).length;
+    var sum=$('rbEvSum');
+    if(sum) sum.innerHTML =
+      /* phrased so no count is followed by a plural-sensitive noun — «1 combined events» otherwise */
+      T('<b>'+num(codeN)+'</b> ایونت با کد و <b>'+num(virN)+'</b> ایونت ترکیبی دارید؛ <b>'+num(live)+'</b> تای‌شان همین حالا داده می‌فرستند.',
+        '<b>'+num(codeN)+'</b> in-code and <b>'+num(virN)+'</b> combined; <b>'+num(live)+'</b> sending data right now.')+
+      (attn?' '+T('<b>'+num(attn)+'</b> مورد نیاز به رسیدگی دارد.','<b>'+num(attn)+'</b> need attention.'):'')+
+      ' '+T('فهرست کامل ایونت‌های پروژه (با پک‌های آماده) در <a class="rb-inlink" href="/events-settings/">ایونت‌های پروژه</a> است.',
+            'The full project inventory (including ready-made packs) is in <a class="rb-inlink" href="/events-settings/">Project events</a>.');
+
+    wireRows();
+  }
+
+  function keyOf(r){ return r.kind==='code'?r.e.id:r.v.id; }
+
+  /* The snippet and the suggested rename exist to be handed to a developer, so they must be
+     copyable — v7 made you select the text by hand. Falls back to execCommand because the
+     wireframe is opened over plain http, where navigator.clipboard is unavailable. */
+  function wireCopy(scope){
+    (scope||document).querySelectorAll('[data-copy]').forEach(function(b){
+      if(b.dataset.copyWired) return; b.dataset.copyWired='1';
+      b.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        var src=document.getElementById(b.getAttribute('data-copy'));
+        if(!src) return;
+        var txt=src.textContent;
+        var done=function(){ if(window.Shahin) Shahin.toast('کپی شد','Copied'); };
+        if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(txt).then(done, function(){ legacy(); });
+        } else legacy();
+        function legacy(){
+          var ta=document.createElement('textarea');
+          ta.value=txt; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px';
+          document.body.appendChild(ta); ta.select();
+          try{ document.execCommand('copy'); done(); }catch(e){}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  }
+
+  function wireRows(){
+    var rs=rows(), list=$('rbEvList');
+    function toggle(i){ openRow=(openRow===i)?null:i; renderList();
+      var t=list.querySelector('[data-evrow="'+i+'"]'); if(t) t.focus(); }
+
+    list.querySelectorAll('[data-evrow]').forEach(function(tr){
+      var i=+tr.getAttribute('data-evrow');
+      tr.addEventListener('click', function(ev){
+        if(ev.target.closest('input,button')) return;
+        toggle(i);
+      });
+      /* v7 rows were mouse-only: no tabindex, no role, no key handling */
+      tr.addEventListener('keydown', function(ev){
+        if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); toggle(i); }
+        else if(ev.key==='Escape'&&openRow===i){ ev.preventDefault(); toggle(i); }
+      });
+    });
+
+    /* Capture keystrokes into `edits` as they happen. v7 only read the inputs on Save, so
+       collapsing the row — or switching filter, or flipping language — threw the text away with
+       no warning. Now the row is the only thing that closes; the words survive. */
+    list.querySelectorAll('[data-evdn],[data-evdesc]').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var i=+(inp.getAttribute('data-evdn')||inp.getAttribute('data-evdesc'));
+        var r=rs[i]; if(!r) return;
+        var k=keyOf(r), cur=edits[k]||{};
+        if(inp.hasAttribute('data-evdn')) cur.dn=inp.value; else cur.desc=inp.value;
+        cur.dirty=true; edits[k]=cur;
+        var flag=list.querySelector('[data-evdirty="'+i+'"]'); if(flag) flag.hidden=false;
+      });
+    });
+
+    list.querySelectorAll('[data-evsave]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i=+b.getAttribute('data-evsave'), r=rs[i];
+        var key=keyOf(r);
+        var dn=list.querySelector('[data-evdn="'+i+'"]');
+        var de=list.querySelector('[data-evdesc="'+i+'"]');
+        edits[key]={ dn: dn?dn.value:'', desc: de?de.value:'', dirty:false };
+        openRow=null; renderList();
+        if(window.Shahin) Shahin.toast('ذخیره شد','Saved');
+      });
+    });
+    wireCopy(list);
+    $('rbEvList').querySelectorAll('[data-evdel]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i=+b.getAttribute('data-evdel'), r=rs[i];
+        if(r.kind!=='virtual') return;
+        if(window.RB&&RB.removeVirtual) RB.removeVirtual(r.v.id);
+        openRow=null; renderList();
+        if(window.Shahin) Shahin.toast('ایونت ترکیبی حذف شد','Combined event deleted');
+      });
+    });
+  }
+
+  function showForm(on){
+    $('rbEvForm').hidden = !on;
+    $('rbEvNew').hidden = on;
+    if(on){
+      RB.fillEventSelect($('rbVirEv1'),'ایونت اول…','First event…');
+      RB.fillEventSelect($('rbVirEv2'),'ایونت دوم…','Second event…');
+      $('rbVirName').focus();
+    }
+  }
+
+  /* where the user came from, so «بازگشت» returns there instead of dumping
+     an in-progress query back on the hub */
+  var origin='hub';
+  function openEvents(){
+    var bl=document.querySelector('.rb-builder');
+    origin = (bl && bl.classList.contains('show')) ? 'builder' : 'hub';
+    $('rbHub').hidden = true;
+    $('rbBoard').hidden = true;
+    if(bl) bl.style.display='none';
+    surface.hidden = false;
+    /* Only offer «بازگشت» when there is something to go back TO: an in-progress query in the
+       builder. Arriving from the menu or a deep link, v7's back button pointed at a hub the
+       user never visited. */
+    $('rbEvBack').hidden = (origin!=='builder');
+    showForm(false);
+    renderList();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function goBack(){
+    surface.hidden = true;
+    var bl=document.querySelector('.rb-builder');
+    if(origin==='builder' && bl){ bl.style.display=''; return; }
+    $('rbHub').hidden = false;
+    $('rbHub').style.display = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    $('rbEvBack').addEventListener('click', goBack);
+    $('rbEvCard').addEventListener('click', openEvents);
+    var flt=$('rbEvFilter');
+    if(flt) flt.querySelectorAll('[data-evf]').forEach(function(b){
+      b.addEventListener('click', function(){
+        flt.querySelectorAll('[data-evf]').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        evFilter=b.getAttribute('data-evf');
+        openRow=null;            /* row indices are filter-relative — a stale one would open the wrong row */
+        renderList();
+      });
+    });
+    var clr=$('rbEvClearF');
+    if(clr) clr.addEventListener('click', function(){
+      evFilter='all'; openRow=null;
+      var f=$('rbEvFilter');
+      if(f) f.querySelectorAll('[data-evf]').forEach(function(x){
+        x.classList.toggle('on', x.getAttribute('data-evf')==='all'); });
+      renderList();
+    });
+    wireCopy(document);
+    /* the table carries FA/EN strings built in JS, so it must be rebuilt on a language flip */
+    document.addEventListener('shahin:lang', function(){ if(!surface.hidden) renderList(); });
+    var fromBuilder=$('rbVirOpen');
+    if(fromBuilder) fromBuilder.addEventListener('click', openEvents);
+    $('rbEvNew').addEventListener('click', function(){ showForm(true); });
+    $('rbVirCancel').addEventListener('click', function(){ showForm(false); });
+    $('rbVirSave').addEventListener('click', function(){
+      var name=$('rbVirName').value.trim();
+      var e1=$('rbVirEv1').value, e2=$('rbVirEv2').value;
+      if(!name){ $('rbVirName').focus(); return; }
+      if(!e1||!e2||e1===e2){
+        if(window.Shahin) Shahin.toast('دو ایونت متفاوت انتخاب کنید','Pick two different events');
+        return;
+      }
+      RB.addVirtual(name,[e1,e2]);
+      $('rbVirName').value='';
+      showForm(false);
+      renderList();
+      RB.refreshPanel();
+      if(window.Shahin) Shahin.toast('ایونت ترکیبی «'+name+'» ساخته شد — در همهٔ گزارش‌ها در دسترس است',
+                                     'Combined event “'+name+'” created — available in every report');
+    });
+    document.addEventListener('shahin:lang', function(){ if(!surface.hidden) renderList(); });
+  });
+  /* deep link — after rb:boot, so the hub's own landing logic has already run */
+  document.addEventListener('rb:boot', function(){
+    var qs=new URLSearchParams(location.search);
+    if(qs.get('s')==='events') openEvents();
+  });
+})();
+/* canonical unified-filter bar → engine
+   (all chrome — popovers, drawer, badge, summary chips — is wired by shahin.js;
+   this layer only translates the bar's state into the demo's numbers) */
+(function(){
+  /* date range (the bar's own control) */
+  document.querySelectorAll('input[name="drRange"]').forEach(function(rb){
+    rb.addEventListener('change', function(){
+      /* PM 2026-10-25, RB-12: «بازهٔ دلخواه…» opens the Jalali calendar (click handler below); the range changes only on «اعمال» */
+      if(rb.value==='custom' && window.RBCal){ if(!/^c/.test(String(RB.Q.range))&&RB.Q.range!=='custom') RBCal.reset(); return; }
+      RB.Q.range=rb.value;
+      if(window.RBCal) RBCal.reset();
+      RB.renderActive();
+    });
+  });
+  /* PM 2026-10-25, RB-12: the shared Jalali calendar (RBShell.datePicker) for «بازهٔ دلخواه…», and for the builder's «از تاریخ» and
+     «آخرین N روز» (those two radios live in rb-amp-builder.js; this hook runs after its own handler and overrides only on «اعمال») */
+  window.RBCal=(function(){
+    function radio(v){ return document.querySelector('input[name="drRange"][value="'+v+'"]'); }
+    function spanOf(r){ return r&&r.parentNode?r.parentNode.querySelector('span'):null; }
+    function setSpan(r, fa, en){ var sp=spanOf(r); if(!sp) return; sp.setAttribute('data-fa',fa); sp.setAttribute('data-en',en); sp.textContent=T(fa,en); }
+    function setTrigger(fa, en){ var lb=document.querySelector('.sh-daterange .sh-dr-label'); if(lb) lb.textContent=T(fa,en); }
+    var DEF={ custom:['بازهٔ دلخواه…','Custom…'], since:['از ۱ تیر تا امروز','Since Jun 22'] };
+    function reset(){ var c=radio('custom'); if(c) setSpan(c, DEF.custom[0], DEF.custom[1]); }
+    function show(range){ var R=RB.rangeInfo(), c=radio('custom'), s0=radio('since');
+      if(/^c\d/.test(String(range))&&c){ c.checked=true; setSpan(c, R.fa, R.en); setTrigger(R.fa, R.en); }
+      else if(/^s\d/.test(String(range))){ if(s0){ s0.checked=true; setSpan(s0, R.fa, R.en); } setTrigger(R.fa, R.en); } }
+    function open(mode, r){ if(!window.RBShell||!RBShell.datePicker) return false;
+      var prev=RB.Q.range, R0=RB.rangeInfo(), from=null, to=null;
+      if(mode==='range'&&(/^c\d/.test(String(prev))||prev==='custom')){ from=R0.start; to=R0.end; }
+      if(mode==='single'&&/^s\d/.test(String(prev))) from=R0.start;
+      if(mode==='lastN'){ var ln=document.getElementById('rbzLastN'), n=Math.max(2,Math.min(365,parseInt(ln&&ln.value,10)||45)); from=new Date(RB.DEMO_NOW.getTime()-(n-1)*86400000); }
+      /* PM 2026-10-31, outcome 1: B10 — a chart with a filter or a segment caps the pick at 93 days (TD-10), with the same reason */
+      var cap=window.RBAmp&&RBAmp.rangeCap?RBAmp.rangeCap():null;
+      RBShell.datePicker(r, { mode:mode, from:from, to:to, maxDays:cap?cap.days:0, capFa:cap?cap.fa:'', capEn:cap?cap.en:'',
+        onPick:function(v, res){   /* v: ISO day or { start, end }; res: the full result with the range code */
+          if(mode==='lastN'){ var ln2=document.getElementById('rbzLastN'); if(ln2){ ln2.value=res.days; ln2.dispatchEvent(new Event('change',{bubbles:true})); } return; }
+          RB.Q.range=res.range; if(r){ r.checked=true; setSpan(r, res.fa, res.en); } setTrigger(res.fa, res.en);
+          RB.renderActive(); if(window.RBAmp&&RBAmp.redraw) RBAmp.redraw();
+          if(window.Shahin) Shahin.toast('بازه '+res.fa+' اعمال شد','Range applied: '+res.en); },
+        onCancel:function(){ if(mode!=='range') return;   /* «از تاریخ» / «آخرین N روز» keep what the builder applied */
+          var back=radio(prev); if(back&&back!==r){ back.checked=true; back.dispatchEvent(new Event('change',{bubbles:true})); }
+          else if(/^c\d/.test(String(prev))) show(prev); else if(r&&RB.Q.range!=='custom'){ r.checked=false; } } });
+      return true; }
+    /* PM 2026-10-31, outcome 1: B10 — listen in the capture phase. The date-range popover (shahin.js) stops click propagation, so a
+       bubbling listener never heard «بازهٔ دلخواه…», «از تاریخ» or «آخرین N روز» and the calendar never opened. */
+    document.addEventListener('click', function(e){
+      var r=e.target&&e.target.closest?e.target.closest('input[name="drRange"]'):null; if(!r) return;
+      if(r.value==='custom') open('range', r); else if(r.value==='since') open('single', r); else if(r.value==='nN') open('lastN', r);
+    }, true);
+    return { open:open, show:show, reset:reset };
+  })();
+  var tgl=document.querySelector('[data-dr-compare-toggle]');
+  if(tgl) tgl.addEventListener('click', function(){
+    setTimeout(function(){ RB.Q.trend.compare=tgl.classList.contains('on'); RB.renderActive(); }, 10);
+  });
+  document.querySelectorAll('input[name="drCompare"]').forEach(function(rb){
+    rb.addEventListener('change', function(){
+      RB.Q.trend.compareMode=rb.value==='lastyear'?'lastyear':'prev';
+      RB.renderActive();
+    });
+  });
+
+  /* Filters drawer → page-scoped: rebuilt from the SAME property catalog that
+     powers breakdowns (one source of truth), then translated into Q.filters on Save */
+  var mega=document.getElementById('shMega');
+  if(!mega) return;
+  (function buildEventDrawer(){
+    var body=mega.querySelector('.sh-mega-body');
+    if(!body) return;
+    /* mirrors the front-cp Overview filters sidebar structure: flat sections with
+       dividers, floating-label combobox fields in pairs, mode tabs + input for
+       open text values, UTM as key-pills that reveal a value field. Values = ours. */
+    var TEXT_PROPS={ page_path:1, referrer_domain:1, code:1 };
+    function textBlock(pid, noLabel){
+      var P=RB.PROPS[pid];
+      return '<div class="rb-tblock" data-propblock="'+pid+'">'+
+        (noLabel?'':'<span class="sh-mega-sublabel" data-fa="'+P.fa+'" data-en="'+P.en+'">'+P.fa+'</span>')+
+        '<div class="sh-seg rb-opseg" data-textops="'+pid+'" style="margin-bottom:10px">'+
+          '<span class="sh-seg-opt on" data-op="in" data-default data-fa="است" data-en="Is">است</span>'+
+          '<span class="sh-seg-opt" data-op="not_in" data-fa="نیست" data-en="Is not">نیست</span>'+
+          '<span class="sh-seg-opt" data-op="contains" data-fa="شامل" data-en="Contains">شامل</span>'+
+          '<span class="sh-seg-opt" data-op="not_contains" data-fa="فاقد" data-en="Not contains">فاقد</span>'+
+        '</div>'+
+        '<input class="sh-mega-search sh-valinput" data-tval="'+pid+'" data-fa-ph="مقدار…" data-en-ph="Value…" placeholder="مقدار…"/></div>';
+    }
+    function comboBlock(pid){
+      var P=RB.PROPS[pid];
+      var h='<div class="rb-mblock" data-propblock="'+pid+'"><div class="rb-combo">'+
+        '<span class="rb-combo-lbl" data-fa="'+P.fa+'" data-en="'+P.en+'">'+P.fa+'</span>'+
+        '<div class="sh-msel" data-msel><button class="sh-msel-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">'+
+        '<span class="sh-msel-text">همه</span><span class="sh-msel-caret">⌄</span></button>'+
+        '<div class="sh-msel-menu">'+
+        '<input class="sh-msel-search" data-fa-ph="جستجو…" data-en-ph="Search…" placeholder="جستجو…"/>'+
+        '<div class="sh-msel-actions">'+
+          '<button class="sh-msel-act sh-msel-all" type="button" data-fa="انتخاب همه" data-en="Select all">انتخاب همه</button>'+
+          '<button class="sh-msel-act sh-msel-clear" type="button" data-fa="هیچ‌کدام" data-en="None">هیچ‌کدام</button>'+
+        '</div><div class="sh-msel-list">';
+      P.vals.forEach(function(v){
+        h+='<label class="sh-msel-opt"><input type="checkbox" value="'+pid+'::'+v[1]+'"/>'+
+           '<span data-fa="'+v[0]+'" data-en="'+v[1]+'">'+v[0]+'</span></label>';
+      });
+      return h+'</div><div class="sh-msel-empty" data-fa="موردی یافت نشد" data-en="No matches" hidden>موردی یافت نشد</div></div></div></div></div>';
+    }
+    function block(pid){ return TEXT_PROPS[pid]?textBlock(pid):comboBlock(pid); }
+    function section(sumFa,sumEn,props){
+      var h='<div class="sh-mega-sec" data-seg-mode data-sum-fa="'+sumFa+'" data-sum-en="'+sumEn+'">'+
+        '<span class="sh-mega-label" data-fa="'+sumFa+'" data-en="'+sumEn+'">'+sumFa+'</span>'+
+        '<div class="sh-mega-cols" style="grid-template-columns:1fr 1fr">';
+      props.forEach(function(pid){ h+=block(pid); });
+      return h+'</div></div>';
+    }
+    /* UTM — production pattern: key pills reveal a per-key value field */
+    function utmSection(){
+      var keys=['utm_campaign','utm_source','utm_medium'];
+      var h='<div class="sh-mega-sec" data-seg-mode data-sum-fa="کمپین (UTM)" data-sum-en="UTM">'+
+        '<span class="sh-mega-label" data-fa="کمپین (UTM)" data-en="UTM">کمپین (UTM)</span>'+
+        '<div class="rb-utmkeys">';
+      keys.forEach(function(pid){
+        var P=RB.PROPS[pid];
+        h+='<span class="sh-chip tog off" data-utmkey="'+pid+'" data-fa="'+P.fa+'" data-en="'+P.en+'">'+P.fa+'</span>';
+      });
+      h+='</div>';
+      keys.forEach(function(pid){
+        h+='<div class="rb-utmblock" data-utmblock="'+pid+'" hidden>'+textBlock(pid,false)+'</div>';
+      });
+      return h+'</div>';
+    }
+    var h='';
+    h+=section('ویژگی‌های ایونت','Event properties', ['code','amount','order_value','media_type','payment_method']);
+    h+=section('صفحه و موجودیت','Page & entity', ['page_path','entity_module','breadcrumb_1_name','page_lang','load_time']);
+    h+=section('منبع ورود','Traffic source', ['referrer_type','referrer_domain']);
+    h+=utmSection();
+    h+=section('دستگاه و مرورگر','Device & browser', ['device_type','browser','os']);
+    h+=section('جغرافیا و شبکه','Geo & network', ['country','city','isp_name']);
+    h+=section('نشست و کاربر','Session & user', ['is_new_user','is_engaged']);
+    h+='<div class="sh-mega-sec" data-sum-fa="ربات" data-sum-en="Bots">'+
+      '<span class="sh-mega-label" data-fa="ترافیک ربات" data-en="Bot traffic">ترافیک ربات</span>'+
+      '<div class="sh-mega-row">'+
+      '<label class="sh-radio"><input type="radio" name="shfBot" value="exclude" data-default checked/><span data-fa="بدون ربات" data-en="Exclude bots">بدون ربات</span></label>'+
+      '<label class="sh-radio"><input type="radio" name="shfBot" value="include"/><span data-fa="شامل ربات" data-en="Include bots">شامل ربات</span></label>'+
+      '</div></div>';
+    body.innerHTML=h;
+    if(window.Shahin && Shahin.multiSelects) Shahin.multiSelects();
+    /* utm pills reveal/clear their field */
+    body.querySelectorAll('[data-utmkey]').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        setTimeout(function(){
+          var pid=chip.getAttribute('data-utmkey');
+          var blk=body.querySelector('[data-utmblock="'+pid+'"]');
+          var on=chip.classList.contains('on');
+          blk.hidden=!on;
+          if(!on){ var inp=blk.querySelector('[data-tval]'); if(inp) inp.value=''; }
+        },10);
+      });
+    });
+    /* header: پاک‌کردن همه (production keeps it in the panel header) */
+    var head=mega.querySelector('.sh-mega-head');
+    if(head && !head.querySelector('.rb-clearall')){
+      var cb=document.createElement('button');
+      cb.className='rb-clearall'; cb.type='button';
+      cb.setAttribute('data-fa','پاک‌کردن همه'); cb.setAttribute('data-en','Clear all');
+      cb.textContent='پاک‌کردن همه';
+      head.insertBefore(cb, head.querySelector('[data-mega-x]'));
+      cb.addEventListener('click', function(){
+        mega.querySelectorAll('.sh-mega-body input[type=checkbox]').forEach(function(c){
+          c.checked=false; c.dispatchEvent(new Event('change',{bubbles:false}));
+        });
+        mega.querySelectorAll('.sh-mega-body .sh-valinput').forEach(function(v){ v.value=''; });
+        mega.querySelectorAll('.sh-mega-body [data-textops]').forEach(function(g){
+          g.querySelectorAll('.sh-seg-opt').forEach(function(o){ o.classList.toggle('on', o.hasAttribute('data-default')); });
+        });
+        mega.querySelectorAll('.sh-mega-body .sh-chip.tog').forEach(function(c){ c.classList.remove('on'); c.classList.add('off'); });
+        mega.querySelectorAll('.rb-utmblock').forEach(function(b){ b.hidden=true; });
+        var sumClear=document.querySelector('[data-mega-summary] [data-clear-all]');
+        if(sumClear) sumClear.click(); else translateMega();
+      });
+    }
+  })();
+  function translateMega(){
+    var fs=[], byProp={};
+    [].forEach.call(mega.querySelectorAll('input[type=checkbox]:checked'), function(c){
+      var pr=c.value.split('::');
+      if(pr.length!==2) return;
+      (byProp[pr[0]]=byProp[pr[0]]||[]).push(pr[1]);
+    });
+    Object.keys(byProp).forEach(function(pid){ fs.push({ prop:pid, op:'in', vals:byProp[pid] }); });
+    [].forEach.call(mega.querySelectorAll('[data-tval]'), function(inp){
+      var val=inp.value.trim(); if(!val) return;
+      var pid=inp.getAttribute('data-tval');
+      var utmBlk=inp.closest('[data-utmblock]');
+      if(utmBlk && utmBlk.hidden) return;
+      var opEl=mega.querySelector('[data-textops="'+pid+'"] .sh-seg-opt.on');
+      var op=opEl?opEl.getAttribute('data-op'):'in';
+      if(op==='contains'||op==='not_contains') fs.push({ prop:pid, op:op, text:val });
+      else fs.push({ prop:pid, op:op, vals:[val] });
+    });
+    RB.Q.filters=fs;
+    RB.renderActive();
+  }
+  mega.querySelectorAll('[data-mega-save]').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(translateMega, 20); }); });
+  var summary=document.querySelector('[data-mega-summary]');
+  /* capture phase: the component's chip/clear handlers stopPropagation, so a
+     bubbling listener would never hear them */
+  if(summary) summary.addEventListener('click', function(){ setTimeout(translateMega, 60); }, true);
+})();
+
+/* ── Insights-parity controls (mirrors docs.mixpanel.com/docs/reports/insights):
+   Measuring menu · viz picker · data function · granularity · annotations ── */
+(function(){
+  if(!document.getElementById('rbMeasure')) return;
+  var IC={"chart-line": "M232 208a8 8 0 0 1-8 8H32a8 8 0 0 1-8-8V48a8 8 0 0 1 16 0v94.37L90.73 98a8 8 0 0 1 10.07-.38l58.81 44.11L218.73 90a8 8 0 1 1 10.54 12l-64 56a8 8 0 0 1-10.07.38l-58.81-44.09L40 163.63V200h184a8 8 0 0 1 8 8", "chart-bar": "M224 200h-8V40a8 8 0 0 0-8-8h-56a8 8 0 0 0-8 8v40H96a8 8 0 0 0-8 8v40H48a8 8 0 0 0-8 8v64h-8a8 8 0 0 0 0 16h192a8 8 0 0 0 0-16M160 48h40v152h-40Zm-56 48h40v104h-40Zm-48 48h32v56H56Z", "chart-bar-horizontal": "M224 96h-40V56a8 8 0 0 0-8-8H56v-8a8 8 0 0 0-16 0v176a8 8 0 0 0 16 0v-8h88a8 8 0 0 0 8-8v-40h72a8 8 0 0 0 8-8v-48a8 8 0 0 0-8-8m-56-32v32H56V64Zm-32 128H56v-32h80Zm80-48H56v-32h160Z", "chart-pie": "M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m71.87 53.27L136 114.14V40.37a88 88 0 0 1 63.87 36.9M120 40.37v83l-71.89 41.5A88 88 0 0 1 120 40.37M128 216a88 88 0 0 1-71.87-37.27l151.76-87.61A88 88 0 0 1 128 216", "table": "M224 48H32a8 8 0 0 0-8 8v136a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a8 8 0 0 0-8-8M40 112h40v32H40Zm56 0h120v32H96Zm120-48v32H40V64ZM40 160h40v32H40Zm176 32H96v-32h120z", "hash": "M224 88h-48.6l8.47-46.57a8 8 0 0 0-15.74-2.86l-9 49.43H111.4l8.47-46.57a8 8 0 0 0-15.74-2.86L95.14 88H48a8 8 0 0 0 0 16h44.23l-8.73 48H32a8 8 0 0 0 0 16h48.6l-8.47 46.57a8 8 0 0 0 6.44 9.3A8 8 0 0 0 80 224a8 8 0 0 0 7.86-6.57l9-49.43h47.74l-8.47 46.57a8 8 0 0 0 6.44 9.3a8 8 0 0 0 1.43.13a8 8 0 0 0 7.86-6.57l9-49.43H208a8 8 0 0 0 0-16h-44.23l8.73-48H224a8 8 0 0 0 0-16m-76.5 64H99.77l8.73-48h47.73Z"};
+  function icon(k){ return IC[k]?'<svg viewBox="0 0 256 256"><path d="'+IC[k]+'"/></svg>':''; }
+  function closeAll(){ document.querySelectorAll('.rb-dd.open').forEach(function(d){ d.classList.remove('open'); }); }
+  document.addEventListener('click', closeAll);
+  ['rbMeasure','rbFnDD','rbGranDD','rbVizDD'].forEach(function(id){
+    var root=document.getElementById(id); if(!root) return;
+    root.querySelector('.rb-dd-t').addEventListener('click', function(e){
+      e.stopPropagation(); var was=root.classList.contains('open'); closeAll(); if(!was) root.classList.add('open');
+    });
+    root.querySelector('.rb-dd-m').addEventListener('click', function(e){ e.stopPropagation(); });
+  });
+
+  var FREQ_AGGS=[['avg','میانگین','Average'],['median','میانه','Median'],['p90','صدک ۹۰','P90'],['min','کمینه','Minimum'],['max','بیشینه','Maximum']];
+  var SUM_AGGS=[['sum','مجموع','Sum'],['avg','میانگین','Average'],['median','میانه','Median'],['p90','صدک ۹۰','P90'],['min','کمینه','Minimum'],['max','بیشینه','Maximum'],['distinct','تعداد یکتا','Distinct count']];
+
+  function buildMeasure(){
+    var q=RB.Q.trend, m=document.getElementById('rbMeasureM');
+    function on(c){ return c?' on':''; }
+    var h='<div class="rb-dd-h">'+T('اندازه‌گیری','Measuring')+'</div>';
+    h+='<button class="rb-dd-i'+on(q.count==='uniques'&&!q.activeUnit)+'" data-mm="uniques" type="button">'+T('کاربران','Users')+'</button>';
+    h+='<button class="rb-dd-i sub'+on(q.activeUnit==='dau')+'" data-mm="dau" type="button"><span class="en">DAU</span> · '+T('کاربران فعال روزانه','Daily Active Users')+'</button>';
+    h+='<button class="rb-dd-i sub'+on(q.activeUnit==='wau')+'" data-mm="wau" type="button"><span class="en">WAU</span> · '+T('کاربران فعال هفتگی','Weekly Active Users')+'</button>';
+    h+='<button class="rb-dd-i sub'+on(q.activeUnit==='mau')+'" data-mm="mau" type="button"><span class="en">MAU</span> · '+T('کاربران فعال ماهانه','Monthly Active Users')+'</button>';
+    h+='<button class="rb-dd-i'+on(q.count==='events')+'" data-mm="events" type="button">'+T('کل رویدادها','Total events')+'</button>';
+    h+='<button class="rb-dd-i'+on(q.count==='sessions')+'" data-mm="sessions" type="button">'+T('کل نشست‌ها','Total sessions')+'</button>';
+    h+='<div class="rb-dd-g'+(q.count==='freq'?' open':'')+'"><button class="rb-dd-i'+on(q.count==='freq')+'" data-mg="1" type="button"><span class="grow">'+T('تکرار بر کاربر','Frequency per user')+'</span><span class="chev">⌄</span></button><div class="subwrap">';
+    FREQ_AGGS.forEach(function(a){ h+='<button class="rb-dd-i sub'+on(q.count==='freq'&&(q.freqAgg||'avg')===a[0])+'" data-mfreq="'+a[0]+'" type="button">'+T(a[1],a[2])+'</button>'; });
+    h+='</div></div>';
+    h+='<div class="rb-dd-g'+(q.count==='sum'&&!q.perUser?' open':'')+'"><button class="rb-dd-i'+on(q.count==='sum'&&!q.perUser)+'" data-mg="1" type="button"><span class="grow">'+T('تجمیع ویژگی','Aggregate property')+'</span><span class="chev">⌄</span></button><div class="subwrap">';
+    SUM_AGGS.forEach(function(a){ h+='<button class="rb-dd-i sub'+on(q.count==='sum'&&!q.perUser&&(q.sumAgg||'sum')===a[0])+'" data-msum="'+a[0]+'" type="button">'+T(a[1],a[2])+'</button>'; });
+    h+='</div></div>';
+    h+='<div class="rb-dd-g'+(q.count==='sum'&&q.perUser?' open':'')+'"><button class="rb-dd-i'+on(q.count==='sum'&&q.perUser)+'" data-mg="1" type="button"><span class="grow">'+T('تجمیع ویژگی بر کاربر','Aggregate property per user')+'</span><span class="chev">⌄</span></button><div class="subwrap">';
+    SUM_AGGS.forEach(function(a){ h+='<button class="rb-dd-i sub'+on(q.count==='sum'&&q.perUser&&(q.sumAgg||'sum')===a[0])+'" data-msumu="'+a[0]+'" type="button">'+T(a[1],a[2])+'</button>'; });
+    h+='</div></div>';
+    m.innerHTML=h;
+    m.querySelectorAll('[data-mg]').forEach(function(b){
+      b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+    });
+    m.querySelectorAll('[data-mm]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var v=b.getAttribute('data-mm');
+        if(v==='dau'||v==='wau'||v==='mau'){ RB.Q.trend.count='uniques'; RB.Q.trend.activeUnit=v; }
+        else { RB.Q.trend.count=v; RB.Q.trend.activeUnit=''; }
+        apply();
+      });
+    });
+    m.querySelectorAll('[data-mfreq]').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.count='freq'; RB.Q.trend.activeUnit=''; RB.Q.trend.freqAgg=b.getAttribute('data-mfreq'); apply(); });
+    });
+    m.querySelectorAll('[data-msum]').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.count='sum'; RB.Q.trend.activeUnit=''; RB.Q.trend.perUser=false; RB.Q.trend.sumAgg=b.getAttribute('data-msum'); apply(); });
+    });
+    m.querySelectorAll('[data-msumu]').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.count='sum'; RB.Q.trend.activeUnit=''; RB.Q.trend.perUser=true; RB.Q.trend.sumAgg=b.getAttribute('data-msumu'); apply(); });
+    });
+  }
+
+  var VIZ=[
+    ['_h','روند در طول زمان','Trend over time'],
+    ['line','خطی','Line','chart-line'],
+    ['stackline','خطی انباشته','Stacked line','chart-line'],
+    ['column','ستونی','Column','chart-bar'],
+    ['stackcol','ستونی انباشته','Stacked column','chart-bar'],
+    ['_h','تجمیع کل بازه','Whole-range aggregate'],
+    ['hbar','میله‌ای','Bar','chart-bar-horizontal'],
+    ['stackhbar','میله‌ای انباشته','Stacked bar','chart-bar-horizontal'],
+    ['pie','دایره‌ای','Pie','chart-pie'],
+    ['table','جدول','Table','table'],
+    ['metric','متریک','Metric','hash']
+  ];
+  function vizLbl(k){
+    if(k==='bar') k='column';
+    var hit=VIZ.filter(function(v){ return v[0]===k; })[0]||VIZ[1];
+    return T(hit[1],hit[2]);
+  }
+  function buildViz(){
+    var k=RB.Q.trend.kind==='bar'?'column':(RB.Q.trend.kind||'line');
+    var m=document.querySelector('#rbVizDD .rb-dd-m'), h='';
+    VIZ.forEach(function(v){
+      if(v[0]==='_h'){ h+='<div class="rb-dd-h">'+T(v[1],v[2])+'</div>'; return; }
+      h+='<button class="rb-dd-i'+(k===v[0]?' on':'')+'" data-viz="'+v[0]+'" type="button">'+icon(v[3])+'<span class="grow">'+T(v[1],v[2])+'</span></button>';
+    });
+    m.innerHTML=h;
+    m.querySelectorAll('[data-viz]').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.kind=b.getAttribute('data-viz'); apply(); });
+    });
+  }
+
+  var FNS=[['linear','خطی','Linear'],['rolling','میانگین متحرک','Rolling average'],['cumulative','تجمعی','Cumulative']];
+  function buildFn(){
+    var m=document.querySelector('#rbFnDD .rb-dd-m'), cur=RB.Q.trend.fn||'linear', h='';
+    FNS.forEach(function(f){ h+='<button class="rb-dd-i'+(cur===f[0]?' on':'')+'" data-fn="'+f[0]+'" type="button">'+T(f[1],f[2])+'</button>'; });
+    m.innerHTML=h;
+    m.querySelectorAll('[data-fn]').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.fn=b.getAttribute('data-fn'); apply(); });
+    });
+  }
+
+  function rangeMode(){
+    var r=RB.Q.range;
+    if(r===7||r==='7') r='7d'; if(r===30||r==='30') r='30d';
+    if(/^[cs]\d/.test(String(r))) return 'custom';   /* PM 2026-10-25, RB-12: a picked range or «از تاریخ» */
+    return ['7d','30d','3m','6m','12m','custom'].indexOf(r)>-1?r:'7d';
+  }
+  var GRANS=[['day','روز','Day'],['week','هفته','Week'],['month','ماه','Month']];
+  function effUnit(){
+    var au=RB.Q.trend.activeUnit;
+    if(au) return {dau:'day',wau:'week',mau:'month'}[au];
+    var g=RB.Q.trend.gran;
+    var allowed=RB.granAllowed(rangeMode());
+    if(g&&g!=='auto'&&allowed.indexOf(g)>-1) return g;
+    /* the range's own default unit */
+    var def={ '7d':'day','30d':'day','custom':'day','3m':'week','6m':'week','12m':'month' };
+    return def[rangeMode()];
+  }
+  function buildGran(){
+    var m=document.querySelector('#rbGranDD .rb-dd-m'), allowed=RB.granAllowed(rangeMode()), cur=effUnit(), h='';
+    GRANS.forEach(function(g){
+      var ok=allowed.indexOf(g[0])>-1;
+      h+='<button class="rb-dd-i'+(cur===g[0]?' on':'')+'" data-gran="'+g[0]+'"'+(ok?'':' disabled')+' type="button">'+T(g[1],g[2])+'</button>';
+    });
+    m.innerHTML=h;
+    m.querySelectorAll('[data-gran]:not([disabled])').forEach(function(b){
+      b.addEventListener('click', function(){ RB.Q.trend.gran=b.getAttribute('data-gran'); RB.Q.trend.activeUnit=''; apply(); });
+    });
+  }
+
+  function refreshLabels(){
+    var ml=RB.measureLabel();
+    var mt=document.querySelector('#rbMeasureT .lbl'); if(mt) mt.textContent=T(ml[0],ml[1]);
+    var vt=document.querySelector('#rbVizDD .lbl'); if(vt) vt.textContent=vizLbl(RB.Q.trend.kind||'line');
+    var cf=(RB.Q.trend.fn||'linear'), fhit=FNS.filter(function(f){ return f[0]===cf; })[0];
+    var ft=document.querySelector('#rbFnDD .lbl'); if(ft) ft.textContent=T(fhit[1],fhit[2]);
+    var gu=effUnit(), ghit=GRANS.filter(function(g){ return g[0]===gu; })[0];
+    var gt=document.querySelector('#rbGranDD .lbl'); if(gt&&ghit) gt.textContent=T(ghit[1],ghit[2]);   /* «today/yesterday» are hourly, which this legacy menu doesn't list */
+  }
+  function rebuildAll(){ buildMeasure(); buildViz(); buildFn(); buildGran(); refreshLabels(); }
+  function apply(){ closeAll(); RB.refreshPanel(); RB.renderActive(); rebuildAll(); plainNote(); }
+
+  /* annotations — pin a note to a date on the time chart */
+  var ann=document.getElementById('rbAnnBtn');
+  if(ann) ann.addEventListener('click', function(){
+    var txt=window.prompt(T('متن یادداشت (روی سه‌چهارم انتهایی بازه پین می‌شود):','Annotation text (pinned near the end of the range):'),'');
+    if(txt&&txt.trim()){
+      RB.addAnnotation(0.82, txt.trim());
+      RB.renderActive();
+      if(window.Shahin) Shahin.toast('یادداشت روی چارت پین شد','Annotation pinned to the chart');
+    }
+  });
+
+  /* new range → granularity options change (Mixpanel guardrails) */
+  document.querySelectorAll('input[name="drRange"]').forEach(function(rb){
+    rb.addEventListener('change', function(){ RB.Q.trend.gran='auto'; setTimeout(function(){ buildGran(); refreshLabels(); }, 30); });
+  });
+
+  /* re-apply after opening a saved report / template (openBuilder is late-bound) */
+  var _openBuilder=openBuilder;
+  openBuilder=function(t){ _openBuilder(t); rebuildAll(); };
+  document.addEventListener('rb:boot', function(){ setTimeout(rebuildAll, 80); });
+  document.addEventListener('shahin:lang', function(){ setTimeout(rebuildAll, 80); });
+  rebuildAll();
+})();
+
+document.addEventListener('rb:boot', function(){
+  var qs=new URLSearchParams(location.search);
+  /* v9/v10: routing (?type=, ?view=builder, ?saved=, ?board=, ?space=) lives in rb-shell.js */
+  setTimeout(function(){ booted=true; }, 400);
+});
+document.addEventListener('shahin:lang', function(){ setTimeout(function(){
+  if(builder.classList.contains('show')){ plainNote(); typeIntro(RB.Q.type); renderTitle(); }
+  else renderHub();
+}, 60); });
+})();
+</script>
+
+
+<!-- v5 dashboard script removed in v10: boards/dashboards live in rb-shell.js -->
+<script src="/assets/shahin-responsive.js"></script>
+<script>if (window.SHAHIN_M === '1') document.write('<script src="rb-m1.js"><\/script>'); else if (window.SHAHIN_M === '2') document.write('<script src="../assets/shahin-mbadge.js"><\/script><script src="rb-m1.js"><\/script>');</script>
+</body>
+</html>

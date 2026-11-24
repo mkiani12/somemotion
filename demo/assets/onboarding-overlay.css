@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ONBOARDING VIDEO — shared overlay convention (global)
+   PM-approved 2028-06-28. Used by every feature-onboarding video that
+   overlays rings + explanation callouts on a real screen recording.
+   RULES (do not break):
+   • Ring = THIN Shahin-orange (#FF5C2F), 2px, subtle glow. Never thick.
+   • The ring must hug its target EXACTLY — never cut through buttons or
+     content. (Tune each beat's rect to bound the section precisely.)
+   • Callout = small white card, brand left-border, ≤ a few lines, the
+     same look across all onboarding videos.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.ob-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.ob-ovl{position:absolute;inset:0;pointer-events:none;z-index:5}
+
+.ob-ring{position:absolute;pointer-events:none;box-sizing:border-box;
+  border:2px solid #FF5C2F;border-radius:8px;box-shadow:0 0 0 2px rgba(255,92,47,.15);
+  opacity:0;transition:opacity .25s, left .4s, top .4s, width .4s, height .4s}
+.ob-ring.on{opacity:1}
+
+.ob-callout{position:absolute;max-width:430px;background:var(--sh-surface);color:var(--sh-text);
+  border:1px solid var(--sh-brand-border);border-inline-start:5px solid var(--sh-brand);border-radius:14px;
+  box-shadow:var(--sh-shadow-2);padding:16px 20px;opacity:0;
+  transition:opacity .25s, left .4s, top .4s;pointer-events:none}
+.ob-callout.on{opacity:1}
+.ob-callout .ch{display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:800;color:var(--sh-brand);margin-bottom:8px}
+.ob-callout .ch .n{width:24px;height:24px;border-radius:7px;background:var(--sh-brand-soft);color:var(--sh-brand);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none}
+.ob-callout .cb{font-size:14.5px;color:var(--sh-text);line-height:1.85;font-weight:600}

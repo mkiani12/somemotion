@@ -1,0 +1,211 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SHAHIN Wireframe Design System — Tokens  (v2 — production-exact)
+   Source of truth: shahin-dashboard/app/front-cp-v4
+     app/theme/LightTheme.ts + DarkTheme.ts (Vuetify theme objects)
+     app/assets/css/vuetify-variables.scss (radii, typography)
+   Themes: html[data-theme="light"] (default) / html[data-theme="dark"]
+   Fonts:  fa → IRANSansX (variable), en → Roboto (swapped by html[lang])
+   Never hard-code colors in pages — always consume these variables.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@font-face{
+  font-family:'IRANSansX';
+  src:url('fonts/IRANSansXV.woff') format('woff');
+  font-weight:100 900;font-display:swap;
+}
+@font-face{
+  font-family:'Roboto';
+  src:url('fonts/Roboto-Regular.woff2') format('woff2');
+  font-weight:400;font-display:swap;
+}
+
+:root, html[data-theme="light"] {
+  /* brand (= primary / surfaceBrandLv1 / contentBrandLv1) */
+  --sh-brand:        #FF5C2F;
+  --sh-brand-soft:   #FFF7F4;   /* surfaceBrandLv2/3 */
+  --sh-brand-border: #FFBEAC;   /* borderBrandLv1 */
+  --sh-brand-grad:   linear-gradient(135deg,#FF5C2F,#FF8A65);
+
+  /* surfaces (surfaceNeutralLv*) */
+  --sh-bg:           #FAFAFA;   /* Lv3/4 — page canvas */
+  --sh-surface:      #FFFFFF;   /* Lv1/2 — cards */
+  --sh-surface-2:    #F5F5F5;   /* Lv5 — table headers, wells */
+  --sh-sidebar-bg:   #FAFAFA;
+  --sh-topbar-bg:    #FAFAFA;
+  --sh-side-active:  #EEEEEE;   /* Lv6 — active nav item */
+
+  /* text (contentNeutralLv*) */
+  --sh-text:         #191919;   /* Lv9 */
+  --sh-text-2:       #4D4D4D;   /* Lv6 */
+  --sh-muted:        #7C7C7C;   /* Lv4 */
+  --sh-muted-2:      #B8B8B8;   /* Lv2 */
+
+  /* lines (borderNeutralLv*) */
+  --sh-border:       #EEEEEE;   /* Lv1 */
+  --sh-border-2:     #E0E0E0;   /* Lv2 — emphasized */
+
+  /* ── analytics-report surfaces & text, lifted 1:1 from front-cp's Vuetify
+     theme (apps/front-cp/app/theme/{Light,Dark}Theme.ts) so the demo's report
+     components can be the same design, not an approximation of it. The names
+     keep production's Lv numbering to make the mapping checkable. ── */
+  --sh-rep-surface:   #FFFFFF;   /* surfaceNeutralLv2 — every report card */
+  --sh-rep-well:      #FAFAFA;   /* surfaceNeutralLv3/4 — total row, filled box */
+  --sh-rep-thead:     #F5F5F5;   /* surfaceNeutralLv5 — table header bar */
+  --sh-rep-pill:      #EEEEEE;   /* surfaceNeutralLv6 — the n/max sub-pill */
+  --sh-rep-t7:        #3A3A3A;   /* contentNeutralLv7 — metric-card label */
+  --sh-rep-t8:        #252525;   /* contentNeutralLv8 — highlight title */
+  --sh-rep-t3:        #9A9A9A;   /* contentNeutralLv3 — share %, floor note */
+  --sh-rep-t5:        #666666;   /* contentNeutralLv5 — mobile table card label */
+  --sh-rep-brand-bg:  #FFF7F4;   /* surfaceBrandLv2 — metric icon chip */
+  --sh-rep-good-bg:   #F5FBF5;   /* surfaceSuccessLv3 — growth highlight icon */
+  --sh-rep-info-bg:   #F2F9FF;   /* surfaceInfoLv1  — engagement highlight icon */
+  --sh-rep-bad-bg:    #FFF7F7;   /* surfaceErrorLv1 — decline highlight icon */
+
+  /* ── chart deck, lifted 1:1 from front-cp utils/getColors.ts. The demo's own
+     --sh-c1..c6 is a DIFFERENT palette used by the rest of the wireframes, so
+     the report charts get their own tokens rather than redefining it. ── */
+  --sh-chart-1:#3CA3FA; --sh-chart-2:#FFA52C; --sh-chart-3:#9385FF;
+  --sh-chart-4:#FF5D75; --sh-chart-5:#4FD9AD; --sh-chart-6:#E96BD0;
+  --sh-chart-other:   #B4C2DF;
+  --sh-chart-grid:    #EEEEEE;   /* chartGridLine */
+  --sh-chart-axis:    #7C7C7C;   /* chartAxisLabel */
+  --sh-chart-ink:     #191919;   /* chartText */
+  --sh-chart-tipbg:   #FFFFFF;   /* chartTooltipBg */
+  --sh-chart-on-fill: #202020;   /* chartInk — text ON a series fill (stacked-bar %, donut total), both themes, never white */
+  --sh-chart-guide:   #C9D1DA;   /* chartTooltipGuideLine — both themes */
+
+  /* heat ramp — chartIntensity in front-cp utils/getColors.ts. Identical in
+     both themes there, so it is declared once and not overridden in dark. */
+  --sh-heat-1:#E6F1FB; --sh-heat-2:#B5D4F4; --sh-heat-3:#7BB0E8;
+  --sh-heat-4:#378ADD; --sh-heat-5:#185FA5;
+  --sh-heat-ink:      #FFFFFF;   /* chartHeatmapInk — label on a filled cell */
+  --sh-heat-ink-mute: #4D4D4D;   /* chartHeatmapInkMuted */
+  --sh-focus:        #FF5C2F;
+
+  /* semantic — exact triples from BaseChip/BaseAlert */
+  --sh-good:         #4CAF50;
+  --sh-good-bg:      #F5FBF5;   /* surfaceSuccessLv3 */
+  --sh-good-border:  #B7DFB9;
+  --sh-warn:         #D56A32;
+  --sh-warn-bg:      #FDF7F4;   /* surfaceWarningLv1 */
+  --sh-warn-border:  #EEC3AD;
+  --sh-bad:          #FF6666;
+  --sh-bad-bg:       #FFF7F7;   /* surfaceErrorLv1 */
+  --sh-bad-border:   #FFC2C2;
+  --sh-info:         #5CADF9;
+  --sh-info-bg:      #F2F9FF;   /* surfaceInfoLv1 */
+  --sh-info-border:  #9DCEFB;
+  --sh-neutral-bg:   #F5F5F5;
+
+  /* charts (categorical — brand first) */
+  --sh-c1:#FF5C2F; --sh-c2:#5CADF9; --sh-c3:#4CAF50;
+  --sh-c4:#7C3AED; --sh-c5:#D56A32; --sh-c6:#0EA5E9;
+  /* analytics time-series palette — exact front-cp Chart.vue series colours */
+  --sh-viz-1:        #6FD195;   /* Users (line)  */
+  --sh-viz-2:        #a9b7fe;   /* Pageviews     */
+  --sh-viz-3:        #fac858;   /* Sessions      */
+  --sh-zebra:        #FAFAFA;   /* ListWithPercentage even rows (= surfaceNeutralLv4) */
+  --sh-bar-track:    rgba(0,0,0,.10);  /* progress-bar track */
+
+  /* elevation — production is flat; shadows minimal */
+  --sh-shadow-1: 0 1px 2px rgba(0,0,0,.05);
+  --sh-shadow-2: 0 12px 32px rgba(0,0,0,.14);
+
+  /* floating message (Notification Bar, messaging convention) — the one surface that
+     inverts the page theme so it reads from across the screen: dark in light, light in dark */
+  --sh-scrim-sheet:  rgba(0,0,0,.32);   /* behind a bottom sheet (lighter than the drawer scrim) */
+  --sh-chart-track:  #EDF1F6;   /* thin progress / bar track under a --sh-chart-1 fill */
+  --sh-float-bg:     #191919;   /* surfaceFloatingLv1 */
+  --sh-float-text:   #FFFFFF;   /* contentOnFloatingLv1 */
+
+  /* scrim behind drawers and dialogs, and text on a solid brand/info fill —
+     the same value in both themes, so the dark block does not override them */
+  --sh-scrim:        rgba(0,0,0,.4);
+  --sh-on-brand:     #FFFFFF;
+
+  /* tooltip (dark in both themes — high contrast on purpose) */
+  --sh-tip-bg:       #1F1F1F;
+  --sh-tip-text:     #FAFAFA;
+  --sh-tip-border:   rgba(255,255,255,.12);
+
+  /* shape & rhythm — $border-radius-root:4px scale (sm 2 / 4 / lg 8 / 12 / 16 / xl 24) */
+  --sh-radius:       8px;       /* fields, selects, alerts, cards */
+  --sh-radius-lg:    16px;
+  --sh-radius-pill:  9999px;
+  --sh-ctl-h:        40px;      /* buttons, inputs */
+  --sh-font-fa:      'IRANSansX', Tahoma, sans-serif;
+  --sh-font-en:      'Roboto', 'Segoe UI', sans-serif;
+  --sh-font:         var(--sh-font-fa);
+}
+
+html[data-theme="dark"] {
+  --sh-brand-soft:   rgba(255,92,47,.14);
+  --sh-brand-border: rgba(255,92,47,.45);
+
+  --sh-bg:           #191919;   /* DarkTheme background */
+  --sh-surface:      #202020;   /* DarkTheme surface */
+  --sh-surface-2:    #3A3A3A;
+  --sh-sidebar-bg:   #1F1F1F;   /* production Navbar/Header dark bg */
+  --sh-topbar-bg:    #1F1F1F;
+  --sh-side-active:  #252525;
+
+  --sh-text:         #FAFAFA;
+  --sh-text-2:       #C9C9C9;
+  --sh-muted:        #9A9A9A;
+  --sh-muted-2:      #7C7C7C;
+
+  --sh-border:       rgba(255,255,255,.10);
+  --sh-border-2:     rgba(255,255,255,.16);
+
+  /* dark counterparts of the analytics-report surfaces above */
+  --sh-rep-surface:   #202020;
+  --sh-rep-well:      #252525;
+  --sh-rep-thead:     #3A3A3A;
+  --sh-rep-pill:      #252525;
+  --sh-rep-t7:        #B8B8B8;
+  --sh-rep-t8:        #EEEEEE;
+  --sh-rep-t3:        #666666;
+  --sh-rep-t5:        #9A9A9A;
+  --sh-rep-brand-bg:  #362622;
+  --sh-rep-good-bg:   #0F2310;
+  --sh-rep-info-bg:   #122332;
+  --sh-rep-bad-bg:    #2D1F1F;
+
+  /* dark deck — chartPalDark and friends */
+  --sh-chart-1:#85C1FF; --sh-chart-2:#FFBE5C; --sh-chart-3:#A29BFE;
+  --sh-chart-4:#FF8595; --sh-chart-5:#81ECE1; --sh-chart-6:#F8A5EC;
+  --sh-chart-other:   #A3B3D2;
+  --sh-chart-grid:    #2B2B2B;
+  --sh-chart-axis:    #B8B8B8;
+  --sh-chart-ink:     #E0E0E0;
+  --sh-chart-tipbg:   #252525;
+  --sh-chart-on-fill: #202020;   /* same in dark: the dark ramp is pastel too */
+  --sh-heat-ink:      #12162B;   /* chartHeatmapInkDark */
+  --sh-heat-ink-mute: #C9C9C9;
+
+  --sh-good-bg:      rgba(76,175,80,.14);
+  --sh-good-border:  rgba(76,175,80,.4);
+  --sh-warn-bg:      rgba(213,106,50,.14);
+  --sh-warn-border:  rgba(213,106,50,.4);
+  --sh-bad-bg:       rgba(255,102,102,.14);
+  --sh-bad-border:   rgba(255,102,102,.4);
+  --sh-info:         #7DBDFA;   /* DarkTheme info */
+  --sh-info-bg:      rgba(92,173,249,.14);
+  --sh-info-border:  rgba(92,173,249,.4);
+  --sh-neutral-bg:   rgba(255,255,255,.07);
+  --sh-viz-2:        #4D6BFF;   /* Pageviews — DarkTheme */
+  --sh-zebra:        rgba(255,255,255,.04);
+  --sh-bar-track:    rgba(255,255,255,.12);
+
+  --sh-shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --sh-shadow-2: 0 12px 32px rgba(0,0,0,.55);
+
+  --sh-tip-bg:       #2A2A2A;
+  --sh-float-bg:     #FAFAFA;
+  --sh-float-text:   #191919;
+  --sh-chart-track:  rgba(255,255,255,.12);
+}
+
+/* font switches with language (production: --v-body-font-family swap) */
+html[lang="fa"]{ --sh-font: var(--sh-font-fa); }
+html[lang="en"]{ --sh-font: var(--sh-font-en); }

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>شاهین — گالری تمپلیت‌ها</title>
+<link rel="stylesheet" href="../assets/shahin-tokens.css"/>
+<link rel="stylesheet" href="../assets/shahin-components.css"/>
+<link rel="stylesheet" href="../assets/shahin-responsive.css"/>
+<style>
+/* ══ v11 — PM 2026-11-14: Shahin has no «ready-made dashboards», only the templates it prepares in a gallery. v10 with the page
+   renamed «گالری تمپلیت‌ها» / «Template gallery» (title, breadcrumb, nav, back link, open button, empty states); nothing else changes. ══ */
+/* ══ v7 — PM 2026-10-31, ready dashboards = templates ══
+   The page reads as Amplitude's template gallery filtered to Shahin's business-type templates. The gallery, card, starter and
+   role-card pieces are copied from report-builder/rb-amp-builder.css + rb-shell.css (the builder's template gallery,
+   rb-amp-templates.js) so both surfaces look like one product; the builder's files are not touched. Every colour via --sh-*. */
+[hidden]{display:none!important}
+.ph{display:inline-flex;flex-shrink:0}
+.ph svg{width:100%;height:100%;fill:currentColor}
+
+/* ── shared header pieces (from rb-shell.css) ── */
+.rbx-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rbx-title{font-size:16px;font-weight:800;color:var(--sh-text);min-width:0;display:inline-flex;align-items:center}
+.rbx-sub{font-size:11.5px;color:var(--sh-muted);line-height:1.9}
+.rbx-spacer{flex:1}
+.rbx-crumb{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--sh-muted);background:none;border:1px dashed transparent;border-radius:var(--sh-radius);padding:3px 7px;cursor:pointer;font-family:inherit;align-self:flex-start}
+.rbx-crumb:hover{border-color:var(--sh-border-2);color:var(--sh-text-2)}
+.rbx-crumb .ph{width:14px;height:14px}
+.rbx-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--sh-radius-pill);border:1px solid var(--sh-border-2);background:var(--sh-neutral-bg);color:var(--sh-text-2);white-space:nowrap}
+.rbx-badge .ph{width:12px;height:12px}
+.rbx-callout{display:flex;gap:9px;align-items:flex-start;font-size:11.5px;line-height:1.85;color:var(--sh-text-2);background:var(--sh-info-bg);border:1px solid var(--sh-info-border);border-radius:var(--sh-radius);padding:9px 11px}
+.rbx-callout.warn{background:var(--sh-warn-bg);border-color:var(--sh-warn-border)}
+.rbx-callout>.ph{width:16px;height:16px;margin-top:2px;color:var(--sh-info)}
+.rbx-callout.warn>.ph{color:var(--sh-warn)}
+.rbx-search{display:flex;align-items:center;gap:6px;border:1px solid var(--sh-border-2);border-radius:var(--sh-radius);background:var(--sh-surface-2);padding:0 9px;min-height:34px}
+.rbx-search .ph{width:15px;height:15px;color:var(--sh-muted)}
+.rbx-search input{border:none;background:none;outline:none;color:var(--sh-text);font:inherit;font-size:12px;flex:1;min-width:0}
+.rbx-item{display:flex;align-items:center;gap:8px;width:100%;text-align:start;background:none;border:none;cursor:pointer;font:inherit;font-size:12px;color:var(--sh-text-2);padding:7px 8px;border-radius:calc(var(--sh-radius) - 3px);min-width:0;text-decoration:none}
+.rbx-item:hover{background:var(--sh-neutral-bg)}
+.rbx-item.on{background:var(--sh-brand-soft);color:var(--sh-brand);font-weight:800}
+.rbx-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbx-item .ct{font-size:10px;color:var(--sh-muted-2)}
+.rbx-item .ph{width:15px;height:15px;opacity:.85}
+.sh-btn .ph{width:15px;height:15px}
+.sh-btn[disabled]{opacity:.5;cursor:not-allowed}
+a.sh-btn{text-decoration:none}
+.rbx-head .sh-btn,.cap-code-copy{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+
+/* ── gallery (from rb-amp-builder.css «Template gallery») ── */
+.tg-wrap{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.tg-nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px;min-width:0}
+.tg-nav .rbx-search{margin-bottom:8px}
+.tg-navh{font-size:10.5px;font-weight:800;color:var(--sh-muted);letter-spacing:.02em;padding:12px 10px 4px}
+.tg-navfoot{margin-top:10px;padding-top:10px;border-top:1px solid var(--sh-border)}
+.tg-main{min-width:0;display:flex;flex-direction:column;gap:14px}
+.tg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.tg-card{display:flex;flex-direction:column;text-align:start;background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:12px;padding:0;overflow:hidden;cursor:pointer;color:var(--sh-text);font:inherit;min-width:0;transition:border-color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out),box-shadow var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.tg-card:hover,.tg-card:focus-visible{border-color:var(--sh-brand-border);box-shadow:var(--sh-shadow-1)}
+.tg-thumb{display:block;background:var(--sh-surface-2);border-bottom:1px solid var(--sh-border);padding:10px 12px}
+.tg-thumb>svg{display:block;width:100%;height:72px}
+.tg-pane{fill:var(--sh-surface);stroke:var(--sh-border)}
+.tg-c1{fill:var(--sh-c1)}.tg-c2{fill:var(--sh-c2)}
+.tg-line{fill:none;stroke:var(--sh-c1);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.tg-cbody{display:flex;flex-direction:column;gap:7px;padding:12px 14px 12px}
+.tg-ctitle{display:flex;align-items:center;gap:7px;font-size:13.5px}
+.tg-ctitle .ph{width:17px;height:17px;color:var(--sh-brand)}
+.tg-cdesc{font-size:11.5px;line-height:1.7;color:var(--sh-muted)}
+.tg-cmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;color:var(--sh-muted)}
+.tg-cfoot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;font-size:10.5px;color:var(--sh-muted);border-top:1px solid var(--sh-border);padding-top:8px;margin-top:2px}
+.tg-cfoot .auto{display:inline-flex;align-items:center;gap:4px;color:var(--sh-good);font-weight:700}
+.tg-cfoot .auto .ph{width:12px;height:12px}
+
+/* ── live collection status (v6's rail, now a summary card above the grid) ── */
+.cs-card{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.cs-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cs-h{font-size:12.5px;font-weight:800;display:inline-flex;align-items:center}
+.cs-count{font-size:13px;font-weight:800;margin-inline-start:auto}
+.cs-count b{font-size:20px;color:var(--sh-brand)}
+.cs-count small{font-size:11.5px;font-weight:700;color:var(--sh-muted)}
+.cs-bar{height:6px;border-radius:var(--sh-radius-pill);background:var(--sh-neutral-bg);overflow:hidden}
+.cs-bar i{display:block;height:100%;background:var(--sh-good);border-radius:inherit}
+.cs-pend{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:11.5px;color:var(--sh-text-2)}
+.cs-chip{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:11px;font-weight:700;color:var(--sh-text-2);background:var(--sh-warn-bg);border:1px solid var(--sh-warn-border);border-radius:var(--sh-radius-pill);padding:3px 10px;cursor:pointer}
+.cs-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--sh-warn)}
+.cs-chip .cnt{color:var(--sh-muted);font-weight:600}
+.cs-chip:hover{border-color:var(--sh-warn)}
+.cs-ov{font-size:11.5px;color:var(--sh-muted);line-height:1.75}
+.cs-empty{font-size:11.5px;color:var(--sh-muted-2);font-style:italic}
+
+/* ── hero ── */
+.cap-hero{margin:2px 2px 4px}
+.cap-hero-q{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.4;display:flex;align-items:center;flex-wrap:wrap}
+.cap-hero-s{font-size:12.5px;color:var(--sh-muted);line-height:1.85;margin-top:7px}
+
+/* ── starter page (from rb-amp-builder.css: .tg-split / .tg-roles / .tg-role) ── */
+.tg-starter{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tg-split.solo{grid-template-columns:minmax(0,1fr)}
+.tg-split{display:grid;grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:16px;align-items:start;margin-top:4px}
+.tg-roles{display:flex;flex-direction:column;gap:10px;background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:12px;padding:12px;min-width:0}
+.tg-rolesh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px}
+.tg-rolesh b{display:inline-flex;align-items:center}
+.tg-rolesh .sh-chip{margin-inline-start:auto}
+.tg-pack{border:1px solid var(--sh-border);border-radius:10px;overflow:hidden;min-width:0}
+.tg-packh{display:flex;align-items:center;gap:8px;width:100%;background:var(--sh-surface-2);border:none;font:inherit;color:var(--sh-text);padding:9px 10px;cursor:pointer;text-align:start;flex-wrap:wrap}
+.tg-packh b{font-size:12.5px}
+.tg-packh .sh-chip{font-size:10.5px}
+.tg-packh .car{margin-inline-start:auto;width:16px;height:16px;color:var(--sh-text-2);transition:transform var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.tg-pack.open .tg-packh .car{transform:rotate(180deg)}
+.tg-packd{font-size:11px;color:var(--sh-muted);line-height:1.6;flex-basis:100%}
+.tg-packb{display:flex;flex-direction:column;gap:8px;padding:9px;min-width:0}
+.tg-role{display:flex;flex-direction:column;gap:7px;border:1px solid var(--sh-border);border-radius:10px;padding:10px 11px;background:var(--sh-surface);min-width:0;transition:box-shadow var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.tg-role.empty{border-style:dashed;border-color:var(--sh-warn-border);background:var(--sh-warn-bg)}
+.tg-role.flash{box-shadow:0 0 0 2px var(--sh-brand)}
+.tg-rhead{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;min-width:0}
+.tg-evn{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;direction:ltr;unicode-bidi:isolate;color:var(--sh-text);overflow-wrap:anywhere;min-width:0}
+.tg-rn{font-size:10.5px;color:var(--sh-muted);white-space:nowrap}
+.tg-rdef{font-size:11.5px;line-height:1.7;color:var(--sh-muted)}
+.tg-rfeed{font-size:11px;color:var(--sh-muted-2);line-height:1.6}
+.tg-rfeed b{color:var(--sh-text-2);font-weight:700}
+.tg-auto{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--sh-good)}
+.tg-auto .ph{width:13px;height:13px}
+.tg-wait1{display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:10.5px;font-weight:700;color:var(--sh-info);background:var(--sh-info-bg);border:1px solid var(--sh-info-border);border-radius:var(--sh-radius-pill);padding:3px 10px;cursor:pointer;align-self:flex-start}
+.tg-wait1 .ph{width:13px;height:13px}
+.tg-hs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tg-hshint{font-size:11px;color:var(--sh-text-2);line-height:1.6;flex:1;min-width:140px}
+.tg-hsbtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--sh-brand-border);background:var(--sh-brand-soft);color:var(--sh-brand);font:inherit;font-size:11.5px;font-weight:800;padding:6px 13px;border-radius:var(--sh-radius-pill);cursor:pointer;white-space:nowrap;transition:background-color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out),color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out),border-color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.tg-hsbtn:hover{background:var(--sh-brand);color:var(--sh-bg);border-color:var(--sh-brand)}
+.tg-schbtn{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;background:none;border:none;font:inherit;font-size:11px;font-weight:700;color:var(--sh-text-2);padding:2px 0;cursor:pointer}
+.tg-schbtn .ph{width:13px;height:13px;transition:transform var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.tg-schbtn[aria-expanded="true"] .ph{transform:rotate(180deg)}
+.tg-schbtn:hover{color:var(--sh-brand)}
+.tg-sch{display:flex;flex-direction:column;gap:8px;min-width:0}
+.cap-fields{display:flex;gap:6px;flex-wrap:wrap}
+.cap-fchip{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;padding:3px 8px;border-radius:8px;border:1px solid var(--sh-border-2);background:var(--sh-neutral-bg);color:var(--sh-text-2);unicode-bidi:isolate;direction:ltr;overflow-wrap:anywhere}
+.cap-fchip.req{border-color:var(--sh-brand-border);background:var(--sh-brand-soft);color:var(--sh-text)}
+.cap-fchip .ty{color:var(--sh-muted)}
+.cap-fnone{font-size:11px;color:var(--sh-muted-2);font-style:italic}
+.cap-code{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cap-code-pre{margin:0;background:var(--sh-surface-2);border:1px solid var(--sh-border);border-radius:9px;padding:10px 10px 9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.8;direction:ltr;text-align:left;color:var(--sh-text-2);white-space:pre;overflow-x:auto;max-width:100%}
+.cap-code-copy{align-self:flex-start}
+.tg-canvas{display:flex;flex-direction:column;gap:12px;min-width:0;position:sticky;top:12px}
+.tg-canvh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800}
+.tg-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tg-tile{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.tg-tile.text{grid-column:1/-1;background:var(--sh-surface-2)}
+.tg-tile.text h3{margin:0 0 4px;font-size:14px}
+.tg-tile.text div{font-size:12px;line-height:1.85;color:var(--sh-text-2)}
+.tg-tilet{font-size:12.5px;font-weight:800;line-height:1.5}
+.tg-tiled{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:10.5px;color:var(--sh-muted)}
+.tg-type{font-size:10px;font-weight:800;padding:1px 7px;border-radius:var(--sh-radius-pill);background:var(--sh-neutral-bg);color:var(--sh-text-2);border:1px solid var(--sh-border-2)}
+.tg-tile>svg{display:block;width:100%;height:56px}
+.tg-ready{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--sh-good)}
+.tg-ready .ph{width:13px;height:13px}
+.tg-wait{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;line-height:1.8;color:var(--sh-muted);padding:9px 10px;border:1px dashed var(--sh-border-2);border-radius:10px}
+.tg-wait>.ph{width:16px;height:16px;margin-top:3px}
+.tg-evlink{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:700;direction:ltr;unicode-bidi:isolate;background:var(--sh-warn-bg);border:1px solid var(--sh-warn-border);color:var(--sh-text);border-radius:6px;padding:2px 8px;cursor:pointer;margin:3px;display:inline-flex;align-items:center;min-height:24px;vertical-align:middle}
+.tg-evlink:hover{border-color:var(--sh-warn)}
+
+/* ── per-project status pieces (PM 2026-10-31) ── */
+.cs-proj{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--sh-text-2);background:var(--sh-neutral-bg);border:1px solid var(--sh-border-2);border-radius:var(--sh-radius-pill);padding:2px 9px}
+.cs-proj .ph{width:13px;height:13px}
+.cs-first{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sh-info)}
+.cs-first .ph{width:14px;height:14px}
+.cs-noev{display:flex;gap:10px;align-items:flex-start;background:var(--sh-info-bg);border:1px solid var(--sh-info-border);border-radius:10px;padding:11px 12px}
+.cs-noev>.ph{width:18px;height:18px;color:var(--sh-info);margin-top:2px}
+.cs-noev-t{font-size:13px;font-weight:800;color:var(--sh-text)}
+.cs-noev-h{font-size:11.5px;color:var(--sh-text-2);line-height:1.8;margin-top:2px}
+.tg-first{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--sh-info)}
+.tg-first .ph{width:13px;height:13px}
+.tg-ready.first{color:var(--sh-info)}
+.tg-cfoot .bycode{display:inline-flex;align-items:center;gap:4px;color:var(--sh-text-2);font-weight:700}
+.tg-cfoot .bycode .ph{width:12px;height:12px}
+.rbx-callout.good{background:var(--sh-good-bg);border-color:var(--sh-good-border)}
+.rbx-callout.good>.ph{color:var(--sh-good)}
+.cap-link{color:var(--sh-brand);font-weight:800;text-decoration:underline}
+
+/* ── save modal (from rb-shell.css: .rbx-ov / .rbx-modal / .rbx-field / .rbx-pick) ── */
+.rbx-ov{position:fixed;inset:0;background:var(--sh-overlay,rgba(0,0,0,.42));z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity var(--sh-duration-fast,140ms) var(--sh-ease-decelerate,ease-out)}
+.rbx-ov.show{opacity:1}
+.rbx-modal{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:calc(var(--sh-radius) + 4px);box-shadow:var(--sh-shadow-2);width:520px;max-width:100%;max-height:calc(100vh - 32px);display:flex;flex-direction:column;transform:translateY(8px);transition:transform var(--sh-duration-fast,140ms) var(--sh-ease-decelerate,ease-out)}
+.rbx-ov.show .rbx-modal{transform:none}
+.rbx-mhead{display:flex;align-items:center;gap:10px;padding:16px 18px 6px}
+.rbx-mtitle{font-size:15px;font-weight:800;flex:1}
+.rbx-mx{background:none;border:none;cursor:pointer;color:var(--sh-muted);font-size:20px;line-height:1;padding:2px 6px;border-radius:6px}
+.rbx-mx:hover{color:var(--sh-text);background:var(--sh-neutral-bg)}
+.rbx-msub{font-size:11.5px;color:var(--sh-muted);padding:0 18px;line-height:1.9}
+.rbx-mbody{padding:14px 18px;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.rbx-mfoot{display:flex;align-items:center;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--sh-border)}
+.rbx-field{display:flex;flex-direction:column;gap:6px;font-size:11.5px;font-weight:800;color:var(--sh-text-2)}
+.rbx-field .sh-input{width:100%;box-sizing:border-box;font-weight:400}
+.rbx-field textarea.sh-input{font:inherit;font-size:12px;font-weight:400;color:var(--sh-text);background:var(--sh-surface-2);border:1px solid var(--sh-border-2);border-radius:var(--sh-radius);padding:8px 10px;min-height:56px;resize:vertical}
+.rbx-note{font-size:11px;font-weight:400;color:var(--sh-muted);line-height:1.8}
+.rbx-err{font-size:11px;font-weight:700;color:var(--sh-bad)}
+.rbx-pick{display:flex;flex-direction:column;border:1px solid var(--sh-border);border-radius:var(--sh-radius);max-height:200px;overflow:auto}
+.rbx-pickrow{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px solid var(--sh-border);font-size:12px;color:var(--sh-text)}
+.rbx-pickrow:last-child{border-bottom:none}
+.rbx-pickrow .grow{flex:1;min-width:0}
+.rbx-pickrow .ph{width:14px;height:14px;color:var(--sh-muted)}
+@media (prefers-reduced-motion:reduce){.rbx-ov,.rbx-ov .rbx-modal{transition:opacity var(--sh-duration-fast,140ms) linear}.rbx-ov .rbx-modal{transform:none}}
+
+/* ── skeleton loading (gallery shape) ── */
+.cap-skel{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px}
+.cap-skel-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cap-sk{background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:12px;position:relative;overflow:hidden}
+.cap-sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--sh-neutral-bg),transparent);animation:capsheen 1.3s infinite}
+@keyframes capsheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.cap-sk.h60{height:60px}.cap-sk.h220{height:220px}.cap-sk.h300{height:300px}
+.cap-skel-m{display:flex;flex-direction:column;gap:12px}
+
+/* reduced motion: same weight as the rules it cancels */
+@media (prefers-reduced-motion:reduce){
+  .cap-sk::after{animation:none}
+  .tg-card,.tg-role,.tg-hsbtn{transition:none}
+  .tg-packh .car,.tg-schbtn .ph{transition:none}
+}
+
+/* ── responsive (the builder's breakpoints) ── */
+@media (max-width:1100px){.tg-split{grid-template-columns:minmax(0,1fr)}.tg-canvas{position:static}}
+@media (max-width:900px){
+  .tg-wrap,.cap-skel{grid-template-columns:minmax(0,1fr)}
+  .tg-nav{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}
+  .tg-nav .rbx-search{flex-basis:100%}
+  .tg-navh{display:none}
+  .tg-nav .rbx-item{width:auto;border:1px solid var(--sh-border)}
+  .tg-navfoot{flex-basis:100%;margin-top:4px}
+}
+@media (max-width:520px){
+  .cap-hero-q{font-size:18px}
+  .tg-grid,.tg-tiles,.cap-skel-g{grid-template-columns:minmax(0,1fr)}
+  .cs-count{margin-inline-start:0}
+}
+
+/* ── v8 · Amplitude template gallery ▸ Industry (PM 2026-11-03) ── */
+.i8-wrap .tg-navh,.tg-nav .tg-navh{display:block;font-size:12px;color:var(--sh-muted);font-weight:600;margin:16px 0 4px;padding-inline:11px}
+.i8-sec{font-size:17px;font-weight:700;color:var(--sh-text);margin:18px 2px 12px}
+.i8-sec .i8-n{color:var(--sh-text-2);font-weight:600}
+.i8-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.i8-card{display:flex;flex-direction:column;padding:0;overflow:hidden;border:1px solid var(--sh-border);border-radius:10px;background:var(--sh-surface);text-align:start;cursor:pointer;box-shadow:none}
+.i8-card:hover{border-color:var(--sh-brand-border);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.i8-card:focus-visible{outline:2px solid var(--sh-brand);outline-offset:2px}
+.i8-head{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--sh-border);min-height:48px}
+.i8-head b{font-size:14px;font-weight:600;color:var(--sh-text);flex:1;min-width:0}
+.i8-st{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--sh-text-2);white-space:nowrap}
+.i8-st i{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--sh-info)}
+.i8-st.good i{background:var(--sh-good)}.i8-st.warn i{background:var(--sh-warn)}
+.i8-ill{position:relative;height:126px;display:grid;place-items:center}
+.i8-ill.p-good{background:color-mix(in srgb,var(--sh-good) 24%,var(--sh-surface))}.i8-ill.p-info{background:color-mix(in srgb,var(--sh-info) 24%,var(--sh-surface))}.i8-ill.p-bad{background:color-mix(in srgb,var(--sh-bad) 20%,var(--sh-surface))}.i8-ill.p-warn{background:color-mix(in srgb,var(--sh-warn) 24%,var(--sh-surface))}
+.i8-paper{position:relative;z-index:1;width:62%;height:86px;background:var(--sh-surface);border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);display:block;padding:4px}
+.i8-paper svg{width:100%;height:100%;display:block}
+.i8-paper.back{position:absolute;z-index:0;opacity:.55;transform:translate(9px,-7px) rotate(-2deg)}
+[dir=rtl] .i8-paper.back{transform:translate(-9px,-7px) rotate(2deg)}
+/* ── v10 (PM 2026-11-11, «the card images are ugly»): each card shows a small preview of its own dashboard — the template's
+   colour and icon, two KPI tiles and its first chart drawn from its real cards — in place of the same pastel sheet and squiggle.
+   The window is cropped by the card's bottom edge, like Amplitude's template thumbnails. --h is the template's chart colour. ── */
+.i9-ill{position:relative;height:140px;overflow:hidden;display:block;--h:var(--sh-chart-1);
+  background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--h) 22%,var(--sh-surface)) 0%,color-mix(in srgb,var(--h) 8%,var(--sh-surface)) 100%);
+  border-bottom:1px solid var(--sh-border)}
+.i9-ill::before{content:"";position:absolute;inset:0;background-image:radial-gradient(color-mix(in srgb,var(--h) 30%,transparent) 1px,transparent 1.2px);background-size:12px 12px;opacity:.5;
+  -webkit-mask-image:linear-gradient(to bottom,#000,transparent 85%);mask-image:linear-gradient(to bottom,#000,transparent 85%)}
+.i9-win{position:absolute;inset-inline:10%;top:16px;bottom:-14px;display:flex;flex-direction:column;gap:6px;padding:8px 9px;background:var(--sh-surface);
+  border:1px solid color-mix(in srgb,var(--h) 22%,var(--sh-border));border-radius:9px;box-shadow:0 6px 18px -8px color-mix(in srgb,var(--h) 45%,transparent);
+  transition:transform var(--sh-duration-fast,120ms) cubic-bezier(.2,0,0,1)}
+.i8-card:hover .i9-win,.i8-card:focus-visible .i9-win{transform:translateY(-3px)}
+@media (prefers-reduced-motion:reduce){.i9-win{transition:none}.i8-card:hover .i9-win,.i8-card:focus-visible .i9-win{transform:none}}
+.i9-wh{display:flex;align-items:center;gap:6px}
+.i9-wi{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--h) 18%,var(--sh-surface));color:var(--h)}
+.i9-wi .ph,.i9-wi svg{width:13px;height:13px;display:block}
+.i9-wl{display:flex;flex-direction:column;gap:3px;flex:1}
+.i9-wl i{display:block;height:4px;border-radius:2px;background:var(--sh-border-2);width:46%}
+.i9-wl i+i{height:3px;width:28%;background:var(--sh-border)}
+.i9-win svg.i9-body{width:100%;flex:1;min-height:0;display:block}
+.i9-t{fill:var(--sh-surface-2);stroke:var(--sh-border);stroke-width:.6}
+.i9-l1{fill:var(--sh-border-2)}.i9-l2{fill:var(--sh-border)}
+.i9-n{fill:var(--sh-text);opacity:.82}
+.i9-h{fill:var(--h)}.i9-hs{fill:none;stroke:var(--h);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.i9-ha{fill:var(--h);opacity:.16}
+.i9-g{stroke:var(--sh-border);stroke-width:.6;stroke-dasharray:2 2}
+.i9-plat{position:absolute;top:7px;inset-inline-end:8px;z-index:2;font-size:10.5px;line-height:17px;padding:0 7px;border-radius:999px;
+  background:var(--sh-surface);color:var(--sh-text);border:1px solid color-mix(in srgb,var(--h) 35%,var(--sh-border));font-weight:600}
+@media (max-width:760px){.i9-ill{height:112px}.i9-win{top:18px}}
+.i8-ln{fill:var(--sh-border-2)}.i8-ln2{fill:var(--sh-border)}
+.i8-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 14px;border:1px solid var(--sh-border);border-radius:10px;background:var(--sh-surface);font-size:12.5px;color:var(--sh-text-2)}
+.i8-sh{font-weight:700;color:var(--sh-text);display:inline-flex;align-items:center;gap:4px}
+.i8-proj{color:var(--sh-muted)}
+.i8-bar{flex:1;min-width:120px;height:6px;border-radius:99px;background:var(--sh-neutral-bg);overflow:hidden}
+.i8-bar i{display:block;height:100%;background:var(--sh-good);border-radius:99px}
+.i8-cnt b{color:var(--sh-text);font-weight:800}
+.i8-wait{border:0;background:none;color:var(--sh-warn);font:inherit;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
+.i8-first{color:var(--sh-info)}
+/* ── v8 · the full template gallery (PM 2026-11-03, milestone 11): usage line, groups, customer-template menu, role binding ── */
+.i8-sub{font-size:14px;font-weight:700;color:var(--sh-text);margin:22px 2px 10px}
+.i8-sub .i8-n{color:var(--sh-text-2);font-weight:600}
+.i8-use{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;padding:9px 16px;border-top:1px solid var(--sh-border);font-size:11px;color:var(--sh-muted)}
+.i8-use .ph{width:13px;height:13px;color:var(--sh-muted-2)}
+.i8-dot{color:var(--sh-muted-2)}
+.i8-tmeta .i8-use{border:0;padding:4px 0 0}
+.i8-card.org{position:relative}
+.i8-omenu{margin-inline-start:2px}
+.rbx-icbtn{display:inline-grid;place-items:center;width:28px;height:28px;flex:0 0 28px;border:1px solid var(--sh-border);border-radius:8px;background:var(--sh-surface);color:var(--sh-text-2);font:inherit;font-size:15px;line-height:1;cursor:pointer;transition:border-color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out),color var(--sh-duration-fast,120ms) var(--sh-ease-standard,ease-out)}
+.rbx-icbtn:hover{border-color:var(--sh-brand);color:var(--sh-brand)}
+.rbx-icbtn .ph{width:16px;height:16px}
+.i8-menu{position:absolute;z-index:60;min-width:240px;max-width:min(320px,calc(100vw - 16px));background:var(--sh-surface);border:1px solid var(--sh-border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:5px}
+.i8-mi{display:flex;align-items:flex-start;gap:9px;width:100%;border:0;background:none;font:inherit;font-size:12.5px;color:var(--sh-text);padding:8px 10px;border-radius:7px;cursor:pointer;text-align:start}
+.i8-mi:hover,.i8-mi:focus-visible{background:var(--sh-neutral-bg)}
+.i8-mi[disabled]{opacity:.45;cursor:default;background:none}
+.i8-mi .ph{width:15px;height:15px;margin-top:2px;color:var(--sh-text-2)}
+.i8-mi .grow{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.i8-mi small{font-size:10.5px;color:var(--sh-muted)}
+.i8-msep{height:1px;background:var(--sh-border);margin:5px 4px}
+.tg-rbind{display:flex;align-items:center;gap:6px}
+.tg-ev{flex:1;min-width:0;display:flex;align-items:center;gap:6px;border:1px solid var(--sh-border);border-radius:8px;background:var(--sh-surface-2);padding:6px 9px;font:inherit;font-size:12px;color:var(--sh-text);cursor:pointer;text-align:start}
+.tg-ev:hover{border-color:var(--sh-brand-border)}
+.tg-ev>span:not(.ph):not(.rbx-caret){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tg-ev .ph{width:14px;height:14px;color:var(--sh-brand)}
+.tg-add{align-self:flex-start}
+.tg-track{display:flex;flex-direction:column;gap:6px;font-size:11px;line-height:1.7;color:var(--sh-text)}
+.tg-track pre{margin:0;padding:8px 10px;border-radius:8px;background:var(--sh-surface-2);border:1px solid var(--sh-border);font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.6;text-align:left;white-space:pre-wrap;word-break:break-all}
+.tg-track .sh-btn{align-self:flex-start}
+.tg-dup{font-size:11px}
+.tg-picklist{max-height:340px;overflow:auto;margin-top:10px}
+.tg-pickh{font-size:10.5px;font-weight:800;color:var(--sh-muted);padding:8px 11px 4px}
+.tg-pickrow{width:100%;font:inherit;background:none;border:none;border-bottom:1px solid var(--sh-border);color:var(--sh-text);cursor:pointer;text-align:start}
+.tg-pickrow:hover{background:var(--sh-neutral-bg)}
+.tg-pickrow.on{background:var(--sh-brand-soft)}
+.tg-pickrow .ph{width:14px;height:14px;color:var(--sh-muted)}
+.tg-pickrow .grow{flex:1;min-width:0}
+.tg-evid{font-size:10.5px;color:var(--sh-muted);font-family:ui-monospace,Menlo,monospace}
+@media (prefers-reduced-motion:reduce){.rbx-icbtn{transition:none}}
+@media (max-width:1100px){.i8-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.i8-grid{gap:12px}.i8-ill{height:100px}}
+@media (max-width:420px){.i8-grid{grid-template-columns:1fr}}
+/* v9 — flat facets (industry · use case) and tag chips on every card */
+.i9-facets{display:flex;flex-direction:column;gap:8px;margin:0 0 16px}
+.i9-facet{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.i9-fl{font-size:12px;color:var(--sh-muted);min-width:56px;display:inline-flex;align-items:center;gap:4px}
+.i9-chips{display:flex;gap:8px;flex-wrap:wrap}
+.i9-chip{height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--sh-border);background:var(--sh-surface);color:var(--sh-text-2);font:inherit;font-size:12px;cursor:pointer}
+.i9-chip:hover{background:var(--sh-surface-2)}
+.i9-chip.on{background:var(--sh-brand-soft);border-color:color-mix(in srgb,var(--sh-brand) 35%,transparent);color:var(--sh-brand)}
+.i9-chip:focus-visible{outline:2px solid var(--sh-brand);outline-offset:1px}
+.i9-tags{display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 12px}
+.i9-tag{font-size:11px;line-height:18px;padding:0 8px;border-radius:999px;background:var(--sh-surface-2);color:var(--sh-text-2)}
+.i9-tag.plat{background:var(--sh-brand-soft);color:color-mix(in srgb,var(--sh-brand) 62%,var(--sh-text))}
+</style>
+</head>
+<body class="sh-layout">
+
+<main class="sh-main">
+  <header class="sh-topbar">
+    <div>
+      <div class="sh-page-title" data-fa="گالری تمپلیت‌ها" data-en="Template gallery">گالری تمپلیت‌ها</div>
+      <div class="sh-crumb" data-fa="پروژه‌ها › جمع‌آوری داده › گالری تمپلیت‌ها" data-en="Projects › Data Collection › Template gallery">پروژه‌ها › جمع‌آوری داده › گالری تمپلیت‌ها</div>
+    </div>
+    <div class="sh-topbar-spacer"></div>
+    <div class="sh-topbar-actions"></div>
+  </header>
+
+  <div class="sh-content" id="capRoot">
+
+    <!-- ══════════ LOADING (gallery shape) ══════════ -->
+    <div class="cap-skel" id="capLoading" hidden aria-busy="true">
+      <div class="cap-sk h300"></div>
+      <div class="cap-skel-m">
+        <div class="cap-sk h60"></div>
+        <div class="cap-skel-g"><div class="cap-sk h220"></div><div class="cap-sk h220"></div><div class="cap-sk h220"></div></div>
+      </div>
+    </div>
+
+    <!-- ══════════ ERROR ══════════ (verbatim from v6) -->
+    <div class="sh-card" id="capError" hidden>
+      <div class="sh-state">
+        <div class="sh-state-icon" data-ic="warning"></div>
+        <div class="sh-state-title" data-fa="پک‌ها بارگذاری نشدند" data-en="Couldn’t load the packs">پک‌ها بارگذاری نشدند</div>
+        <div class="sh-state-hint" data-fa="ارتباط با سرور برقرار نشد؛ چیزی تغییر نکرده است." data-en="We couldn’t reach the server; nothing has changed.">ارتباط با سرور برقرار نشد؛ چیزی تغییر نکرده است.</div>
+        <button class="sh-btn primary compact" id="capRetry" data-fa="تلاش دوباره" data-en="Try again">تلاش دوباره</button>
+      </div>
+    </div>
+
+    <!-- ══════════ NO ACCESS (role) — no CTA per convention ══════════ (verbatim from v6) -->
+    <div class="sh-card" id="capDenied" hidden>
+      <div class="sh-state">
+        <div class="sh-state-icon" data-ic="lock-simple"></div>
+        <div class="sh-state-title" data-fa="دسترسی شما به این بخش باز نیست" data-en="You don’t have access to this section">دسترسی شما به این بخش باز نیست</div>
+        <div class="sh-state-hint" data-fa="پک‌های ایونت را ادمین پروژه مدیریت می‌کند. برای دسترسی با او در تماس باشید." data-en="Event packs are managed by a project admin. Contact them for access.">پک‌های ایونت را ادمین پروژه مدیریت می‌کند. برای دسترسی با او در تماس باشید.</div>
+      </div>
+    </div>
+
+    <!-- ══════════ MAIN: gallery or starter, rendered by JS ══════════ -->
+    <div id="capMain"></div>
+  </div>
+</main>
+
+<div id="gtt"></div>
+<script src="versions.js"></script>
+<script>
+/* PM 2026-11-03: the milestone-1 version is this same page with ?m=1 (no copy, so it can never drift); es-start-m1.js only hides scope */
+window.SHAHIN_M = (new URLSearchParams(location.search)).get('m');
+window.SHAHIN_PAGE = Object.assign({}, window.SHAHIN_PAGE_META, { version: window.SHAHIN_M === '1' || window.SHAHIN_M === '2' ? 'm1' : 'v12' });   /* milestone 2 adds nothing here, so ?m=2 (from the menu of a milestone-2 page) is the milestone-1 cut */
+/* ?project=N wins and is written back before the nav reads it, as the report builder's engine does (rb-engine-v12.js) */
+(function(){ try{ var q=new URLSearchParams(location.search).get('project'); if(q!=null && /^[0-3]$/.test(q)) localStorage.setItem('shahin-nav-project', q); }catch(e){} })();
+</script>
+<script src="../assets/shahin-nav.js"></script>
+<script src="../assets/shahin.js"></script>
+<!-- PM 2026-11-03: the builder's own per-project events and the shared template catalog, so roles bind as they do in the builder -->
+<script src="../report-builder/rb-engine-v12.js"></script>
+<script src="../report-builder/rb-data-defs.js"></script>
+<script src="../report-builder/rb-tpl-catalog.js"></script>
+<script>if (window.SHAHIN_M === '1' || window.SHAHIN_M === '2') document.write('<script src="es-start-m1.js"><\/script>');</script>
+<script>
+(function(){
+  'use strict';
+  var qs = new URLSearchParams(location.search);
+  var $  = function(id){ return document.getElementById(id); };
+  var curLang = function(){ return (window.Shahin && Shahin.lang) ? Shahin.lang() : (document.documentElement.lang==='en'?'en':'fa'); };
+  var t   = function(fa,en){ return curLang()==='fa' ? fa : en; };
+  var num = function(n){ return (window.Shahin && Shahin.fmt) ? Shahin.fmt(n) : String(n); };
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  /* Phosphor (regular) icons, from design-system/assets/ph-icons.js */
+  var PH = {"coins":"<path fill=\"currentColor\" d=\"M184 89.57V84c0-25.08-37.83-44-88-44S8 58.92 8 84v40c0 20.89 26.25 37.49 64 42.46V172c0 25.08 37.83 44 88 44s88-18.92 88-44v-40c0-20.7-25.42-37.32-64-42.43M232 132c0 13.22-30.79 28-72 28c-3.73 0-7.43-.13-11.08-.37C170.49 151.77 184 139 184 124v-18.26c29.87 4.45 48 16.53 48 26.26M72 150.25v-23.79A184 184 0 0 0 96 128a184 184 0 0 0 24-1.54v23.79A163 163 0 0 1 96 152a163 163 0 0 1-24-1.75m96-40.32V124c0 8.39-12.41 17.4-32 22.87V123.5c12.91-3.13 23.84-7.79 32-13.57M96 56c41.21 0 72 14.78 72 28s-30.79 28-72 28s-72-14.78-72-28s30.79-28 72-28m-72 68v-14.07c8.16 5.78 19.09 10.44 32 13.57v23.37C36.41 141.4 24 132.39 24 124m64 48v-4.17c2.63.1 5.29.17 8 .17c3.88 0 7.67-.13 11.39-.35a122 122 0 0 0 12.61 3.76v23.46c-19.59-5.47-32-14.48-32-22.87m48 26.25V174.4a179.5 179.5 0 0 0 24 1.6a184 184 0 0 0 24-1.54v23.79a165.5 165.5 0 0 1-48 0m64-3.38V171.5c12.91-3.13 23.84-7.79 32-13.57V172c0 8.39-12.41 17.4-32 22.87\"/>","folder-simple":"<path fill=\"currentColor\" d=\"M216 72h-85.33l-27.74-20.8a16.12 16.12 0 0 0-9.6-3.2H40a16 16 0 0 0-16 16v136a16 16 0 0 0 16 16h176.89A15.13 15.13 0 0 0 232 200.89V88a16 16 0 0 0-16-16m0 128H40V64h53.33l29.87 22.4A8 8 0 0 0 128 88h88Z\"/>","chart-line":"<path fill=\"currentColor\" d=\"M232 208a8 8 0 0 1-8 8H32a8 8 0 0 1-8-8V48a8 8 0 0 1 16 0v94.37L90.73 98a8 8 0 0 1 10.07-.38l58.81 44.11L218.73 90a8 8 0 1 1 10.54 12l-64 56a8 8 0 0 1-10.07.38l-58.81-44.09L40 163.63V200h184a8 8 0 0 1 8 8\"/>","storefront":"<path fill=\"currentColor\" d=\"M232 96a8 8 0 0 0-.3-2.2l-14.35-50.2A16.07 16.07 0 0 0 202 32H54a16.07 16.07 0 0 0-15.35 11.6L24.31 93.8A8 8 0 0 0 24 96v16a40 40 0 0 0 16 32v72a8 8 0 0 0 8 8h160a8 8 0 0 0 8-8v-72a40 40 0 0 0 16-32zM54 48h148l11.42 40H42.61Zm50 56h48v8a24 24 0 0 1-48 0Zm-16 0v8a24 24 0 0 1-35.12 21.26a8 8 0 0 0-1.82-1.06A24 24 0 0 1 40 112v-8Zm112 104H56v-56.8a40.6 40.6 0 0 0 8 .8a40 40 0 0 0 32-16a40 40 0 0 0 64 0a40 40 0 0 0 32 16a40.6 40.6 0 0 0 8-.8Zm4.93-75.8a8 8 0 0 0-1.8 1.05A24 24 0 0 1 168 112v-8h48v8a24 24 0 0 1-11.07 20.2\"/>","newspaper":"<path fill=\"currentColor\" d=\"M88 112a8 8 0 0 1 8-8h80a8 8 0 0 1 0 16H96a8 8 0 0 1-8-8m8 40h80a8 8 0 0 0 0-16H96a8 8 0 0 0 0 16m136-88v120a24 24 0 0 1-24 24H32a24 24 0 0 1-24-23.89V88a8 8 0 0 1 16 0v96a8 8 0 0 0 16 0V64a16 16 0 0 1 16-16h160a16 16 0 0 1 16 16m-16 0H56v120a23.8 23.8 0 0 1-1.37 8H208a8 8 0 0 0 8-8Z\"/>","video-camera":"<path fill=\"currentColor\" d=\"M251.77 73a8 8 0 0 0-8.21.39L208 97.05V72a16 16 0 0 0-16-16H32a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16v-25l35.56 23.71A8 8 0 0 0 248 184a8 8 0 0 0 8-8V80a8 8 0 0 0-4.23-7M192 184H32V72h160zm48-22.95l-32-21.33v-23.44L240 95Z\"/>","lightning":"<path fill=\"currentColor\" d=\"M215.79 118.17a8 8 0 0 0-5-5.66L153.18 90.9l14.66-73.33a8 8 0 0 0-13.69-7l-112 120a8 8 0 0 0 3 13l57.63 21.61l-14.62 73.25a8 8 0 0 0 13.69 7l112-120a8 8 0 0 0 1.94-7.26M109.37 214l10.47-52.38a8 8 0 0 0-5-9.06L62 132.71l84.62-90.66l-10.46 52.38a8 8 0 0 0 5 9.06l52.8 19.8Z\"/>","check-circle":"<path fill=\"currentColor\" d=\"M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88a88.1 88.1 0 0 0 88-88\"/>","link-break":"<path fill=\"currentColor\" d=\"M198.63 57.37a32 32 0 0 0-45.19-.06l-11.65 12.21a8 8 0 0 1-11.58-11l11.72-12.29a2 2 0 0 1 .13-.13a48 48 0 0 1 67.88 67.88a2 2 0 0 1-.13.13l-12.29 11.72a8 8 0 0 1-11-11.58l12.21-11.65a32 32 0 0 0-.1-45.23m-84.42 129.11l-11.65 12.21a32 32 0 0 1-45.25-45.25l12.21-11.65a8 8 0 0 0-11-11.58l-12.33 11.72a2 2 0 0 0-.13.13a48 48 0 0 0 67.88 67.88a2 2 0 0 0 .13-.13l11.72-12.29a8 8 0 1 0-11.58-11ZM216 152h-24a8 8 0 0 0 0 16h24a8 8 0 0 0 0-16M40 104h24a8 8 0 0 0 0-16H40a8 8 0 0 0 0 16m120 80a8 8 0 0 0-8 8v24a8 8 0 0 0 16 0v-24a8 8 0 0 0-8-8M96 72a8 8 0 0 0 8-8V40a8 8 0 0 0-16 0v24a8 8 0 0 0 8 8\"/>","layout":"<path fill=\"currentColor\" d=\"M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 16v40H40V56ZM40 112h56v88H40Zm176 88H112v-88h104z\"/>","floppy-disk":"<path fill=\"currentColor\" d=\"M219.31 72L184 36.69A15.86 15.86 0 0 0 172.69 32H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V83.31A15.86 15.86 0 0 0 219.31 72M168 208H88v-56h80Zm40 0h-24v-56a16 16 0 0 0-16-16H88a16 16 0 0 0-16 16v56H48V48h124.69L208 83.31ZM160 72a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h56a8 8 0 0 1 8 8\"/>","lock-simple":"<path fill=\"currentColor\" d=\"M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16M96 56a32 32 0 0 1 64 0v24H96Zm112 152H48V96h160z\"/>","info":"<path fill=\"currentColor\" d=\"M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m16-40a8 8 0 0 1-8 8a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16a16 16 0 0 1 16 16v40a8 8 0 0 1 8 8m-32-92a12 12 0 1 1 12 12a12 12 0 0 1-12-12\"/>","warning":"<path fill=\"currentColor\" d=\"M236.8 188.09L149.35 36.22a24.76 24.76 0 0 0-42.7 0L19.2 188.09a23.51 23.51 0 0 0 0 23.72A24.35 24.35 0 0 0 40.55 224h174.9a24.35 24.35 0 0 0 21.33-12.19a23.51 23.51 0 0 0 .02-23.72m-13.87 15.71a8.5 8.5 0 0 1-7.48 4.2H40.55a8.5 8.5 0 0 1-7.48-4.2a7.59 7.59 0 0 1 0-7.72l87.45-151.87a8.75 8.75 0 0 1 15 0l87.45 151.87a7.59 7.59 0 0 1-.04 7.72M120 144v-40a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12a12 12 0 0 1 12 12\"/>","magnifying-glass":"<path fill=\"currentColor\" d=\"m229.66 218.34l-50.07-50.06a88.11 88.11 0 1 0-11.31 11.31l50.06 50.07a8 8 0 0 0 11.32-11.32M40 112a72 72 0 1 1 72 72a72.08 72.08 0 0 1-72-72\"/>","squares-four":"<path fill=\"currentColor\" d=\"M104 40H56a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 64H56V56h48zm96-64h-48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 64h-48V56h48zm-96 32H56a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16v-48a16 16 0 0 0-16-16m0 64H56v-48h48zm96-64h-48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16v-48a16 16 0 0 0-16-16m0 64h-48v-48h48z\"/>","clock-counter-clockwise":"<path fill=\"currentColor\" d=\"M136 80v43.47l36.12 21.67a8 8 0 0 1-8.24 13.72l-40-24A8 8 0 0 1 120 128V80a8 8 0 0 1 16 0m-8-48a95.44 95.44 0 0 0-67.92 28.15C52.81 67.51 46.35 74.59 40 82V64a8 8 0 0 0-16 0v40a8 8 0 0 0 8 8h40a8 8 0 0 0 0-16H49c7.15-8.42 14.27-16.35 22.39-24.57a80 80 0 1 1 1.66 114.75a8 8 0 1 0-11 11.64A96 96 0 1 0 128 32\"/>","copy":"<path fill=\"currentColor\" d=\"M216 32H88a8 8 0 0 0-8 8v40H40a8 8 0 0 0-8 8v128a8 8 0 0 0 8 8h128a8 8 0 0 0 8-8v-40h40a8 8 0 0 0 8-8V40a8 8 0 0 0-8-8m-56 176H48V96h112Zm48-48h-32V88a8 8 0 0 0-8-8H96V48h112Z\"/>","caret-down":"<path fill=\"currentColor\" d=\"m213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32\"/>","arrow-right":"<path fill=\"currentColor\" d=\"m221.66 133.66l-72 72a8 8 0 0 1-11.32-11.32L196.69 136H40a8 8 0 0 1 0-16h156.69l-58.35-58.34a8 8 0 0 1 11.32-11.32l72 72a8 8 0 0 1 0 11.32\"/>","arrow-left":"<path fill=\"currentColor\" d=\"M224 128a8 8 0 0 1-8 8H59.31l58.35 58.34a8 8 0 0 1-11.32 11.32l-72-72a8 8 0 0 1 0-11.32l72-72a8 8 0 0 1 11.32 11.32L59.31 120H216a8 8 0 0 1 8 8\"/>","arrow-square-out":"<path fill=\"currentColor\" d=\"M224 104a8 8 0 0 1-16 0V59.32l-66.33 66.34a8 8 0 0 1-11.32-11.32L196.68 48H152a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8Zm-40 24a8 8 0 0 0-8 8v72H48V80h72a8 8 0 0 0 0-16H48a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-72a8 8 0 0 0-8-8\"/>","clock":"<path fill=\"currentColor\" d=\"M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m64-88a8 8 0 0 1-8 8h-56a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v48h48a8 8 0 0 1 8 8\"/>","stack":"<path fill=\"currentColor\" d=\"M230.91 172a8 8 0 0 1-2.91 10.91l-96 56a8 8 0 0 1-8.06 0l-96-56A8 8 0 0 1 36 169.09l92 53.65l92-53.65a8 8 0 0 1 10.91 2.91M220 121.09l-92 53.65l-92-53.65a8 8 0 0 0-8 13.82l96 56a8 8 0 0 0 8.06 0l96-56a8 8 0 1 0-8.06-13.82M24 80a8 8 0 0 1 4-6.91l96-56a8 8 0 0 1 8.06 0l96 56a8 8 0 0 1 0 13.82l-96 56a8 8 0 0 1-8.06 0l-96-56A8 8 0 0 1 24 80m23.88 0L128 126.74L208.12 80L128 33.26Z\"/>","text-t":"<path fill=\"currentColor\" d=\"M208 56v32a8 8 0 0 1-16 0V64h-56v128h24a8 8 0 0 1 0 16H96a8 8 0 0 1 0-16h24V64H64v24a8 8 0 0 1-16 0V56a8 8 0 0 1 8-8h144a8 8 0 0 1 8 8\"/>","code":"<path fill=\"currentColor\" d=\"M69.12 94.15L28.5 128l40.62 33.85a8 8 0 1 1-10.24 12.29l-48-40a8 8 0 0 1 0-12.29l48-40a8 8 0 0 1 10.24 12.3m176 27.7l-48-40a8 8 0 1 0-10.24 12.3L227.5 128l-40.62 33.85a8 8 0 1 0 10.24 12.29l48-40a8 8 0 0 0 0-12.29m-82.39-89.37a8 8 0 0 0-10.25 4.79l-64 176a8 8 0 0 0 4.79 10.26A8.1 8.1 0 0 0 96 224a8 8 0 0 0 7.52-5.27l64-176a8 8 0 0 0-4.79-10.25\"/>","check":"<path fill=\"currentColor\" d=\"m229.66 77.66l-128 128a8 8 0 0 1-11.32 0l-56-56a8 8 0 0 1 11.32-11.32L96 188.69L218.34 66.34a8 8 0 0 1 11.32 11.32\"/>","package":"<path fill=\"currentColor\" d=\"m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z\"/>","arrow-counter-clockwise":"<path fill=\"currentColor\" d=\"M224 128a96 96 0 0 1-94.71 96H128a95.38 95.38 0 0 1-65.9-26.2a8 8 0 0 1 11-11.63a80 80 0 1 0-1.67-114.78a3 3 0 0 1-.26.25L44.59 96H72a8 8 0 0 1 0 16H24a8 8 0 0 1-8-8V56a8 8 0 0 1 16 0v29.8L60.25 60A96 96 0 0 1 224 128\"/>","target":"<path fill=\"currentColor\" d=\"M221.87 83.16A104.1 104.1 0 1 1 195.67 49l22.67-22.68a8 8 0 0 1 11.32 11.32l-96 96a8 8 0 0 1-11.32-11.32l27.72-27.72a40 40 0 1 0 17.87 31.09a8 8 0 1 1 16-.9a56 56 0 1 1-22.38-41.65l22.75-22.75a87.88 87.88 0 1 0 23.13 29.67a8 8 0 0 1 14.44-6.9\"/>","user-circle":"<path fill=\"currentColor\" d=\"M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24M74.08 197.5a64 64 0 0 1 107.84 0a87.83 87.83 0 0 1-107.84 0M96 120a32 32 0 1 1 32 32a32 32 0 0 1-32-32m97.76 66.41a79.66 79.66 0 0 0-36.06-28.75a48 48 0 1 0-59.4 0a79.66 79.66 0 0 0-36.06 28.75a88 88 0 1 1 131.52 0\"/>","dots-three":"<path fill=\"currentColor\" d=\"M140 128a12 12 0 1 1-12-12a12 12 0 0 1 12 12m56-12a12 12 0 1 0 12 12a12 12 0 0 0-12-12m-136 0a12 12 0 1 0 12 12a12 12 0 0 0-12-12\"/>","plus":"<path fill=\"currentColor\" d=\"M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8\"/>","link":"<path fill=\"currentColor\" d=\"M240 88.23a54.43 54.43 0 0 1-16 37L189.25 160a54.27 54.27 0 0 1-38.63 16h-.05A54.63 54.63 0 0 1 96 119.84a8 8 0 0 1 16 .45A38.62 38.62 0 0 0 150.58 160a38.4 38.4 0 0 0 27.31-11.31l34.75-34.75a38.63 38.63 0 0 0-54.63-54.63l-11 11A8 8 0 0 1 135.7 59l11-11a54.65 54.65 0 0 1 77.3 0a54.86 54.86 0 0 1 16 40.23m-131 97.43l-11 11A38.4 38.4 0 0 1 70.6 208a38.63 38.63 0 0 1-27.29-65.94L78 107.31a38.63 38.63 0 0 1 66 28.4a8 8 0 0 0 16 .45A54.86 54.86 0 0 0 144 96a54.65 54.65 0 0 0-77.27 0L32 130.75A54.62 54.62 0 0 0 70.56 224a54.28 54.28 0 0 0 38.64-16l11-11a8 8 0 0 0-11.2-11.34\"/>","pencil-simple":"<path fill=\"currentColor\" d=\"m227.31 73.37l-44.68-44.69a16 16 0 0 0-22.63 0L36.69 152A15.86 15.86 0 0 0 32 163.31V208a16 16 0 0 0 16 16h44.69a15.86 15.86 0 0 0 11.31-4.69L227.31 96a16 16 0 0 0 0-22.63M92.69 208H48v-44.69l88-88L180.69 120ZM192 108.68L147.31 64l24-24L216 84.68Z\"/>","star":"<path fill=\"currentColor\" d=\"M239.18 97.26A16.38 16.38 0 0 0 224.92 86l-59-4.76l-22.78-55.09a16.36 16.36 0 0 0-30.27 0L90.11 81.23L31.08 86a16.46 16.46 0 0 0-9.37 28.86l45 38.83L53 211.75a16.38 16.38 0 0 0 24.5 17.82l50.5-31.08l50.53 31.08A16.4 16.4 0 0 0 203 211.75l-13.76-58.07l45-38.83a16.43 16.43 0 0 0 4.94-17.59m-15.34 5.47l-48.7 42a8 8 0 0 0-2.56 7.91l14.88 62.8a.37.37 0 0 1-.17.48c-.18.14-.23.11-.38 0l-54.72-33.65a8 8 0 0 0-8.38 0l-54.72 33.67c-.15.09-.19.12-.38 0a.37.37 0 0 1-.17-.48l14.88-62.8a8 8 0 0 0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16a8 8 0 0 0 6.72-4.94l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153 91.86a8 8 0 0 0 6.75 4.92l63.92 5.16c.15 0 .24 0 .33.29s0 .4-.16.5\"/>","gauge":"<path fill=\"currentColor\" d=\"M207.06 72.67A111.24 111.24 0 0 0 128 40h-.4C66.07 40.21 16 91 16 153.13V176a16 16 0 0 0 16 16h192a16 16 0 0 0 16-16v-24a111.25 111.25 0 0 0-32.94-79.33M224 176H119.71l54.76-75.3a8 8 0 0 0-12.94-9.42L99.92 176H32v-22.87c0-3.08.15-6.12.43-9.13H56a8 8 0 0 0 0-16H35.27c10.32-38.86 44-68.24 84.73-71.66V80a8 8 0 0 0 16 0V56.33A96.14 96.14 0 0 1 221 128h-21a8 8 0 0 0 0 16h23.67c.21 2.65.33 5.31.33 8Z\"/>","compass":"<path fill=\"currentColor\" d=\"M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m44.42-143.16l-64 32a8.05 8.05 0 0 0-3.58 3.58l-32 64A8 8 0 0 0 80 184a8.1 8.1 0 0 0 3.58-.84l64-32a8.05 8.05 0 0 0 3.58-3.58l32-64a8 8 0 0 0-10.74-10.74M138 138l-40.11 20.11L118 118l40.15-20.07Z\"/>","funnel":"<path fill=\"currentColor\" d=\"M230.6 49.53A15.81 15.81 0 0 0 216 40H40a16 16 0 0 0-11.81 26.76l.08.09L96 139.17V216a16 16 0 0 0 24.87 13.32l32-21.34a16 16 0 0 0 7.13-13.32v-55.49l67.74-72.32l.08-.09a15.8 15.8 0 0 0 2.78-17.23m-84.42 81.05A8 8 0 0 0 144 136v58.66L112 216v-80a8 8 0 0 0-2.16-5.47L40 56h176Z\"/>","pulse":"<path fill=\"currentColor\" d=\"M240 128a8 8 0 0 1-8 8h-27.06l-37.78 75.58A8 8 0 0 1 160 216h-.4a8 8 0 0 1-7.08-5.14L95.35 60.76l-32.07 70.55A8 8 0 0 1 56 136H24a8 8 0 0 1 0-16h26.85l37.87-83.31a8 8 0 0 1 14.76.46l57.51 151l31.85-63.71A8 8 0 0 1 200 120h32a8 8 0 0 1 8 8\"/>","timer":"<path fill=\"currentColor\" d=\"M128 40a96 96 0 1 0 96 96a96.11 96.11 0 0 0-96-96m0 176a80 80 0 1 1 80-80a80.09 80.09 0 0 1-80 80m45.66-125.66a8 8 0 0 1 0 11.32l-40 40a8 8 0 0 1-11.32-11.32l40-40a8 8 0 0 1 11.32 0M96 16a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16h-48a8 8 0 0 1-8-8\"/>","rocket-launch":"<path fill=\"currentColor\" d=\"M223.85 47.12a16 16 0 0 0-15-15c-12.58-.75-44.73.4-71.41 27.07L132.69 64H74.36A15.9 15.9 0 0 0 63 68.68L28.7 103a16 16 0 0 0 9.07 27.16l38.47 5.37l44.21 44.21l5.37 38.49a15.94 15.94 0 0 0 10.78 12.92a16.1 16.1 0 0 0 5.1.83a15.9 15.9 0 0 0 11.3-4.68l34.32-34.3a15.9 15.9 0 0 0 4.68-11.36v-58.33l4.77-4.77c26.68-26.68 27.83-58.83 27.08-71.42M74.36 80h42.33l-39.53 39.52L40 114.34Zm74.41-9.45a76.65 76.65 0 0 1 59.11-22.47a76.46 76.46 0 0 1-22.42 59.16L128 164.68L91.32 128ZM176 181.64L141.67 216l-5.19-37.17L176 139.31Zm-74.16 9.5C97.34 201 82.29 224 40 224a8 8 0 0 1-8-8c0-42.29 23-57.34 32.86-61.85a8 8 0 0 1 6.64 14.56c-6.43 2.93-20.62 12.36-23.12 38.91c26.55-2.5 36-16.69 38.91-23.12a8 8 0 1 1 14.56 6.64Z\"/>","arrows-clockwise":"<path fill=\"currentColor\" d=\"M224 48v48a8 8 0 0 1-8 8h-48a8 8 0 0 1 0-16h28.69l-14.63-14.63a79.56 79.56 0 0 0-56.13-23.43h-.45a79.52 79.52 0 0 0-55.89 22.77a8 8 0 0 1-11.18-11.44a96 96 0 0 1 135 .79L208 76.69V48a8 8 0 0 1 16 0m-37.59 135.29a80 80 0 0 1-112.47-.66L59.31 168H88a8 8 0 0 0 0-16H40a8 8 0 0 0-8 8v48a8 8 0 0 0 16 0v-28.69l14.63 14.63A95.43 95.43 0 0 0 130 222.06h.53a95.36 95.36 0 0 0 67.07-27.33a8 8 0 0 0-11.18-11.44Z\"/>","article":"<path fill=\"currentColor\" d=\"M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 160H40V56h176zM184 96a8 8 0 0 1-8 8H80a8 8 0 0 1 0-16h96a8 8 0 0 1 8 8m0 32a8 8 0 0 1-8 8H80a8 8 0 0 1 0-16h96a8 8 0 0 1 8 8m0 32a8 8 0 0 1-8 8H80a8 8 0 0 1 0-16h96a8 8 0 0 1 8 8\"/>"};
+  function ic(k){ return '<span class="ph" aria-hidden="true">'+(PH[k]?'<svg viewBox="0 0 256 256">'+PH[k]+'</svg>':'')+'</span>'; }
+  function tip(fa, en){ return ' data-tip-fa="'+esc(fa)+'" data-tip-en="'+esc(en)+'"'; }
+  function toast(fa, en){ if (window.Shahin && Shahin.toast) Shahin.toast(fa, en); }
+
+  /* ─────────── roles and project (the report builder's own parsing, rb-shell.js) ───────────
+     PM 2026-10-28, TD-2: a dashboard saved from a template saves its charts, so only the project owner or an admin saves.
+     ?prole=owner|admin|member|viewer (default admin; «manager» = admin; ?role=viewer = viewer). */
+  var ROLE  = qs.get('role')==='viewer' ? 'viewer' : 'editor';
+  var PROLE = (function(){ var r=qs.get('prole'); if(r==='manager') r='admin'; return ['owner','admin','member','viewer'].indexOf(r)>-1 ? r : (ROLE==='viewer'?'viewer':'admin'); })();
+  function canSave(){ return ROLE!=='viewer' && (PROLE==='owner' || PROLE==='admin'); }
+  var NO_SAVE = ['ذخیره نمودار فعلا فقط برای مالک و ادمین پروژه است', 'Saving charts is for the project owner and admins for now'];
+  /* the topbar project (PM 2026-10-31: collection status follows it), read as the builder reads it: ?project=N wins, else the
+     switcher's localStorage key; a switch re-renders in place (shahinBeforeProjectSwitch, below) */
+  function readProject(lsOnly){ var q=qs.get('project'); if(!lsOnly && q!=null && /^[0-3]$/.test(q)) return +q;
+    try{ var v=JSON.parse(localStorage.getItem('shahin-nav-project')); return (v>=0 && v<=3) ? v : 0; }catch(e){ return 0; } }
+  var PROJ = readProject();
+
+  /* ─────────── DATA: categories = Shahin's business-type templates (v6 content) ─────────── */
+  // collect ∈ {auto, code, player}. auto = no code on the known connection points (WooCommerce/WordPress); player = known players.
+  var CATS = [
+    { id:'commerce', tpl:'store', icon:'storefront', fa:'فروش و تراکنش', en:'Sales and transactions',
+      dFa:'مسیر خرید را می‌سنجد: بازدید محصول، افزودن به سبد، شروع تسویه، پرداخت و نتیجه سفارش.',
+      dEn:'Measures the purchase path: product views, add-to-cart, checkout, payment and order outcome.',
+      tipFa:"<span class='tip-title'>فروش و تراکنش</span>مسیر خرید را می‌سنجد: بازدید محصول، افزودن به سبد، شروع تسویه، پرداخت و نتیجه سفارش. داشبورد فروشگاهی از همین ایونت‌ها نرخ تبدیل و قیف خرید را می‌سازد. روی ووکامرس بدون کد جمع می‌شوند؛ فروشگاه غیرووکامرسی از مسیر اسکیما.",
+      tipEn:"<span class='tip-title'>Sales and transactions</span>Measures the purchase path: product views, add-to-cart, checkout, payment and order outcome. The store dashboard builds the conversion rate and purchase funnel from these. Collected with no code on WooCommerce; a non-WooCommerce store uses the schema path.",
+      href:'../events-ecommerce/', linkFa:'داشبورد فروشگاهی', linkEn:'Store dashboard',
+      autoFa:'روی ووکامرس خودکار', autoEn:'Automatic on WooCommerce',
+      noteFa:'روی ووکامرس این ایونت‌ها خودکار جمع می‌شوند و دولوپر شما کاری نمی‌کند؛ فروشگاه غیرووکامرسی همین ایونت‌ها را از مسیر اسکیما می‌فرستد.',
+      noteEn:'On WooCommerce these events are collected automatically and your developer does nothing; a non-WooCommerce store sends the same events via the schema path.',
+      textFa:'<h3>فروشگاه در یک نگاه</h3><div>خریداران هر روز، جایی که مسیر خرید می‌شکند و آنچه مشتریان جستجو می‌کنند.</div>',
+      textEn:'<h3>The store at a glance</h3><div>Buyers each day, where the purchase path breaks and what customers search for.</div>',
+      range:'30d',
+      /* the ready dashboard's cards (titles from the builder's store template, rb-amp-templates.js), each with the events it needs */
+      tiles:[ { fa:'خریداران روزانه', en:'Daily buyers', type:'trend', ev:['purchase'] },
+              { fa:'قیف خرید', en:'Purchase funnel', type:'funnel', ev:['item_viewed','add_to_cart','begin_checkout','purchase'] },
+              { fa:'قیف پرداخت', en:'Checkout funnel', type:'funnel', ev:['begin_checkout','shipping_info_submitted','payment_info_submitted','purchase'] },
+              { fa:'کد تخفیف تا خرید', en:'Coupon to purchase', type:'funnel', ev:['coupon_applied','purchase'] },
+              { fa:'پرتکرارترین عبارت‌های جستجو', en:'Top search terms', type:'bar', ev:['search_submitted'] } ] },
+    { id:'content', tpl:'media', icon:'newspaper', fa:'محتوا و تعامل', en:'Content and engagement',
+      dFa:'تعامل مخاطب با محتوا را می‌سنجد: عمق و زمان واقعی خواندن، فید و پیشنهادها، جامعه، گالری و دیوار پرداخت.',
+      dEn:'Measures how the audience engages with content: read depth and true reading time, feed and recommendations, community, gallery and paywall.',
+      tipFa:"<span class='tip-title'>محتوا و تعامل</span>تعامل مخاطب با محتوا را می‌سنجد: عمق و زمان واقعی خواندن، فید و پیشنهادها، جامعه (واکنش، کامنت، دنبال‌کردن)، گالری و دیوار پرداخت. داشبورد رسانه از این‌ها عمق مطالعه و رشد مخاطب را می‌سازد. خواندن روی وردپرس خودکار است؛ کنش‌های تعاملی از مسیر اسکیما.",
+      tipEn:"<span class='tip-title'>Content and engagement</span>Measures how the audience engages with content: read depth and true reading time, feed and recommendations, community (reactions, comments, follows), gallery and paywall. The media dashboard builds read depth and audience growth from these. Reading is automatic on WordPress; interactive actions use the schema path.",
+      href:'../events-media/', linkFa:'داشبورد رسانه', linkEn:'Media dashboard',
+      autoFa:'خواندن روی وردپرس خودکار', autoEn:'Reading automatic on WordPress',
+      textFa:'<h3>نبض تحریریه</h3><div>کدام مقاله تا پایان خوانده می‌شود، خواننده از کجا به مطلب بعدی می‌رود و چه کسی دنبال‌کننده می‌شود.</div>',
+      textEn:'<h3>Newsroom pulse</h3><div>Which articles get read to the end, where readers go next and who becomes a follower.</div>',
+      range:'7d',
+      /* the media dashboard's cards: the «می‌سازد» (feeds) lines of the v6 events */
+      tiles:[ { fa:'قیف هضم محتوا', en:'Content digestion funnel', type:'funnel', ev:['item_viewed','article_read_started','article_read_completed'] },
+              { fa:'توزیع عمق خواندن', en:'Read-depth distribution', type:'bar', ev:['article_read_depth'] },
+              { fa:'میانگین زمان واقعی خواندن', en:'Average true reading time', type:'trend', ev:['article_engagement_time'] },
+              { fa:'نرخ چرخش داخلی', en:'Internal turn rate', type:'trend', ev:['recommendation_viewed','recommendation_clicked'] },
+              { fa:'رشد مخاطب پایدار', en:'Durable audience growth', type:'trend', ev:['newsletter_subscribed','entity_followed'] },
+              { fa:'اشتراک‌گذاری به تفکیک کانال', en:'Shares by channel', type:'bar', ev:['share'] },
+              { fa:'تعامل عمیق', en:'Deep engagement', type:'trend', ev:['comment_added','reaction_added'] },
+              { fa:'تعامل عمیق تصویری', en:'Deep visual engagement', type:'trend', ev:['gallery_completed'] },
+              { fa:'قیف دیوار پرداخت', en:'Paywall funnel', type:'funnel', ev:['paywall_viewed','subscription_started'] } ] },
+    { id:'cross', tpl:'video', icon:'video-camera', fa:'ویدیو', en:'Video',
+      dFa:'تماشای ویدیو را می‌سنجد: شروع پخش، مایل‌استون‌های تماشا، اتمام کامل و کیفیت پخش.',
+      dEn:'Measures video watching: playback start, watch milestones, full completion and playback quality.',
+      tipFa:"<span class='tip-title'>ویدیو</span>تماشای ویدیو را می‌سنجد: شروع پخش، مایل‌استون‌های تماشا، اتمام کامل و کیفیت پخش. داشبورد ویدیو از این‌ها نرخ اتمام و کیفیت تجربه را می‌سازد. از پلیرهای شناخته‌شده (یوتیوب، آپارات، Plyr، video.js و…) روی هر سایتی خودکار جمع می‌شود — حتی سایت اختصاصی و بدون کد.",
+      tipEn:"<span class='tip-title'>Video</span>Measures video watching: playback start, watch milestones, full completion and playback quality. The video dashboard builds completion rate and experience quality from these. Collected automatically from known players (YouTube, Aparat, Plyr, video.js and more) on any site — even a custom-built one, with no code.",
+      href:'../video-dashboard/', linkFa:'داشبورد ویدیو', linkEn:'Video dashboard',
+      autoFa:'خودکار از پلیرهای شناخته‌شده', autoEn:'Automatic from known players',
+      noteFa:'این ایونت‌ها از پلیرهای شناخته‌شده (یوتیوب، آپارات، Plyr، video.js و مشابه) روی هر سایتی — حتی اختصاصی — خودکار جمع می‌شوند؛ دولوپر شما کاری نمی‌کند.',
+      noteEn:'These events are collected automatically from known players (YouTube, Aparat, Plyr, video.js and more) on any site — even a custom build; your developer has nothing to do.',
+      textFa:'<h3>سلامت ویدیو</h3><div>چند نفر تماشا می‌کنند، چند نفر تا پایان می‌مانند و پخش چقدر بدون گیر و خطاست.</div>',
+      textEn:'<h3>Video health</h3><div>How many people watch, how many stay to the end and how smoothly playback runs.</div>',
+      range:'30d',
+      tiles:[ { fa:'بینندگان روزانه', en:'Daily viewers', type:'trend', ev:['video_started'] },
+              { fa:'قیف اتمام پخش', en:'Completion funnel', type:'funnel', ev:['video_started','video_progress','video_completed'] },
+              { fa:'نرخ خطای پخش', en:'Playback error rate', type:'trend', ev:['video_started','video_error'] },
+              { fa:'مدت گیرها', en:'Rebuffer durations', type:'bar', ev:['video_buffered'] },
+              { fa:'کاهش کیفیت انطباقی', en:'Adaptive quality drops', type:'bar', ev:['video_quality_changed'] } ] },
+    /* PM 2026-10-31: crypto exchange joins the gallery. Copy from the builder's «صرافی رمزارز» template (rb-amp-templates.js) and its
+       fixed page (events-exchange/v11); events and properties from the registry's exchange pack (Tech-Specs/Events/registry-seed.v1.json).
+       first_deposit / first_trade are funnel steps, not events (PRD-Business-Exchange §1), as in the builder's template. */
+    { id:'exchange', tpl:'exchange', icon:'coins', fa:'صرافی رمزارز', en:'Crypto exchange', codeOnly:true,
+      dFa:'از ثبت‌نام تا اولین معامله: ثبت‌نام‌ها، قیف فعال‌شدن معامله‌گر، معامله‌گران فعال، منبع معامله‌گران و بازگشت به معامله.',
+      dEn:'From sign-up to first trade: sign-ups, the trader activation funnel, active traders, where traders come from and returning to trade.',
+      tipFa:"<span class='tip-title'>صرافی رمزارز</span>مسیر کاربر صرافی را می‌سنجد: ثبت‌نام، احراز هویت، واریز، معامله و دعوت. داشبورد صرافی از این‌ها قیف فعال‌سازی و تبدیل به معامله‌گر را می‌سازد. همه این ایونت‌ها از کد سایت یا اپ صرافی فرستاده می‌شوند.",
+      tipEn:"<span class='tip-title'>Crypto exchange</span>Measures the exchange user’s path: sign-up, identity verification, deposit, trade and referrals. The exchange dashboard builds the activation funnel and conversion to trader from these. Every one of these events is sent from the exchange’s site or app code.",
+      href:'../events-exchange/', linkFa:'داشبورد صرافی', linkEn:'Exchange dashboard',
+      autoFa:'با کد سایت یا اپ صرافی', autoEn:'Sent from the exchange’s code',
+      noteFa:'هیچ‌کدام از این ایونت‌ها خودکار جمع نمی‌شود؛ دولوپر صرافی هر ایونت را طبق اسکیمای آن از سایت یا اپ می‌فرستد.',
+      noteEn:'None of these events is collected automatically; the exchange’s developer sends each one from the site or app per its schema.',
+      textFa:'<h3>صرافی در یک نگاه</h3><div>چند نفر ثبت‌نام می‌کنند، چند نفر تا اولین معامله می‌رسند و کدام کانال معامله‌گر واقعی می‌آورد، نه فقط ثبت‌نام.</div>',
+      textEn:'<h3>The exchange at a glance</h3><div>How many people sign up, how many reach a first trade, and which channel brings real traders, not just sign-ups.</div>',
+      range:'30d',
+      tiles:[ { fa:'ثبت‌نام‌های روزانه', en:'Daily sign-ups', type:'trend', ev:['sign_up'] },
+              { fa:'از ثبت‌نام تا اولین معامله', en:'Sign-up to first trade', type:'funnel', ev:['sign_up','kyc_approved','deposit','trade'] },
+              { fa:'معامله‌گران فعال', en:'Active traders', type:'trend', ev:['trade'] },
+              { fa:'معامله‌گران به تفکیک منبع ورود', en:'Traders by traffic source', type:'trend', ev:['trade'] },
+              { fa:'بازگشت به معامله', en:'Returning to trade', type:'retention', range:'3m', ev:['trade'] },
+              { fa:'قیف فعال‌سازی صرافی', en:'Exchange activation funnel', type:'funnel', ev:['sign_up','login','kyc_approved','deposit','trade'] },
+              { fa:'تبدیل به معامله‌گر', en:'Conversion to trader', type:'funnel', ev:['sign_up','trade'] } ] }
+  ];
+  /* v9 (PM 2026-11-11): platform templates next to the generic store one, like Amplitude's Shopify / WooCommerce templates.
+     They share the store's event packs (packs:'commerce') and add the platform's own cards.
+     v10 (PM 2026-11-11): each opens its own catalog template (store_woo / store_portal in rb-tpl-catalog.js), so the builder lists them too
+     and «save as dashboard» saves the platform template; Portal adds its own event, order_expired (pack portal_pay). */
+  function cloneCat(base, o){ var c=JSON.parse(JSON.stringify(base)); for (var k in o) c[k]=o[k]; return c; }
+  CATS.splice(1, 0,
+    cloneCat(CATS[0], { id:'commerce_woo', tpl:'store_woo', packs:'commerce', plat:'woo', fa:'فروشگاه ووکامرس', en:'WooCommerce store',
+      dFa:'قالب فروشگاهی برای سایت‌های ووکامرس: ایونت‌های خرید، سبد و جستجو را افزونه شاهین خودکار می‌فرستد؛ دولوپر شما کاری نمی‌کند.',
+      dEn:'The store template for WooCommerce sites: the Shahin plugin sends the purchase, cart and search events automatically; your developer does nothing.',
+      tipFa:"<span class='tip-title'>فروشگاه ووکامرس</span>همان داشبورد فروشگاهی برای سایت‌های ووکامرس؛ ایونت‌هایش را افزونه شاهین بدون کد می‌فرستد.",
+      tipEn:"<span class='tip-title'>WooCommerce store</span>The store dashboard for WooCommerce sites; the Shahin plugin sends its events with no code.",
+      noteFa:'این قالب برای سایت‌های ووکامرس است: افزونه شاهین ایونت‌های خرید، سبد و جستجو را خودکار می‌فرستد.',
+      noteEn:'This template is for WooCommerce sites: the Shahin plugin sends the purchase, cart and search events automatically.' }),
+    cloneCat(CATS[0], { id:'commerce_portal', tpl:'store_portal', packs:'commerce', xpack:'portal_pay', plat:'portal', fa:'فروشگاه پرتال', en:'Portal store',
+      dFa:'قالب فروشگاهی برای فروشگاه‌های ساخته‌شده با پرتال: ایونت‌ها از اتصال پرتال به شاهین می‌رسند و سفارش‌هایی را هم نشان می‌دهد که فرصت پرداختشان تمام شد.',
+      dEn:'The store template for shops built on Portal: events arrive from the Portal–Shahin connection, and it also shows the orders whose payment window ran out.',
+      tipFa:"<span class='tip-title'>فروشگاه پرتال</span>داشبورد فروشگاهی با ایونت‌های اتصال پرتال، به‌اضافه سفارش‌های منقضی: سفارش‌هایی که فرصت پرداختشان در پرتال پیش از پرداخت تمام شد.",
+      tipEn:"<span class='tip-title'>Portal store</span>The store dashboard with events from the Portal connection, plus expired orders: orders whose Portal payment window closed before they were paid.",
+      href:'http://localhost:8016/analytics/ecommerce/', linkFa:'داشبورد پرتال', linkEn:'Portal dashboard',
+      noteFa:'این قالب برای فروشگاه‌های پرتال است: ایونت‌ها از اتصال پرتال به شاهین می‌رسند، از جمله «انقضای فرصت پرداخت» که فقط پرتال می‌فرستد.',
+      noteEn:'This template is for Portal shops: events arrive from the Portal–Shahin connection, including «Payment window expired», which only Portal sends.' })
+  );
+  CATS[2].tiles = CATS[2].tiles.concat([ { fa:'نرخ انقضای سفارش', en:'Order expiry rate', type:'trend', ev:['begin_checkout','order_expired'] },
+    { fa:'سفارش‌های منقضی به تفکیک درگاه', en:'Expired orders by gateway', type:'bar', ev:['order_expired'] },
+    { fa:'پرداخت ناموفق به تفکیک درگاه', en:'Failed payments by gateway', type:'bar', ev:['payment_info_submitted','purchase_failed'] } ]);
+  CATS[1].tiles = CATS[1].tiles.concat([ { fa:'رهاسازی سبد', en:'Cart abandonment', type:'funnel', ev:['add_to_cart','purchase'] } ]);
+  /* v9: every template carries flat tags — industry (one, or «all» for general ones) and use cases — and the gallery filters on them (Amplitude's facets) */
+  var IND=[['all','همه صنعت‌ها','All industries'],['store','فروشگاه آنلاین','Online store'],['media','رسانه و خبر','News & media'],['video','ویدیو و پخش','Video & streaming'],['exchange','صرافی رمزارز','Crypto exchange']];
+  var USE=[['all','همه کاربردها','All use cases'],['acq','جذب ترافیک','Acquisition'],['funnel','قیف و تبدیل','Funnel & conversion'],['revenue','فروش و درآمد','Sales & revenue'],['retention','بازگشت','Retention'],['engage','تعامل','Engagement'],['content','محتوا','Content'],['activity','فعالیت کاربران','User activity']];
+  var PLAT={ woo:['ووکامرس','WooCommerce'], portal:['پرتال','Portal'] };
+  var TAGS={ commerce:{ ind:['store'], use:['funnel','revenue'] }, commerce_woo:{ ind:['store'], use:['funnel','revenue'] }, commerce_portal:{ ind:['store'], use:['funnel','revenue'] },
+    content:{ ind:['media'], use:['content','engage'] }, cross:{ ind:['video'], use:['engage','content'] }, exchange:{ ind:['exchange'], use:['funnel','acq'] },
+    'tpl:kpis':{ ind:['all'], use:['activity','acq'] }, 'tpl:acq':{ ind:['all'], use:['acq'] }, 'tpl:funnel':{ ind:['all'], use:['funnel'] }, 'tpl:activity':{ ind:['all'], use:['activity','retention'] },
+    'tpl:engage':{ ind:['all'], use:['engage'] }, 'tpl:adopt':{ ind:['all'], use:['engage'] }, 'tpl:retention':{ ind:['all'], use:['retention'] }, 'tpl:content':{ ind:['all'], use:['content'] } };
+  function tagsOf(k){ return TAGS[k]||{ ind:['all'], use:[] }; }
+  function facetHit(k){ var g=tagsOf(k);
+    return (S.ind==='all' || g.ind.indexOf(S.ind)>-1 || g.ind.indexOf('all')>-1) && (S.use==='all' || g.use.indexOf(S.use)>-1); }
+  function lbl(list, id){ var x=list.filter(function(r){ return r[0]===id; })[0]; return x ? t(x[1], x[2]) : id; }
+  function tagLine(k, plat){ var g=tagsOf(k), out=[];
+    if (plat) out.push('<span class="i9-tag plat">'+t(PLAT[plat][0], PLAT[plat][1])+'</span>');
+    out.push('<span class="i9-tag">'+(g.ind[0]==='all' ? t('همه صنعت‌ها','Any industry') : lbl(IND, g.ind[0]))+'</span>');
+    g.use.slice(0,2).forEach(function(u){ out.push('<span class="i9-tag">'+lbl(USE, u)+'</span>'); });
+    return '<span class="i9-tags">'+out.join('')+'</span>'; }
+  function withTags(html, k, plat){ return html.replace(/<\/button>$/, tagLine(k, plat)+'</button>'); }
+  function facetBar(){
+    function row(name, list, cur, key, tipFa, tipEn){ return '<div class="i9-facet"><span class="i9-fl"'+tip("<span class='tip-title'>"+name[0]+"</span>"+tipFa, "<span class='tip-title'>"+name[1]+"</span>"+tipEn)+'>'+t(name[0],name[1])+'</span><div class="i9-chips" role="group" aria-label="'+esc(t(name[0],name[1]))+'">'+
+      list.map(function(r){ var on=r[0]===cur; return '<button type="button" class="i9-chip'+(on?' on':'')+'" data-'+key+'="'+r[0]+'" aria-pressed="'+(on?'true':'false')+'">'+t(r[1],r[2])+'</button>'; }).join('')+'</div></div>'; }
+    return '<div class="i9-facets">'+row(['صنعت','Industry'], IND, S.ind, 'ind', 'قالب‌های مخصوص یک نوع کسب‌وکار را نشان می‌دهد؛ قالب‌های عمومی در همه صنعت‌ها دیده می‌شوند.', 'Shows the templates made for one kind of business; general templates appear under every industry.')+
+      row(['کاربرد','Use case'], USE, S.use, 'use', 'قالب‌هایی را نشان می‌دهد که به این پرسش جواب می‌دهند، از هر صنعتی.', 'Shows the templates that answer this question, from any industry.')+'</div>'; }
+  var CATMAP = {}; CATS.forEach(function(c){ CATMAP[c.id]=c; });
+
+  /* the packs and events, verbatim from v6 (copy-rule fixes: no hamza on he, no kasre) */
+  var PACKS = [
+    { id:'product', g:'commerce', fa:'صفحه محصول', en:'Product page',
+      dFa:'صفحه محصول: بازدید و افزودن به سبد', dEn:'Product page: views and add-to-cart',
+      events:[
+        { n:'item_viewed', c:'auto', capFa:'بازدید صفحه محصول', capEn:'Product page view', req:[['item_id','string']], opt:[['item_type','enum(product)']] },
+        { n:'add_to_cart', c:'auto', capFa:'افزودن به سبد', capEn:'Added to cart', req:[['item_id','string']], opt:[['value','number'],['currency','string']] }
+      ]},
+    { id:'cart_checkout', g:'commerce', fa:'سبد و تسویه', en:'Cart & checkout',
+      dFa:'سبد تا خرید: تسویه، پرداخت و نتیجه سفارش', dEn:'Cart to purchase: checkout, payment and order outcome',
+      events:[
+        { n:'cart_viewed', c:'auto', capFa:'دیدن سبد خرید', capEn:'Viewed the cart' },
+        { n:'begin_checkout', c:'auto', capFa:'شروع تسویه‌حساب', capEn:'Began checkout' },
+        { n:'shipping_info_submitted', c:'auto', capFa:'ثبت اطلاعات ارسال', capEn:'Submitted shipping info' },
+        { n:'payment_info_submitted', c:'auto', capFa:'ثبت اطلاعات پرداخت', capEn:'Submitted payment info' },
+        { n:'purchase', c:'auto', capFa:'خرید موفق', capEn:'Successful purchase', req:[['value','number'],['currency','string'],['order_id','string']] },
+        { n:'purchase_failed', c:'auto', capFa:'خرید ناموفق', capEn:'Purchase failed' },
+        { n:'coupon_applied', c:'auto', capFa:'اعمال کد تخفیف', capEn:'Coupon applied', req:[['coupon_code','string']] },
+        { n:'coupon_denied', c:'auto', capFa:'رد کد تخفیف', capEn:'Coupon denied', req:[['coupon_code','string']] }
+      ]},
+    { id:'discovery', g:'commerce', fa:'جستجو', en:'Search',
+      dFa:'جستجوی داخل فروشگاه و نتایج', dEn:'In-store search and results',
+      events:[
+        { n:'search_submitted', c:'auto', capFa:'جستجوی محصول', capEn:'Product search', req:[['search_term','string']] },
+        { n:'search_results_viewed', c:'auto', capFa:'دیدن نتایج جستجو', capEn:'Viewed search results' },
+        { n:'search_no_results', c:'auto', capFa:'جستجوی بی‌نتیجه', capEn:'Search with no results', req:[['search_term','string']] }
+      ]},
+
+    { id:'article', g:'content', fa:'مقاله و محتوا', en:'Articles & content',
+      dFa:'مقاله، عمق خواندن، فید و اشتراک‌گذاری', dEn:'Articles, read depth, feed and sharing',
+      events:[
+        { n:'article_read_started', c:'auto', capFa:'خواننده واقعا شروع به خواندن کرد', capEn:'Reader actually began reading', req:[['article_id','string']], feFa:'قیف هضم محتوا', feEn:'Content digestion funnel' },
+        { n:'article_read_depth', c:'auto', capFa:'عبور از مایل‌استون‌های عمق خواندن', capEn:'Passed a read-depth milestone', req:[['article_id','string'],['depth_percent','enum(25|50|75|100)']], feFa:'توزیع عمق خواندن', feEn:'Read-depth distribution' },
+        { n:'article_read_completed', c:'auto', capFa:'خواندن کامل رفتاری (۹۰٪ بدنه یا زمان فعال)', capEn:'Behavioral full read (90% of body or active time)', req:[['article_id','string']], feFa:'نرخ مطالعه کامل', feEn:'Full-read rate' },
+        { n:'article_engagement_time', c:'auto', capFa:'زمان فعال خواندن (نه idle)', capEn:'Active reading time (not idle)', req:[['article_id','string'],['active_time_sec','number']], feFa:'میانگین زمان واقعی خواندن', feEn:'Average true reading time' },
+        { n:'article_print_clicked', c:'code', capFa:'کلیک روی دکمه چاپ مقاله', capEn:'Clicked the article print button', req:[['article_id','string']], feFa:'سیگنال محتوای مرجع', feEn:'Reference-content signal' },
+        { n:'newsletter_subscribed', c:'code', capFa:'ثبت‌نام موفق در خبرنامه', capEn:'Successful newsletter sign-up', req:[['newsletter_type','string']], feFa:'رشد مخاطب پایدار', feEn:'Durable audience growth' },
+        { n:'newsletter_unsubscribed', c:'code', capFa:'لغو اشتراک خبرنامه', capEn:'Newsletter unsubscribe', req:[['newsletter_type','string']], feFa:'churn خبرنامه', feEn:'Newsletter churn' },
+        { n:'item_viewed', c:'auto', capFa:'بازدید صفحه مقاله', capEn:'Article page view', req:[['item_id','string']], opt:[['item_type','enum(article)'],['article_category','string'],['author_name','string']], feFa:'مخرج نرخ مطالعه/چرخش', feEn:'Denominator for read/turn rates' },
+        { n:'item_list_viewed', c:'auto', capFa:'بازدید صفحه دسته/آرشیو/نویسنده', capEn:'Category/archive/author page view', req:[['list_type','enum(category|feed|collection|related)']], feFa:'ورودی فید', feEn:'Feed entry' },
+        { n:'list_item_clicked', c:'auto', capFa:'کلیک کارت فید', capEn:'Feed card click', req:[['item_id','string'],['list_type','string']], feFa:'CTR فید', feEn:'Feed CTR' },
+        { n:'recommendation_viewed', c:'auto', capFa:'نمایش بلوک پیشنهادی', capEn:'Recommendation block shown', opt:[['module_type','string'],['position','number']], feFa:'مخرج CTR پیشنهاد', feEn:'Denominator for recommendation CTR' },
+        { n:'recommendation_clicked', c:'auto', capFa:'کلیک مقاله مرتبط', capEn:'Related-article click', req:[['item_id','string']], opt:[['module_type','string'],['position','number']], feFa:'نرخ چرخش داخلی', feEn:'Internal turn rate' },
+        { n:'share', c:'code', capFa:'اشتراک‌گذاری مقاله', capEn:'Article share', req:[['share_channel','string']], opt:[['entity_type','enum(article)'],['content_id','string']], feFa:'Share Mix', feEn:'Share Mix' },
+        { n:'search_submitted', c:'auto', capFa:'جستجوی داخلی', capEn:'Internal search', req:[['search_term','string']], opt:[['search_context','enum(content)']], feFa:'شروع مسیر مخاطب', feEn:'Audience journey start' },
+        { n:'scroll_depth_reached', c:'auto', capFa:'عمق اسکرول کل صفحه', capEn:'Full-page scroll depth', req:[['depth_percent','enum(25|50|75|90)']], feFa:'کف عمق اسکرول', feEn:'Scroll-depth floor' },
+        { n:'form_submitted', c:'code', capFa:'ارسال فرم (کف خبرنامه)', capEn:'Form submit (newsletter fallback)', req:[['form_id','string']], feFa:'کف فرم خبرنامه', feEn:'Newsletter-form fallback' }
+      ]},
+    { id:'community', g:'content', fa:'جامعه و تعامل', en:'Community & interaction',
+      dFa:'واکنش، ذخیره، دنبال‌کردن و کامنت', dEn:'Reactions, saves, follows and comments',
+      events:[
+        { n:'reaction_added', c:'code', capFa:'واکنش روی مقاله/کامنت', capEn:'Reaction on an article/comment', req:[['target_type','enum(article|comment)']], opt:[['reaction_type','string']], feFa:'سیگنال کیفیت', feEn:'Quality signal' },
+        { n:'reaction_removed', c:'code', capFa:'برداشتن واکنش', capEn:'Reaction removed', req:[['target_type','enum(article|comment)']] },
+        { n:'item_saved', c:'code', capFa:'ذخیره مقاله برای بعد', capEn:'Saved an article for later', req:[['item_id','string']], opt:[['item_type','enum(article)']] },
+        { n:'item_unsaved', c:'code', capFa:'لغو ذخیره', capEn:'Unsaved', req:[['item_id','string']] },
+        { n:'entity_followed', c:'code', capFa:'دنبال‌کردن نویسنده/موضوع', capEn:'Followed an author/topic', req:[['entity_type','enum(author|topic)']], opt:[['entity_id','string']], feFa:'رشد مخاطب پایدار', feEn:'Durable audience growth' },
+        { n:'entity_unfollowed', c:'code', capFa:'لغو دنبال‌کردن', capEn:'Unfollowed', req:[['entity_type','enum(author|topic)']] },
+        { n:'comment_added', c:'code', capFa:'ثبت کامنت زیر مقاله', capEn:'Posted a comment on an article', opt:[['article_id','string']], feFa:'تعامل عمیق', feEn:'Deep engagement' },
+        { n:'comment_replied', c:'code', capFa:'پاسخ زیر کامنت', capEn:'Replied under a comment', opt:[['article_id','string'],['parent_comment_id','string']] },
+        { n:'content_reported', c:'code', capFa:'گزارش محتوای نامناسب', capEn:'Reported inappropriate content', req:[['target_type','enum(article|comment)']], feFa:'trust & safety', feEn:'trust & safety' }
+      ]},
+    { id:'gallery', g:'content', fa:'گالری', en:'Gallery',
+      dFa:'گالری تصاویر و پیمایش آن', dEn:'Image galleries and navigation',
+      events:[
+        { n:'gallery_viewed', c:'code', capFa:'باز کردن گالری/آلبوم', capEn:'Opened a gallery/album', req:[['gallery_id','string'],['gallery_title','string'],['image_count','number']] },
+        { n:'gallery_image_viewed', c:'code', capFa:'دیده‌شدن یک تصویر', capEn:'An image was viewed', req:[['gallery_id','string'],['image_id','string'],['image_position','number']] },
+        { n:'gallery_image_navigated', c:'code', capFa:'حرکت بین تصاویر', capEn:'Navigated between images', req:[['gallery_id','string'],['from_position','number'],['to_position','number']] },
+        { n:'gallery_completed', c:'code', capFa:'رسیدن به آخرین تصویر (≥۹۰٪)', capEn:'Reached the last image (≥90%)', req:[['gallery_id','string'],['image_count','number'],['images_seen','number']], feFa:'تعامل عمیق تصویری', feEn:'Deep visual engagement' }
+      ]},
+    { id:'paywall', g:'content', fa:'اشتراک و دیوار پرداخت', en:'Subscription and paywall',
+      dFa:'دیوار پرداخت و شروع اشتراک', dEn:'Paywall and subscription start',
+      events:[
+        { n:'paywall_viewed', c:'code', capFa:'رسیدن به محتوای قفل‌شده', capEn:'Reached locked content', opt:[['article_id','string'],['paywall_type','string'],['articles_remaining','number']], feFa:'قیف دیوار پرداخت', feEn:'Paywall funnel' },
+        { n:'paywall_dismissed', c:'code', capFa:'رد کردن دیوار پرداخت', capEn:'Dismissed the paywall', opt:[['article_id','string']] },
+        { n:'subscription_started', c:'code', capFa:'شروع خرید اشتراک', capEn:'Started a subscription purchase', opt:[['plan_id','string']], feFa:'انتهای قیف دیوار پرداخت', feEn:'Paywall funnel bottom' }
+      ]},
+
+    { id:'video', g:'cross', fa:'ویدیو', en:'Video',
+      dFa:'پخش ویدیو از پلیرهای شناخته‌شده', dEn:'Video playback from known players',
+      events:[
+        { n:'video_started', c:'player', capFa:'شروع پخش ویدیو', capEn:'Video playback started', opt:[['video_id','string'],['media_type','enum(video)']] },
+        { n:'video_progress', c:'player', capFa:'مایل‌استون‌های تماشا (۲۵/۵۰/۷۵)', capEn:'Watch milestones (25/50/75)' },
+        { n:'video_completed', c:'player', capFa:'تماشای کامل (۹۰٪+)', capEn:'Full watch (90%+)', feFa:'نرخ اتمام', feEn:'Completion rate' },
+        { n:'video_buffered', c:'player', capFa:'بافرینگ/کیفیت پخش', capEn:'Buffering / playback quality' },
+        { n:'video_quality_changed', c:'player', capFa:'تغییر کیفیت', capEn:'Quality changed' },
+        { n:'video_error', c:'player', capFa:'خطای پخش', capEn:'Playback error' }
+      ]},
+
+    { id:'ex_account', g:'exchange', fa:'ثبت‌نام و احراز هویت', en:'Sign-up and identity',
+      dFa:'ساخت حساب، ورود و مراحل احراز هویت', dEn:'Account creation, login and identity verification',
+      events:[
+        { n:'sign_up_started', c:'code', capFa:"شروع ثبت‌نام", capEn:"Sign-up started", opt:[["app_surface", "string"], ["id", "string"], ["method", "string"]] },
+        { n:'sign_up', c:'code', capFa:"وقتی کاربر حساب صرافی می‌سازد.", capEn:"When a user creates an exchange account.", opt:[["app_surface", "string"], ["id", "string"], ["method", "string"]], feFa:"قیف فعال‌سازی صرافی", feEn:"Exchange activation funnel" },
+        { n:'login', c:'code', capFa:"ورود به حساب", capEn:"Logged in", opt:[["app_surface", "string"], ["id", "string"], ["method", "string"]], feFa:"قیف فعال‌سازی صرافی", feEn:"Exchange activation funnel" },
+        { n:'kyc_started', c:'code', capFa:"شروع احراز هویت", capEn:"KYC started", opt:[["app_surface", "string"], ["id", "string"], ["kyc_level", "string"]] },
+        { n:'kyc_submitted', c:'code', capFa:"ارسال مدارک احراز هویت", capEn:"KYC documents submitted", opt:[["app_surface", "string"], ["id", "string"], ["kyc_level", "string"]] },
+        { n:'kyc_approved', c:'code', capFa:"وقتی مدارک کاربر تایید می‌شود و می‌تواند واریز کند.", capEn:"When the user’s documents are approved and they can deposit.", opt:[["app_surface", "string"], ["id", "string"], ["kyc_level", "string"], ["status", "string"], ["failure_reason", "string"]], feFa:"قیف فعال‌سازی صرافی", feEn:"Exchange activation funnel" }
+      ]},
+    { id:'ex_funding', g:'exchange', fa:'واریز و برداشت', en:'Deposits and withdrawals',
+      dFa:'واریز تومانی و رمزارزی و برداشت از حساب', dEn:'Toman and crypto deposits, and withdrawals',
+      events:[
+        { n:'deposit_started', c:'code', capFa:"شروع واریز", capEn:"Deposit started", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["deposit_method", "string"], ["amount", "string"], ["currency", "string"]] },
+        { n:'deposit_address_generated', c:'code', capFa:"ساخت آدرس واریز", capEn:"Deposit address generated", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"]] },
+        { n:'deposit_detected', c:'code', capFa:"شناسایی واریز در شبکه", capEn:"Deposit detected on the network", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] },
+        { n:'deposit_confirmed', c:'code', capFa:"تایید واریز", capEn:"Deposit confirmed", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] },
+        { n:'deposit', c:'code', capFa:"وقتی واریز تومانی یا رمزارزی به حساب می‌نشیند.", capEn:"When a toman or crypto deposit lands in the account.", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["deposit_method", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]], feFa:"از ثبت‌نام تا اولین معامله", feEn:"Sign-up to first trade" },
+        { n:'withdraw_started', c:'code', capFa:"شروع برداشت", capEn:"Withdrawal started", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["withdraw_type", "string"], ["amount", "string"], ["currency", "string"]] },
+        { n:'withdraw_submitted', c:'code', capFa:"ثبت درخواست برداشت", capEn:"Withdrawal request submitted", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["withdraw_type", "string"], ["amount", "string"], ["currency", "string"]] },
+        { n:'withdraw_verification', c:'code', capFa:"تایید هویت برای برداشت", capEn:"Withdrawal verification", opt:[["app_surface", "string"], ["id", "string"], ["withdraw_type", "string"], ["method", "string"], ["status", "string"], ["failure_reason", "string"]] },
+        { n:'withdraw_processed', c:'code', capFa:"انجام برداشت", capEn:"Withdrawal processed", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["network", "string"], ["withdraw_type", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] }
+      ]},
+    { id:'ex_trade', g:'exchange', fa:'معامله', en:'Trading',
+      dFa:'صفحه معامله، بازدید کوین و ثبت سفارش', dEn:'Trading screen, coin views and orders',
+      events:[
+        { n:'trading_screen_viewed', c:'code', capFa:"دیدن صفحه معامله", capEn:"Viewed the trading screen", opt:[["app_surface", "string"], ["id", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"]] },
+        { n:'coin_view', c:'code', capFa:"بازدید صفحه یک کوین", capEn:"Viewed a coin page", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"]] },
+        { n:'order_form_opened', c:'code', capFa:"باز کردن فرم سفارش", capEn:"Opened the order form", opt:[["app_surface", "string"], ["id", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"], ["side", "string"], ["order_type", "string"], ["trade_mode", "string"]] },
+        { n:'order_submitted', c:'code', capFa:"ثبت سفارش", capEn:"Order submitted", opt:[["app_surface", "string"], ["id", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"], ["side", "string"], ["order_type", "string"], ["trade_mode", "string"], ["amount", "string"], ["currency", "string"]] },
+        { n:'order_accepted', c:'code', capFa:"پذیرش سفارش", capEn:"Order accepted", opt:[["app_surface", "string"], ["id", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"], ["side", "string"], ["order_type", "string"], ["trade_mode", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] },
+        { n:'trade', c:'code', capFa:"لحظه ارزش صرافی: سفارشی که انجام شده.", capEn:"The exchange’s value moment: an order that was filled.", opt:[["app_surface", "string"], ["id", "string"], ["base_asset", "string"], ["quote_asset", "string"], ["market_type", "string"], ["side", "string"], ["order_type", "string"], ["trade_mode", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]], feFa:"تبدیل به معامله‌گر", feEn:"Conversion to trader" },
+        { n:'staking_request', c:'code', capFa:"درخواست استیکینگ", capEn:"Staking request", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] }
+      ]},
+    { id:'ex_referral', g:'exchange', fa:'دعوت', en:'Referrals',
+      dFa:'ساخت و اشتراک لینک دعوت و ثبت‌نام دعوت‌شده‌ها', dEn:'Creating and sharing invite links, and invitee sign-ups',
+      events:[
+        { n:'referral_created', c:'code', capFa:"ساخت لینک دعوت", capEn:"Invite link created", opt:[["app_surface", "string"], ["id", "string"]] },
+        { n:'referral_shared', c:'code', capFa:"اشتراک لینک دعوت", capEn:"Invite link shared", opt:[["app_surface", "string"], ["id", "string"], ["method", "string"]] },
+        { n:'referral_signup', c:'code', capFa:"ثبت‌نام با لینک دعوت", capEn:"Sign-up via an invite link", opt:[["app_surface", "string"], ["id", "string"], ["method", "string"]] },
+        { n:'referral_reward_earned', c:'code', capFa:"دریافت پاداش دعوت", capEn:"Invite reward earned", opt:[["app_surface", "string"], ["id", "string"], ["coin", "string"], ["amount", "string"], ["currency", "string"], ["status", "string"], ["failure_reason", "string"]] }
+      ]},
+    /* v10: Portal's own pack — only the Portal–Shahin connection sends it (portal-demo analytics/ecommerce: «سفارش‌های منقضی») */
+    { id:'portal_pay', g:'portal_x', fa:'فرصت پرداخت پرتال', en:'Portal payment window',
+      dFa:'سفارش‌هایی که فرصت پرداختشان در پرتال پیش از پرداخت تمام شد', dEn:'Orders whose Portal payment window closed before they were paid',
+      events:[
+        { n:'order_expired', c:'auto', capFa:'انقضای فرصت پرداخت', capEn:'Payment window expired', req:[['order_id','string']], opt:[['payment_gateway','string'],['order_value','number']] }
+      ]}
+  ];
+  /* v10: a platform template may add one pack of its own (xpack) after the shared ones — Portal's payment window */
+  function packsOf(cid){ var c=CATMAP[cid], g=(c&&c.packs)||cid, x=c&&c.xpack; return PACKS.filter(function(p){ return p.g===g || (x && p.id===x); }); }
+
+  /* ─────────── per-project collection (PM 2026-10-31: collection status follows the topbar project) ───────────
+     Which events have actually arrived in each demo project, consistent with the builder's project profiles
+     (research-notes/…/34-project-profiles.md): 0 Chakavak = WooCommerce store with a small video catalog, 1 Pelikan = video-first
+     site with a VOD subscription, 2 Bamdad = WordPress news publisher with a paywall and news videos, 3 Starchap = new, no events.
+     A pack listed as true has every event arriving; a list names the arriving events. No demo project is an exchange. */
+  var ARRIVE = {
+    0: { product:true, cart_checkout:true, discovery:true,
+         article:['scroll_depth_reached','share'],
+         video:['video_started','video_progress','video_completed','video_buffered','video_error'] },
+    1: { video:true,
+         article:['search_submitted','scroll_depth_reached','share'],
+         paywall:['subscription_started'] },
+    2: { article:['article_read_started','article_read_depth','article_read_completed','article_engagement_time','item_viewed','item_list_viewed','list_item_clicked',
+                  'recommendation_viewed','recommendation_clicked','share','search_submitted','scroll_depth_reached'],
+         community:['comment_added'], paywall:true,
+         video:['video_started','video_progress','video_completed','video_buffered'] },
+    3: {}
+  };
+  var PROJ_NAMES = [['چکاوک','Chakavak'],['پلیکان','Pelikan'],['بامداد','Bamdad'],['سارگپه','Starchap']];
+
+  /* ─────────── STATE ─────────── */
+  /* view = 'gallery' | category id; sec = gallery nav section; packOpen = expanded pack groups in a starter;
+     sch = per-role schema open; impl = code events marked added (the v6 handshake), per project; saved = dashboards saved here. */
+  var S = { view:'gallery', sec:'all', ind:'all', use:'all', q:'', recent:[], packOpen:{}, sch:{}, impl:{}, saved:[] };
+  function evKey(packId, n){ return packId+'__'+n; }
+  function isCode(ev){ return ev.c==='code'; }
+  function impl(){ var p=PROJ; return S.impl[p]||(S.impl[p]={}); }
+  function arrived(pack, ev){ var a=(ARRIVE[PROJ]||{})[pack.id]; return a===true || (Array.isArray(a) && a.indexOf(ev.n)>-1); }
+  /* one status per event in this project: on = data arriving · first = waiting for its first data (automatic, or code marked added) ·
+     code = waiting for your code (the only state where someone must act) */
+  function status(pack, ev){ if (arrived(pack, ev)) return 'on'; if (!isCode(ev) || impl()[evKey(pack.id, ev.n)]) return 'first'; return 'code'; }
+  function noEvents(){ return !Object.keys(ARRIVE[PROJ]||{}).length; }
+  function catStats(cid){
+    var tot=0, on=0, first=0, code=0, pend=[];
+    packsOf(cid).forEach(function(p){ var pc=0; p.events.forEach(function(ev){ tot++; var s=status(p, ev); if (s==='on') on++; else if (s==='first') first++; else { code++; pc++; } }); if (pc) pend.push({ p:p, n:pc }); });
+    return { tot:tot, on:on, first:first, code:code, pend:pend }; }
+  function allStats(){ var r={ tot:0, on:0, first:0, code:0, pend:[] }; CATS.filter(function(c){ return !c.packs; }).forEach(function(c){ var s=catStats(c.id); r.tot+=s.tot; r.on+=s.on; r.first+=s.first; r.code+=s.code; s.pend.forEach(function(x){ r.pend.push({ p:x.p, n:x.n, c:c }); }); }); return r; }
+  function chip(s){ return s.on===s.tot ? '<span class="sh-chip good">'+t('همه در حال دریافت','all collecting')+'</span>'
+    : '<span class="sh-chip '+(s.code?'warn':'info')+'">'+t(num(s.on)+' از '+num(s.tot)+' در حال دریافت', num(s.on)+' of '+num(s.tot)+' collecting')+'</span>'; }
+  /* an event's worst status across the category's packs that carry it */
+  function evStatus(cid, n){ var rank={ on:0, first:1, code:2 }, worst=null;
+    packsOf(cid).forEach(function(p){ p.events.forEach(function(ev){ if (ev.n===n){ var s=status(p, ev); if (worst===null || rank[s]>rank[worst]) worst=s; } }); });
+    return worst || 'first'; }
+  function firstPackWith(cid, n){ return packsOf(cid).filter(function(p){ return p.events.some(function(ev){ return ev.n===n; }); })[0]; }
+  function tilesUsing(cid, n){ return CATMAP[cid].tiles.filter(function(tl){ return tl.ev.indexOf(n)>-1; }).length; }
+
+  function exVal(ty){
+    if (ty.indexOf('enum(')===0){ var f = ty.slice(5,-1).split('|')[0]; return /^\d+$/.test(f) ? f : "'"+f+"'"; }
+    if (ty==='number') return '0';
+    return "'…'";
+  }
+  function snippet(ev){ var props=(ev.req||[]).concat(ev.opt||[]);
+    return props.length ? "shahin.track('"+ev.n+"', {\n"+props.map(function(f){ return "  "+f[0]+": "+exVal(f[1]); }).join(',\n')+"\n});" : "shahin.track('"+ev.n+"');"; }
+  function typeLbl(k){ var x=window.RBTplCatalog ? RBTplCatalog.typeLbl(k) : null; if (x && x[0]!==k) return t(x[0], x[1]); return k==='funnel' ? t('قیف','Funnel') : k==='retention' ? t('ریتنشن','Retention') : t('روند','Trend'); }
+  function rangeLbl(r){ return r==='7d' ? t('۷ روز اخیر','Last 7 days') : r==='3m' ? t('۳ ماه اخیر','Last 3 months') : t('۳۰ روز اخیر','Last 30 days'); }
+
+  /* ─────────── illustrations (not live data, as Amplitude's cards and the builder's tg-thumb) ─────────── */
+  function mini(type, x, w, seed){
+    var h='';
+    if (type==='funnel') [40,30,20,12].forEach(function(v,j){ h+='<rect x="'+(x+6+j*(w-12)/4)+'" y="'+(62-v)+'" width="'+((w-12)/4-3)+'" height="'+v+'" rx="1.5" class="tg-c'+(j===0?1:2)+'"/>'; });
+    else if (type==='bar') [14,30,22,36,18].forEach(function(v,j){ h+='<rect x="'+(x+6+j*(w-12)/5)+'" y="'+(62-v)+'" width="'+((w-12)/5-3)+'" height="'+v+'" rx="1.5" class="tg-c2"/>'; });
+    else if (type==='retention'){ var cw=(w-12)/4; for (var r=0;r<4;r++) for (var c=0;c<4-r;c++) h+='<rect x="'+(x+6+c*cw)+'" y="'+(16+r*11)+'" width="'+(cw-2)+'" height="9" rx="1.5" class="tg-c1" opacity="'+(0.9-c*0.2)+'"/>'; }
+    else h+='<polyline points="'+[0,1,2,3,4].map(function(j){ return (x+6+j*(w-12)/4)+','+(54-[6,18,12,28,22][(j+seed)%5]); }).join(' ')+'" class="tg-line"/>';
+    return h; }
+  function thumb(c){ var h='<svg viewBox="0 0 160 72" aria-hidden="true" preserveAspectRatio="xMidYMid meet">';
+    c.tiles.slice(0,3).forEach(function(tl, i){ var x=4+i*52; h+='<rect x="'+x+'" y="4" width="48" height="64" rx="6" class="tg-pane"/>'+mini(tl.type, x, 48, i); });
+    return h+'</svg>'; }
+  function tileSvg(tl, i){ return '<svg viewBox="0 0 160 72" aria-hidden="true" preserveAspectRatio="none">'+mini(tl.type, 0, 160, i)+'</svg>'; }
+
+  /* ─────────── the empty project (PM 2026-10-31): the report builder's no-events copy, verbatim ─────────── */
+  function noEventsBox(){
+    return '<div class="cs-noev" id="capNoEv">'+ic('info')+'<div><div class="cs-noev-t">'+t('هنوز ایونتی از سایت شما نرسیده','No events from your site yet')+'</div>'+
+      '<div class="cs-noev-h">'+t('پس از نصب اسکریپت شاهین، ایونت‌ها با ۱ تا ۲ ساعت تاخیر این‌جا دیده می‌شوند.','Once the Shahin script is installed, events show up here within 1–2 hours.')+'</div></div></div>'; }
+
+  /* ─────────── GALLERY ─────────── */
+  function catMatches(c, q){
+    if (!q) return true;
+    var hay=[c.fa, c.en, c.dFa, c.dEn];
+    packsOf(c.id).forEach(function(p){ hay.push(p.fa, p.en); p.events.forEach(function(ev){ hay.push(ev.n, ev.capFa, ev.capEn); }); });
+    return hay.join(' ').toLowerCase().indexOf(q)>-1; }
+  function secList(k){
+    if (k==='biz') k='all';
+    if (k==='recent') return S.recent.map(function(id){ return CATMAP[id]; }).filter(Boolean);
+    if (k==='full') return CATS.filter(function(c){ var s=catStats(c.id); return s.on===s.tot; });
+    if (k==='wait') return CATS.filter(function(c){ return catStats(c.id).code>0; });
+    return CATS.slice(); }
+  /* v8 (PM 2026-11-03, Amplitude's template gallery ▸ Industry): a card is only its name on a white strip and a pastel illustration;
+     Shahin's extra layer, the collection status, is one small dot and count on the title row */
+  var PASTEL={ commerce:'p-good', commerce_woo:'p-good', commerce_portal:'p-warn', content:'p-info', cross:'p-bad', exchange:'p-warn' };
+  function stDot(s){ var cls = s.on===s.tot ? 'good' : s.code ? 'warn' : 'info';
+    var tx = s.on===s.tot ? t('همه در حال دریافت','All collecting') : t(num(s.on)+' از '+num(s.tot), num(s.on)+' of '+num(s.tot));
+    return '<span class="i8-st '+cls+'" title="'+esc(t(num(s.on)+' از '+num(s.tot)+' ایونت در حال دریافت', num(s.on)+' of '+num(s.tot)+' events collecting'))+'"><i></i>'+tx+'</span>'; }
+  function paper(c){ var tl=c.tiles[0]||{type:'trend'}; return '<span class="i8-paper"><svg viewBox="0 0 160 72" aria-hidden="true" preserveAspectRatio="none"><rect x="10" y="8" width="38" height="4" rx="2" class="i8-ln"/><rect x="10" y="15" width="22" height="3" rx="1.5" class="i8-ln2"/>'+mini(tl.type, 8, 144, 1)+'</svg></span>'; }
+  /* v10: the card preview — a mini dashboard window in the template's own colour (see .i9-ill) */
+  var HUE={ commerce:5, commerce_woo:3, commerce_portal:2, content:1, cross:4, exchange:6 };
+  function seedOf(id){ var h=0; String(id).split('').forEach(function(ch){ h=(h*31+ch.charCodeAt(0))>>>0; }); return h; }
+  function dashChart(type, x, y, w, hgt, sd){
+    var o='', b=y+hgt, i;
+    if (type==='funnel'){ var f=[1,.72,.5,.34]; for (i=0;i<4;i++){ var bw=(w-6)/4, bh=(hgt-4)*f[i]; o+='<rect x="'+(x+i*(bw+2))+'" y="'+(b-bh)+'" width="'+bw+'" height="'+bh+'" rx="2" class="i9-h" opacity="'+(1-i*.18)+'"/>'; } }
+    else if (type==='bar'){ var v=[.45,.8,.6,.95,.5,.7]; for (i=0;i<6;i++){ var w6=(w-10)/6, bh2=(hgt-4)*v[(i+sd)%6]; o+='<rect x="'+(x+i*(w6+2))+'" y="'+(b-bh2)+'" width="'+w6+'" height="'+bh2+'" rx="1.5" class="i9-h" opacity="'+(i%2?.55:1)+'"/>'; } }
+    else if (type==='retention'){ var cw=(w-6)/5, ch=(hgt-6)/4; for (var r=0;r<4;r++) for (var c=0;c<5-r;c++) o+='<rect x="'+(x+c*(cw+1.5))+'" y="'+(y+r*(ch+2))+'" width="'+cw+'" height="'+ch+'" rx="1.5" class="i9-h" opacity="'+(0.95-c*0.17)+'"/>'; }
+    else { var pv=[.35,.5,.42,.68,.58,.8,.72,.9], pts=[];
+      for (i=0;i<8;i++) pts.push((x+i*w/7).toFixed(1)+','+(b-(hgt-4)*pv[(i+sd)%8]*(i>5?1:.95)).toFixed(1));
+      o+='<line x1="'+x+'" x2="'+(x+w)+'" y1="'+(y+hgt*.5)+'" y2="'+(y+hgt*.5)+'" class="i9-g"/>'+
+         '<path d="M'+x+','+b+' L'+pts.join(' L')+' L'+(x+w)+','+b+' Z" class="i9-ha"/><polyline points="'+pts.join(' ')+'" class="i9-hs"/>'; }
+    return o; }
+  function dash(o){   /* o = { id, hue (1–6), icon, types:[main, second], plat } */
+    var sd=seedOf(o.id)%8, k=[['58','12'],['44','16'],['36','20']][sd%3];
+    var body='<svg class="i9-body" viewBox="0 0 200 84" preserveAspectRatio="xMidYMin slice" aria-hidden="true">'+
+      /* two KPI tiles */
+      '<rect x=".5" y=".5" width="54" height="37" rx="5" class="i9-t"/><rect x="6" y="7" width="22" height="3" rx="1.5" class="i9-l2"/><rect x="6" y="15" width="'+k[0]*.6+'" height="8" rx="2" class="i9-n"/><rect x="6" y="28" width="'+k[1]+'" height="3" rx="1.5" class="i9-h"/>'+
+      '<rect x=".5" y="43.5" width="54" height="37" rx="5" class="i9-t"/><rect x="6" y="50" width="26" height="3" rx="1.5" class="i9-l2"/>'+dashChart(o.types[1]||'bar', 6, 58, 42, 17, sd+3)+
+      /* the template's first chart */
+      '<rect x="60.5" y=".5" width="139" height="80" rx="5" class="i9-t"/><rect x="67" y="7" width="40" height="3.5" rx="1.75" class="i9-l1"/><rect x="67" y="14" width="24" height="3" rx="1.5" class="i9-l2"/>'+
+      dashChart(o.types[0]||'trend', 68, 24, 124, 50, sd)+'</svg>';
+    return '<span class="i9-ill" style="--h:var(--sh-chart-'+(o.hue||1)+')">'+(o.plat?'<span class="i9-plat">'+esc(o.plat)+'</span>':'')+
+      '<span class="i9-win"><span class="i9-wh"><span class="i9-wi">'+ic(o.icon||'layout')+'</span><span class="i9-wl"><i></i><i></i></span></span>'+body+'</span></span>'; }
+  function tyOf(type){ return type==='stick'?'bar':type==='mex'?'trend':type==='pie'?'bar':(type||'trend'); }
+  function card(c){
+    var s=catStats(c.id);
+    return '<button class="tg-card i8-card" type="button" data-open="'+c.id+'"><span class="i8-head"><b>'+esc(t(c.fa,c.en))+'</b>'+stDot(s)+'</span>'+
+      dash({ id:c.id, hue:HUE[c.id], icon:c.icon, types:[tyOf((c.tiles[1]||c.tiles[0]||{}).type), tyOf((c.tiles[0]||{}).type)] })+(SCOPE_BIZ?'':useLine(usage(c.tpl).n, usage(c.tpl).last))+'</button>'; }
+  function emptyState(icon, tf, te, hf, he){ return '<div class="sh-card"><div class="sh-state"><div class="sh-state-icon">'+ic(icon)+'</div><div class="sh-state-title">'+t(tf,te)+'</div><div class="sh-state-hint">'+t(hf,he)+'</div></div></div>'; }
+
+  /* v8: Shahin's collection status as one quiet strip above the grid (Amplitude has no such layer) */
+  function statusCard(){
+    var a=allStats(), pct=a.tot?Math.round(a.on*100/a.tot):0, pn=PROJ_NAMES[PROJ]||PROJ_NAMES[0];
+    var h='<section class="i8-strip" aria-label="'+esc(t('وضعیت جمع‌آوری','Collection status'))+'">'+
+      '<span class="i8-sh"'+tip("<span class='tip-title'>وضعیت جمع‌آوری</span>ایونت‌هایی که داده‌شان در همین پروژه می‌رسد در حال دریافت‌اند. ایونت خودکاری که هنوز داده‌ای از آن نرسیده منتظر اولین داده است؛ ایونتی که با کد فرستاده می‌شود تا وقتی کدش اضافه نشده منتظر کد شماست. این خلاصه زنده است و با عوض کردن پروژه عوض می‌شود.",
+        "<span class='tip-title'>Collection status</span>Events whose data arrives in this project are collecting. An automatic event with no data yet is waiting for its first data; an event sent from code waits for your code until it is added. This summary is live and changes with the project.")+'>'+t('وضعیت جمع‌آوری','Collection status')+'</span>'+
+      '<span class="i8-proj" id="capProj">'+esc(t(pn[0],pn[1]))+'</span>'+
+      '<span class="i8-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'" aria-label="'+esc(t('سهم ایونت‌های در حال دریافت','Share of events collecting'))+'"><i style="width:'+pct+'%"></i></span>'+
+      '<span class="i8-cnt" id="capCount">'+t('<b>'+num(a.on)+'</b> از '+num(a.tot)+' ایونت در حال دریافت', '<b>'+num(a.on)+'</b> of '+num(a.tot)+' events collecting')+'</span>';
+    if (a.code) h+='<button class="i8-wait" type="button" data-sec="wait">'+t(num(a.code)+' ایونت منتظر کد شما', num(a.code)+' events waiting on your code')+'</button>';
+    else if (a.first) h+='<span class="i8-first" id="capFirst">'+t(num(a.first)+' منتظر اولین داده', num(a.first)+' waiting for first data')+'</span>';
+    h+='</section>';
+    if (noEvents()) h+=noEventsBox();
+    return h; }
+
+  function galleryView(){
+    var NAV=[['all','همه تمپلیت‌ها','All templates','squares-four'],['recent','اخیرا دیده‌شده','Recently viewed','clock-counter-clockwise'],
+      
+      { head:['قالب‌های سفارشی','Custom templates'], k:'custom' },['project','این پروژه','This project','folder-simple'],['mine','ساخته شما','Made by you','user-circle'],
+      { head:['وضعیت جمع‌آوری','Collection status'] },['full','همه در حال دریافت','All collecting','check-circle'],['wait','منتظر کد شما','Waiting on your code','code']];
+    if (!inScope(S.sec) || S.sec==='biz' || S.sec==='usecase') S.sec='all';
+    if (['usecase','project','mine'].indexOf(S.sec)>-1 || (!SCOPE_BIZ && (S.sec==='all' || S.sec==='recent'))){ if (!rbFresh()) return ''; }
+    var h='<div class="tg-wrap"><nav class="tg-nav" aria-label="'+esc(t('دسته‌های تمپلیت','Template sections'))+'">'+
+      '<label class="rbx-search">'+ic('magnifying-glass')+'<input id="capQ" type="search" aria-label="'+esc(t('جستجوی داشبورد یا ایونت','Search dashboards or events'))+'" placeholder="'+esc(t('جستجو…','Search…'))+'" value="'+esc(S.q)+'"/></label>';
+    NAV.forEach(function(s){ if (s.head){ if (!s.k || inScope(s.k)) h+='<span class="tg-navh">'+t(s.head[0],s.head[1])+'</span>'; return; }
+      if (!inScope(s[0])) return;
+      var on=S.sec===s[0];
+      h+='<button class="rbx-item'+(on?' on':'')+'" type="button" data-sec="'+s[0]+'"'+(on?' aria-current="page"':'')+'><span class="nm">'+t(s[1],s[2])+'</span>'+(s[0]==='full'||s[0]==='wait'?'<span class="ct">'+num(secList(s[0]).length)+'</span>':'')+'</button>'; });
+    h+='</nav>';
+    var TITLES={ all:['همه تمپلیت‌ها','All templates'], recent:['اخیرا دیده‌شده','Recently viewed'], biz:['نوع کسب‌وکار','Business type'], full:['همه در حال دریافت','All collecting'], wait:['منتظر کد شما','Waiting on your code'],
+      usecase:['کاربرد','Use case'], project:['قالب‌های این پروژه','This project’s templates'], mine:['ساخته شما','Made by you'] };
+    var TIPS={ usecase:["<span class='tip-title'>کاربرد</span>قالب‌هایی که شاهین برای یک پرسش رایج ساخته، مثل جذب ترافیک یا بازگشت کاربران؛ برای هر پروژه‌ای کار می‌کنند، حتی پروژه‌ای که فقط کد شاهین را نصب کرده.",
+        "<span class='tip-title'>Use case</span>Templates Shahin built for a common question, such as traffic acquisition or user retention; they work for any project, even one with only the Shahin snippet installed."],
+      project:["<span class='tip-title'>قالب‌های این پروژه</span>داشبوردهایی که مالک یا ادمین همین پروژه به قالب تبدیل و در گالری پروژه منتشر کرده. قالب‌ها در همین پروژه‌اند؛ برای استفاده در پروژه دیگر، «کپی به پروژه دیگر» را بزنید.",
+        "<span class='tip-title'>This project’s templates</span>Dashboards this project’s owner or an admin turned into templates and published to the project gallery. Templates stay in this project; to use one elsewhere, choose “Copy to another project”."],
+      mine:["<span class='tip-title'>ساخته شما</span>قالب‌هایی که خودتان ساخته‌اید یا از پروژه دیگری به این پروژه کپی کرده‌اید، چه در گالری پروژه باشند چه فقط با لینک.",
+        "<span class='tip-title'>Made by you</span>Templates you made, or copied into this project from another one, whether they are in the project gallery or link-only."] };
+    var tt=TITLES[S.sec]||TITLES.all, q=S.q.trim().toLowerCase();
+    h+='<div class="tg-main">'+statusCard()+(S.sec==='all'?facetBar():'');
+    /* the business-type dashboards, then (outside milestone 1) Shahin's use-case templates and the project's own */
+    var list=secList(S.sec), tl=[], ol=[];
+    if (!SCOPE_BIZ){
+      if (S.sec==='all' || S.sec==='usecase') tl=UTPL.slice();
+      if (S.sec==='recent') tl=S.recent.filter(function(id){ return id.indexOf('tpl:')===0; }).map(function(id){ return utpl(id.slice(4)); }).filter(Boolean);
+      if ((S.sec==='all' || S.sec==='project') && !SCOPE_SH) ol=projTpls();
+      if (S.sec==='mine' && !SCOPE_SH) ol=mineTpls();
+      if (S.sec==='usecase' || S.sec==='project' || S.sec==='mine') list=[];
+    }
+    if (S.sec==='all'){ list=list.filter(function(c){ return facetHit(c.id); }); tl=tl.filter(function(x){ return facetHit('tpl:'+x.id); }); if (S.ind!=='all' || S.use!=='all') ol=[]; }
+    if (q){ list=list.filter(function(c){ return catMatches(c, q); }); tl=tl.filter(function(x){ return (x.fa+' '+x.en+' '+x.dFa+' '+x.dEn).toLowerCase().indexOf(q)>-1; }); ol=ol.filter(function(o){ return orgHit(o, q); }); }
+    var total=list.length+tl.length+ol.length;
+    if (!total){
+      if (!q && S.sec==='all' && (S.ind!=='all' || S.use!=='all')) h+=emptyState('funnel','قالبی با این صنعت و کاربرد نیست','No template for this industry and use case','یکی از فیلترها را روی «همه» بگذارید.','Set one of the filters to «All».');
+      else if (q) h+=emptyState('magnifying-glass','تمپلیتی پیدا نشد','No template found','عبارت دیگری جستجو کنید یا نام یک ایونت را بنویسید.','Try another search or type an event name.');
+      else if (S.sec==='recent') h+=emptyState('clock-counter-clockwise','هنوز تمپلیتی را باز نکرده‌اید','You haven’t opened a template yet','داشبوردهایی که باز می‌کنید این‌جا می‌مانند تا دوباره پیدایشان کنید.','Dashboards you open stay here so you can find them again.');
+      else if (S.sec==='wait') h+=emptyState('check-circle','هیچ داشبوردی منتظر کد شما نیست','No dashboard is waiting for your code','همه ایونت‌هایی که با کد فرستاده می‌شوند اضافه شده‌اند.','Every event sent from code has been added.');
+      /* TG-3: only the project owner or an admin turns dashboards into templates, so others get a hint that says who does */
+      else if (S.sec==='project' || S.sec==='mine') h+=emptyState(S.sec==='mine'?'user-circle':'folder-simple', S.sec==='mine'?'هنوز قالبی نساخته‌اید':'هنوز قالبی در این پروژه ساخته نشده', S.sec==='mine'?'You haven’t made a template yet':'No templates in this project yet',
+        canSave()?'هر داشبورد را با «تبدیل به قالب…» در منوی ⋯ آن در گزارش‌ساز به قالب تبدیل کنید تا تیم با یک کلیک از آن داشبورد تازه بسازد.':'مالک یا ادمین پروژه داشبوردها را به قالب تبدیل می‌کند؛ قالب‌هایی که می‌سازند این‌جا می‌آیند.',
+        canSave()?'Turn any dashboard into a template with «Turn into a template…» in its ⋯ menu in the report builder, so your team can build a new dashboard from it in one click.':'The project owner or an admin turns dashboards into templates; the templates they make show up here.');
+      else h+=emptyState('code','هنوز داشبوردی کامل جمع نمی‌شود','No dashboard is fully collecting yet','وقتی همه ایونت‌های یک داشبورد برسند، آن داشبورد این‌جا می‌آید.','A dashboard shows up here once all of its events arrive.');
+    } else {
+      var tp=TIPS[S.sec]||["<span class='tip-title'>گالری تمپلیت‌ها</span>تمپلیت‌هایی که شاهین برای هر نوع کسب‌وکار ساخته و با ایونت‌های همین پروژه پر می‌شوند. هر کارت را باز کنید تا ایونت‌های آن و وضعیت جمع‌آوری هرکدام را ببینید.",
+        "<span class='tip-title'>Template gallery</span>Templates Shahin built for each business type, filled with this project’s own events. Open a card to see its events and the collection status of each."];
+      h+='<h2 class="i8-sec"'+tip(tp[0], tp[1])+'>'+t(tt[0],tt[1])+' <span class="i8-n">('+num(total)+')</span></h2>';
+      /* one group needs no sub-heading; several (the «همه» view) get the gallery's own group names */
+      var groups=[[list, ['قالب‌های صنعت','Industry templates'], function(){ return list.map(function(c){ return withTags(card(c), c.id, c.plat); }).join(''); }],
+        [tl, ['قالب‌های عمومی','General templates'], function(){ return tl.map(function(x, i){ return withTags(tcard(x, i), 'tpl:'+x.id); }).join(''); }],
+        [ol, ['قالب‌های این پروژه','This project’s templates'], function(){ return ol.map(ocard).join(''); }]].filter(function(g){ return g[0].length; });
+      groups.forEach(function(g){ if (groups.length>1) h+='<h3 class="i8-sub">'+t(g[1][0], g[1][1])+' <span class="i8-n">('+num(g[0].length)+')</span></h3>';
+        h+='<div class="tg-grid i8-grid">'+g[2]()+'</div>'; });
+    }
+    return h+'</div></div>'; }
+
+  /* ─────────── STARTER (one category = one starter template) ─────────── */
+  function roleCard(c, p, ev){
+    var k=evKey(p.id, ev.n), st=status(p, ev), done=!!impl()[k], n=tilesUsing(c.id, ev.n), open=!!S.sch[k];
+    var h='<div class="tg-role'+(st==='code'?' empty':'')+'" id="role-'+esc(k)+'" data-st="'+st+'"><div class="tg-rhead"><span class="tg-evn">'+esc(ev.n)+'</span>'+
+      (n?'<span class="tg-rn">'+num(n)+' '+t('نمودار',n===1?'chart':'charts')+'</span>':'')+'</div>'+
+      '<div class="tg-rdef">'+esc(t(ev.capFa, ev.capEn))+'</div>';
+    if (ev.feFa) h+='<div class="tg-rfeed">→ <b>'+t('می‌سازد','Feeds')+':</b> '+esc(t(ev.feFa, ev.feEn))+'</div>';
+    /* status = the role's binding in this project: arriving = bound (Amplitude's bound role); waiting for code = its empty role */
+    if (st==='on') h+='<span class="tg-auto">'+ic('check-circle')+t('در حال دریافت','Collecting')+'</span>';
+    else if (st==='first' && isCode(ev) && done) h+='<button type="button" class="tg-wait1" data-impl="'+esc(k)+'" title="'+esc(t('برای لغو کلیک کنید','Click to undo'))+'">'+ic('clock')+t('منتظر اولین داده','Waiting for first data')+'</button>';
+    else if (st==='first') h+='<span class="tg-first">'+ic('clock')+t('خودکار — بدون کد؛ منتظر اولین داده','Automatic — no code; waiting for first data')+'</span>';
+    else h+='<div class="tg-hs"><span class="tg-hshint">'+t('کد این ایونت را طبق اسکیما اضافه کنید، بعد این را بزنید','Add this event’s code per the schema, then press this')+'</span>'+
+      '<button type="button" class="tg-hsbtn" data-impl="'+esc(k)+'">'+t('کد را اضافه کردم','I’ve added the code')+'</button></div>';
+    h+='<button type="button" class="tg-schbtn" data-sch="'+esc(k)+'" aria-expanded="'+(open?'true':'false')+'">'+ic('caret-down')+t('اسکیما','Schema')+'</button>';
+    if (open){
+      var chips='';
+      if (ev.req && ev.req.length) chips+=ev.req.map(function(f){ return '<span class="cap-fchip req">'+esc(f[0])+' <span class="ty">: '+esc(f[1])+'</span></span>'; }).join('');
+      if (ev.opt && ev.opt.length) chips+=ev.opt.map(function(f){ return '<span class="cap-fchip">'+esc(f[0])+' <span class="ty">: '+esc(f[1])+'</span></span>'; }).join('');
+      if (!chips) chips='<span class="cap-fnone">'+t('— بدون فیلد','— no fields')+'</span>';
+      var body=snippet(ev);
+      h+='<div class="tg-sch"><div class="cap-fields">'+chips+'</div><div class="cap-code">'+
+        '<button type="button" class="sh-btn ghost compact cap-copy cap-code-copy" data-code="'+esc(body)+'">'+ic('copy')+' '+t('کپی','Copy')+'</button><pre class="cap-code-pre">'+esc(body)+'</pre></div></div>';
+    }
+    return h+'</div>'; }
+
+  function tileHtml(c, tl, i){
+    var sts=tl.ev.map(function(n){ return evStatus(c.id, n); }), miss=tl.ev.filter(function(n, j){ return sts[j]==='code'; });
+    var h='<div class="tg-tile"><div class="tg-tilet">'+esc(t(tl.fa, tl.en))+'</div><div class="tg-tiled"><span class="tg-type">'+typeLbl(tl.type)+'</span><span>'+rangeLbl(tl.range||c.range)+'</span></div>'+tileSvg(tl, i);
+    if (miss.length) h+='<div class="tg-wait">'+ic('link-break')+'<span>'+t('منتظر ایونت ','Waiting for ')+miss.map(function(n){ var p=firstPackWith(c.id, n); return '<button type="button" class="tg-evlink" data-goto="'+esc(evKey(p.id, n))+'">'+esc(n)+'</button>'; }).join(t('، ',', '))+'</span></div>';
+    else if (sts.every(function(s){ return s==='on'; })) h+='<span class="tg-ready">'+ic('check-circle')+t('داده این نمودار در حال رسیدن است','This chart’s data is arriving')+'</span>';
+    else h+='<span class="tg-ready first">'+ic('clock')+t('آماده؛ با رسیدن داده پر می‌شود','Ready; fills as data arrives')+'</span>';
+    return h+'</div>'; }
+
+  function starterView(){
+    var c=CATMAP[S.view]; if (!c){ S.view='gallery'; return galleryView(); }
+    var s=catStats(c.id), sv=canSave(), done=S.saved.filter(function(x){ return x.cat===c.id && x.proj===PROJ; }).slice(-1)[0];
+    var h='<div class="tg-starter"><button class="rbx-crumb" type="button" data-back="1">'+ic(curLang()==='fa'?'arrow-right':'arrow-left')+t('بازگشت به گالری تمپلیت‌ها','Back to the template gallery')+'</button>';
+    h+='<div class="rbx-head">'+ic(c.icon).replace('class="ph"','class="ph" style="width:20px;height:20px;color:var(--sh-brand)"')+
+      '<span class="rbx-title"'+tip(c.tipFa, c.tipEn)+'>'+esc(t(c.fa, c.en))+'</span>'+
+      '<span class="rbx-badge">'+ic('layout')+t('قالب شاهین','Shahin template')+'</span><span class="rbx-spacer"></span>'+
+      '<a class="sh-btn ghost compact" href="'+c.href+'" target="_blank" rel="noopener">'+ic('arrow-square-out')+' '+t('باز کردن داشبورد تمپلیت','Open the template dashboard')+'</a>'+
+      '<button class="sh-btn primary compact" id="capSave" type="button"'+(sv?'':' disabled aria-disabled="true" title="'+esc(t(NO_SAVE[0],NO_SAVE[1]))+'"')+'>'+ic('floppy-disk')+' '+t('ذخیره به‌عنوان داشبورد','Save as dashboard')+'</button></div>';
+    h+='<div class="rbx-sub">'+esc(t(c.dFa, c.dEn))+'</div>';
+    if (!sv) h+='<div class="rbx-callout tg-nosave" id="capNoSave">'+ic('lock-simple')+'<span>'+t(NO_SAVE[0], NO_SAVE[1])+'</span></div>';
+    if (done) h+='<div class="rbx-callout good" id="capSaved">'+ic('check-circle')+'<span>'+t('داشبورد «'+esc(done.name)+'» در «'+esc(done.spFa)+'» ساخته شد؛ نمودارهایش مال شماست. ','Dashboard “'+esc(done.name)+'” was created in “'+esc(done.spEn)+'”; its charts are yours. ')+
+      '<a class="cap-link" id="capSavedLink" href="'+esc(done.href)+'">'+t('باز کردن در گزارش‌ساز','Open in the report builder')+'</a></span></div>';
+    if (noEvents()) h+=noEventsBox();
+    if (c.noteFa) h+='<div class="rbx-callout">'+ic('info')+'<span>'+t(c.noteFa, c.noteEn)+'</span></div>';
+    h+='<div class="tg-split solo"><aside class="tg-roles" aria-label="'+esc(t('ایونت‌های قالب','Template events'))+'"><div class="tg-rolesh"><b'+
+      tip("<span class='tip-title'>ایونت‌های قالب</span>هر کارت یک ایونت این داشبورد و وضعیت آن در همین پروژه است: در حال دریافت، منتظر اولین داده، یا منتظر کد شما تا وقتی «کد را اضافه کردم» را نزده‌اید.",
+          "<span class='tip-title'>Template events</span>Each card is one event of this dashboard and its status in this project: collecting, waiting for its first data, or waiting for your code until you press “I’ve added the code”.")+'>'+t('ایونت‌های قالب','Template events')+'</b>'+chip(s)+'</div>';
+    packsOf(c.id).forEach(function(p, i){
+      var open = S.packOpen.hasOwnProperty(p.id) ? S.packOpen[p.id] : i===0;
+      var ps={ tot:p.events.length, on:0, code:0 }; p.events.forEach(function(ev){ var x=status(p, ev); if (x==='on') ps.on++; else if (x==='code') ps.code++; });
+      h+='<div class="tg-pack'+(open?' open':'')+'"><button type="button" class="tg-packh" data-packh="'+p.id+'" aria-expanded="'+(open?'true':'false')+'"><b>'+esc(t(p.fa,p.en))+'</b>'+
+        '<span class="sh-chip off">'+num(ps.tot)+' '+t('ایونت','events')+'</span>'+chip(ps)+
+        ic('caret-down').replace('class="ph"','class="ph car"')+'<span class="tg-packd">'+esc(t(p.dFa,p.dEn))+'</span></button>';
+      if (open) h+='<div class="tg-packb">'+p.events.map(function(ev){ return roleCard(c, p, ev); }).join('')+'</div>';
+      h+='</div>'; });
+    /* PM 2026-11-14 (v12): a template page has no dashboard preview; collection status lives only on the event cards */
+    h+='</aside></div>';
+    return h; }
+
+  /* ─────────── «ذخیره به‌عنوان داشبورد»: the in-place save modal (PM 2026-10-31; Amplitude saves on the starter itself) ───────────
+     Modelled on the builder's save modal (rb-amp-templates.js saveModal + rb-shell.js modal): title and subtitle verbatim, name
+     prefilled «… (کپی)», a description, the location from the builder's spaces (personal space first, «فقط شما به این فضا دسترسی
+     دارید.»), and the list of charts that are duplicated. TD-2: only the project owner or an admin reaches it. */
+  var SPACES = [ { id:'me', fa:'فضای شخصی', en:'Personal space', personal:true },
+                 { id:'mkt', fa:'فضای تیم مارکتینگ', en:'Marketing team space' },
+                 { id:'prd', fa:'فضای تیم محصول', en:'Product team space' } ];
+  var modalClose=null;
+  function closeModal(){ var ov=$('capOv'); if (!ov) return; ov.classList.remove('show'); setTimeout(function(){ if (ov.parentNode) ov.parentNode.removeChild(ov); }, 150); modalClose=null; var b=$('capSave'); if (b) b.focus(); }
+  function saveModal(c){
+    if (!canSave()){ toast(NO_SAVE[0], NO_SAVE[1]); return; }
+    closeModal();
+    var ov=document.createElement('div'); ov.className='rbx-ov'; ov.id='capOv';
+    ov.innerHTML='<div class="rbx-modal" role="dialog" aria-modal="true" aria-labelledby="capMTitle">'+
+      '<div class="rbx-mhead"><span class="rbx-mtitle" id="capMTitle">'+t('ساختن داشبورد تازه','Create new dashboard')+'</span><button class="rbx-mx" type="button" data-mclose="1" aria-label="'+esc(t('بستن','Close'))+'">×</button></div>'+
+      '<div class="rbx-msub">'+t('داشبوردی که از قالب ساخته می‌شود نمودارها را هم کپی می‌کند تا مال شما باشند و ویرایششان کنید. تغییرهای بعدی قالب به این کپی نمی‌رسد.','A dashboard made from a template duplicates its charts so you own and can edit them. Later changes to the template don’t reach this copy.')+'</div>'+
+      '<div class="rbx-mbody">'+
+        '<label class="rbx-field"><span>'+t('نام','Name')+'</span><input class="sh-input" id="capName" value="'+esc(t(c.fa+' (کپی)', c.en+' (copy)'))+'"/><span class="rbx-err" id="capNameErr" hidden>'+t('برای داشبورد یک نام بنویسید.','Give the dashboard a name.')+'</span></label>'+
+        '<label class="rbx-field"><span>'+t('توضیح','Description')+'</span><textarea class="sh-input" id="capDesc" rows="2">'+esc(t(c.dFa, c.dEn))+'</textarea></label>'+
+        '<label class="rbx-field"><span>'+t('محل ذخیره','Location')+'</span><select class="sh-input" id="capSpace">'+SPACES.map(function(sp){ return '<option value="'+sp.id+'"'+(sp.personal?' selected':'')+'>'+esc(t(sp.fa, sp.en))+'</option>'; }).join('')+'</select>'+
+          '<span class="rbx-note" id="capSpNote">'+t('فقط شما به این فضا دسترسی دارید.','Only you have access to this space.')+'</span></label>'+
+        '<div class="rbx-pick">'+c.tiles.map(function(tl){ return '<div class="rbx-pickrow">'+ic('chart-line')+'<span class="grow">'+esc(t(tl.fa, tl.en))+'</span><span class="tg-type">'+typeLbl(tl.type)+'</span></div>'; }).join('')+'</div>'+
+      '</div><div class="rbx-mfoot"><span class="rbx-spacer"></span><button class="sh-btn ghost compact" type="button" data-mclose="1">'+t('انصراف','Cancel')+'</button>'+
+        '<button class="sh-btn primary compact" type="button" id="capMSave">'+t('ذخیره','Save')+'</button></div></div>';
+    document.body.appendChild(ov);
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+    ov.addEventListener('mousedown', function(e){ if (e.target===ov) closeModal(); });
+    ov.addEventListener('click', function(e){ if (e.target.closest('[data-mclose]')) closeModal(); });
+    var sel=$('capSpace');
+    sel.addEventListener('change', function(){ var sp=SPACES.filter(function(x){ return x.id===sel.value; })[0];
+      $('capSpNote').textContent = sp.personal ? t('فقط شما به این فضا دسترسی دارید.','Only you have access to this space.') : t('اعضای این فضا داشبورد را می‌بینند.','Members of this space will see the dashboard.'); });
+    $('capMSave').addEventListener('click', function(){
+      var name=$('capName').value.trim();
+      if (!name){ $('capNameErr').hidden=false; $('capName').focus(); return; }
+      var sp=SPACES.filter(function(x){ return x.id===sel.value; })[0];
+      /* PM 2026-11-01: the builder creates the same copy from the link (?tplsave=), so the new dashboard opens there and is listed in its space */
+      /* TG-15: the save is counted here, once, so the builder doesn't count it again when the link opens (&counted=1) */
+      var href='../report-builder/v12.html?tplsave='+encodeURIComponent(c.tpl)+'&name='+encodeURIComponent(name)+'&desc='+encodeURIComponent($('capDesc').value.trim())+'&space='+sp.id+'&project='+PROJ+'&prole='+PROLE+'&counted=1';
+      if (window.RBTplCatalog) RBTplCatalog.bump(PROJ, c.tpl);
+      S.saved.push({ cat:c.id, proj:PROJ, name:name, desc:$('capDesc').value.trim(), space:sp.id, spFa:sp.fa, spEn:sp.en, href:href });
+      closeModal(); paint();
+      if (window.Shahin && Shahin.toast) Shahin.toast('داشبورد «'+name+'» ساخته شد؛ نمودارهایش مال شماست', 'Dashboard “'+name+'” created; its charts are yours',
+        { tone:'success', duration:6000, action:{ fa:'باز کردن در گزارش‌ساز', en:'Open in the report builder', run:function(){ location.href=href; } } });
+    });
+    modalClose=closeModal;
+    setTimeout(function(){ var f=$('capName'); if (f){ f.focus(); f.select(); } }, 60);
+  }
+
+  /* ═════════════ PM 2026-11-03: v8 is the single template gallery (milestone 11, C34–C39) ═════════════
+     Shahin's use-case templates, the project's own templates and the ones you made live here next to the business-type dashboards.
+     Every template, role binding, usage count, copy and the demo's seeded customer template come from rb-tpl-catalog.js, the file the
+     report builder reads too, and each role binds against the builder's own per-project events (rb-engine-v12.js), so a role binds the
+     same way on both pages. A dashboard is still created by the builder (?tplsave=); a customer template is a dashboard (Decision 18),
+     so it opens, and is edited, published or removed, in the builder. */
+  var CATL = window.RBTplCatalog || null, HAS_RB = !!(window.RB && RB.EVENTS && RB.evById);
+  /* ?m=1: es-start-m1.js scopes this page to Shahin's business-type dashboards (milestone 1, feature 3) before it renders */
+  var SCOPE_BIZ = !!(window.CAP_SCOPE && window.CAP_SCOPE.only === 'biz') || !CATL || !HAS_RB;
+  /* PM 2026-11-14: milestone 1 shows Shahin's own templates by industry AND use case (CAP_SCOPE.only='shahin'); the project's own
+     templates, «ساخته شما» and the custom section stay with the templates milestone */
+  var SCOPE_SH = !SCOPE_BIZ && !!(window.CAP_SCOPE && window.CAP_SCOPE.only === 'shahin');
+  function inScope(k){ if (SCOPE_SH) return ['project','mine','custom'].indexOf(k) < 0; return !SCOPE_BIZ || ['usecase','project','mine','custom'].indexOf(k) < 0; }
+  /* the builder's event list is the project it loaded with; a switch in place reloads before it is read for another project */
+  function rbFresh(){ if (!HAS_RB || RB.PROJECT === PROJ) return true;
+    qs.set('project', String(PROJ)); if (S.view.indexOf('tpl:')===0) qs.set('tpl', S.view.slice(4)); else qs.delete('tpl');
+    if (S.view==='gallery') qs.set('sec', S.sec); location.replace(location.pathname+'?'+qs.toString()); return false; }
+  function rbSent(id){ var e=HAS_RB && RB.evById(id); return !!(e && e.w>0); }
+  function rbSentList(){ return HAS_RB ? RB.EVENTS.filter(function(e){ return e.w>0 && !e.deleted && e.id!=='video_heartbeat'; }) : []; }
+  function rbEvName(id){ var e=HAS_RB && RB.evById(id); return e ? t(e.fa, e.en) : id; }
+  function rbNoData(){ return !HAS_RB || !RB.EVENTS.some(function(e){ return e.w>0; }); }
+  var UTPL = CATL ? CATL.TPL.filter(function(x){ return x.grp==='usecase'; }) : [];
+  function utpl(id){ return UTPL.filter(function(x){ return x.id===id; })[0]; }
+  var PEOPLE = { me:['شما','You'], pm:['مدیر محصول','Product manager'], an:['تحلیلگر داده','Data analyst'], mk:['مدیر مارکتینگ','Marketing lead'] };
+  function pname(id){ var p=PEOPLE[id]||PEOPLE.me; return t(p[0], p[1]); }
+  function ago(h){ if (h<1) return t('همین حالا','just now'); if (h<24) return t(num(h)+' ساعت پیش', h+' h ago'); var d=Math.round(h/24); return t(num(d)+' روز پیش', d+' d ago'); }
+  function useLine(n, last){ return '<span class="i8-use">'+ic('chart-line')+'<span>'+num(n)+' '+t('بار استفاده', n===1?'use':'uses')+'</span><span class="i8-dot">·</span><span>'+
+    (last==null ? t('هنوز استفاده نشده','Not used yet') : t('آخرین استفاده: ','Last used ')+ago(last))+'</span></span>'; }
+  function usage(tid){ return CATL ? CATL.used(PROJ, tid) : { n:0, last:null }; }
+
+  /* ── role bindings (level 1 automatic, level 2 picked; TG-10 picks persist per user, project and template) ── */
+  var BIND={};
+  function bindings(x){ var k=PROJ+':'+x.id; if (!BIND[k]) BIND[k]=CATL.bind(x, rbSent, rbSentList().map(function(e){ return e.id; }), CATL.picks(PROJ)[x.id]); return BIND[k]; }
+  function unbound(x){ var b=bindings(x).b; return x.roles.filter(function(r){ return !b[r.id]; }); }
+  function setPick(x, rid, evId){ var bb=bindings(x); bb.b[rid]=evId||''; bb.auto[rid]=false; CATL.savePick(PROJ, x.id, rid, evId||''); }
+
+  /* ── cards ── */
+  var TPAL=['p-info','p-good','p-warn','p-bad'];
+  function paperOf(type){ var ty=type==='stick'?'bar':type==='mex'?'trend':type; return '<span class="i8-paper"><svg viewBox="0 0 160 72" aria-hidden="true" preserveAspectRatio="none"><rect x="10" y="8" width="38" height="4" rx="2" class="i8-ln"/><rect x="10" y="15" width="22" height="3" rx="1.5" class="i8-ln2"/>'+mini(ty, 8, 144, 1)+'</svg></span>'; }
+  function tplDot(x){ var n=unbound(x).length;
+    if (!x.roles.length) return '<span class="i8-st good"><i></i>'+t('بدون تنظیم','No setup')+'</span>';
+    if (!n) return '<span class="i8-st good"><i></i>'+t('آماده','Ready')+'</span>';
+    return '<span class="i8-st warn" title="'+esc(t(num(n)+' نقش بدون ایونت', n+' roles without an event'))+'"><i></i>'+t(num(n)+' نقش خالی', n+(n===1?' empty role':' empty roles'))+'</span>'; }
+  function tcard(x, i){ var u=usage(x.id), ch=CATL.charts(x);
+    return '<button class="tg-card i8-card" type="button" data-tplo="'+x.id+'"><span class="i8-head"><b>'+esc(t(x.fa,x.en))+'</b>'+tplDot(x)+'</span>'+
+      dash({ id:x.id, hue:(i%6)+1, icon:x.icon, types:[tyOf((ch[1]||ch[0]||{}).type), tyOf((ch[0]||{}).type)] })+useLine(u.n, u.last)+'</button>'; }
+
+  /* ── customer templates: the seeded campaign report (when the project sends a goal) and copies made into this project ── */
+  function orgList(){
+    if (!CATL || !HAS_RB) return [];
+    var out=[], goal=CATL.CAMPAIGN_GOALS.filter(rbSent)[0];
+    if (goal){ var sd=CATL.campaign(PROJ, goal); out.push({ id:sd.board.id, fa:sd.board.fa, en:sd.board.en, cards:sd.board.cards, owner:sd.board.owner, tpl:sd.tpl }); }
+    CATL.readCopies(PROJ).forEach(function(c){ if (!c || !c.id) return;
+      out.push({ id:c.id, fa:c.fa, en:c.en, cards:c.cards||[], owner:'me', tpl:{ instr:c.instr||'', events:c.events||[], props:c.props||[], texts:c.texts||[], pub:false, by:'me', used:0, last:null, copied:{ from:c.from } } }); });
+    return out; }
+  function projTpls(){ return orgList().filter(function(o){ return o.tpl.pub; }); }
+  function mineTpls(){ return orgList().filter(function(o){ return o.tpl.by==='me' || o.owner==='me'; }); }
+  function orgHit(o, q){ return (o.fa+' '+o.en+' '+(o.tpl.instr||'')).toLowerCase().indexOf(q)>-1; }
+  function boardHref(id){ return '../report-builder/v12.html?board='+encodeURIComponent(id)+'&project='+PROJ+'&prole='+PROLE; }
+  function ocard(o, i){
+    var x=o.tpl, n=o.cards.filter(function(c){ return c.k!=='text'; }).length, can=x.by==='me' || o.owner==='me' || canSave();
+    var first=o.cards.filter(function(c){ return c.k!=='text'; })[0]||{};
+    return '<div class="tg-card i8-card org" role="button" tabindex="0" data-orgo="'+esc(o.id)+'"><span class="i8-head"><b>'+esc(t(o.fa,o.en))+'</b>'+
+      (x.pub ? '<span class="i8-st good"><i></i>'+t('در گالری پروژه','In the project gallery')+'</span>' : '<span class="i8-st"><i></i>'+t('فقط با لینک','Link only')+'</span>')+
+      (can ? '<button class="rbx-icbtn i8-omenu" type="button" data-omenu="'+esc(o.id)+'" aria-haspopup="menu" aria-label="'+esc(t('بیشتر','More'))+'">'+ic('dots-three')+'</button>' : '')+'</span>'+
+      dash({ id:o.id, hue:((i+2)%6)+1, icon:'layout', types:[tyOf(first.type||(first.q&&first.q.type)), 'bar'] })+
+      '<span class="i8-use">'+ic('user-circle')+'<span>'+esc(pname(x.by||o.owner))+'</span><span class="i8-dot">·</span><span>'+num(n)+' '+t('نمودار', n===1?'chart':'charts')+'</span><span class="i8-dot">·</span><span>'+num(x.used||0)+' '+t('بار استفاده',(x.used||0)===1?'use':'uses')+'</span></span></div>'; }
+  function orgById(id){ return orgList().filter(function(o){ return o.id===id; })[0]; }
+
+  /* ── one use-case template: role cards on the side, the dashboard preview on the canvas (Amplitude's starter-template page) ── */
+  function track(id){ return CATL.track(id, HAS_RB ? RB.evById(id) : null); }
+  function roleCardT(x, r){
+    var bb=bindings(x), id=bb.b[r.id], auto=bb.auto[r.id], n=CATL.charts(x).filter(function(c){ return CATL.uses(c, r.id); }).length;
+    var h='<div class="tg-role'+(id?'':' empty')+'" data-role="'+r.id+'"><div class="tg-rhead"><b>'+esc(t(r.fa,r.en))+'</b><span class="tg-rn">'+num(n)+' '+t('نمودار', n===1?'chart':'charts')+'</span></div>'+
+      '<div class="tg-rdef">'+esc(t(r.dFa,r.dEn))+'</div>';
+    if (id){
+      h+='<div class="tg-rbind"><button class="tg-ev" type="button" data-pick="'+r.id+'">'+ic('lightning')+'<span>'+esc(rbEvName(id))+'</span><span class="rbx-caret">⌄</span></button>'+
+        '<button class="rbx-icbtn" type="button" data-clear="'+r.id+'" aria-label="'+esc(t('برداشتن ایونت','Remove event'))+'" title="'+esc(t('برداشتن ایونت','Remove event'))+'">×</button></div>';
+      /* TG-11: the same event may serve two roles; the card names the other role, nothing is blocked */
+      var oth=x.roles.filter(function(o){ return o.id!==r.id && bb.b[o.id]===id; });
+      if (oth.length){ var nm=oth.map(function(o){ return t('«'+esc(o.fa)+'»','“'+esc(o.en)+'”'); }).join(t('، ',', '));
+        h+='<div class="rbx-callout warn tg-dup">'+ic('warning')+'<span>'+t('این ایونت به نقش '+nm+' هم وصل است. نمودارها مثل قبل حساب می‌شوند، ولی قیفی که دو قدمش یک ایونت باشد معمولا معنای زیادی ندارد.','This event is also bound to '+nm+'. The charts compute as usual, but a funnel whose two steps are one event rarely means much.')+'</span></div>'; }
+      if (auto) h+='<span class="tg-auto"'+tip("<span class='tip-title'>اتصال خودکار</span>این پروژه ایونت استاندارد همین نقش را می‌فرستد، پس شاهین خودش آن را وصل کرد. با کلیک روی ایونت عوضش کنید.","<span class='tip-title'>Bound automatically</span>This project sends the role’s standard event, so Shahin bound it for you. Click the event to change it.")+'>'+ic('check-circle')+t('خودکار وصل شد','Bound automatically')+'</span>';
+    } else {
+      var reg=r.prefer[0];
+      h+='<button class="sh-btn ghost compact tg-add" type="button" data-pick="'+r.id+'">'+ic('plus')+' '+t('انتخاب ایونت','Pick an event')+'</button>';
+      if (!rbSent(reg) && ((HAS_RB && RB.evById(reg)) || CATL.REG[reg])) h+='<div class="tg-track"><span>'+t('این پروژه ایونت استاندارد این نقش را نمی‌فرستد. دولوپر شما با این خط اضافه‌اش می‌کند:','This project doesn’t send the role’s standard event. Your developer adds it with:')+'</span><pre dir="ltr">'+esc(track(reg))+'</pre>'+
+        '<button class="sh-btn ghost compact" type="button" data-copytrack="'+esc(reg)+'">'+ic('copy')+' '+t('کپی کد','Copy code')+'</button></div>';
+    }
+    return h+'</div>'; }
+  function evIdsOf(o, acc){ acc=acc||[]; if (typeof o==='string'){ if (HAS_RB && RB.evById(o)) acc.push(o); } else if (Array.isArray(o)) o.forEach(function(v){ evIdsOf(v, acc); }); else if (o && typeof o==='object') Object.keys(o).forEach(function(k){ if (k!=='groupBy' && k!=='prop' && k!=='gb') evIdsOf(o[k], acc); }); return acc; }
+  function tileT(x, c, i, b){
+    if (c.k==='text') return '<div class="tg-tile text">'+t(c.fa, c.en)+'</div>';
+    var L=CATL.typeLbl(c.type), miss=x.roles.filter(function(r){ return CATL.uses(c, r.id) && !b[r.id]; });
+    var h='<div class="tg-tile"><div class="tg-tilet">'+esc(t(c.fa, c.en))+'</div><div class="tg-tiled"><span class="tg-type">'+t(L[0],L[1])+'</span><span>'+rangeLbl(c.range)+'</span></div>'+tileSvg({ type:c.type==='stick'?'bar':c.type }, i);
+    /* TG-9: a project with no data shows the no-data line on every chart card, never a zero (checked before the role wait) */
+    if (rbNoData()) h+='<span class="tg-ready first">'+ic('clock')+t('این نمودار برای این بازه داده‌ای ندارد.','This chart has no data for this range.')+'</span>';
+    else if (miss.length) h+='<div class="tg-wait">'+ic('link-break')+'<span>'+t('منتظر ایونت برای نقش ','Waiting for an event for ')+miss.map(function(r){ return '<button type="button" class="tg-evlink" data-pick="'+r.id+'">'+esc(t(r.fa,r.en))+'</button>'; }).join(t('، ',', '))+'</span></div>';
+    else { var ids=evIdsOf(CATL.fill(c.amp, b)); h+=ids.every(rbSent) ? '<span class="tg-ready">'+ic('check-circle')+t('داده این نمودار در حال رسیدن است','This chart’s data is arriving')+'</span>' : '<span class="tg-ready first">'+ic('clock')+t('آماده؛ با رسیدن داده پر می‌شود','Ready; fills as data arrives')+'</span>'; }
+    return h+'</div>'; }
+  function tplView(){
+    var x=utpl(S.view.slice(4)); if (!x || !rbFresh()){ S.view='gallery'; return galleryView(); }
+    var b=bindings(x).b, miss=unbound(x), sv=canSave(), can=sv && !miss.length, done=S.saved.filter(function(s){ return s.cat===S.view && s.proj===PROJ; }).slice(-1)[0];
+    var h='<div class="tg-starter"><button class="rbx-crumb" type="button" data-back="1">'+ic(curLang()==='fa'?'arrow-right':'arrow-left')+t('بازگشت به گالری تمپلیت‌ها','Back to the template gallery')+'</button>';
+    h+='<div class="rbx-head">'+ic(x.icon).replace('class="ph"','class="ph" style="width:20px;height:20px;color:var(--sh-brand)"')+'<span class="rbx-title">'+esc(t(x.fa,x.en))+'</span>'+
+      '<span class="rbx-badge">'+ic('layout')+t('قالب شاهین','Shahin template')+'</span><span class="rbx-badge">'+t('کاربرد','Use case')+'</span><span class="rbx-spacer"></span>'+
+      '<button class="sh-btn ghost compact" type="button" data-tplink="'+x.id+'">'+ic('link')+' '+t('کپی لینک','Copy link')+'</button>'+
+      '<button class="sh-btn primary compact" id="capSave" type="button"'+(can?'':' disabled aria-disabled="true"')+(sv?'':' title="'+esc(t(NO_SAVE[0],NO_SAVE[1]))+'"')+'>'+ic('floppy-disk')+' '+t('ذخیره به‌عنوان داشبورد','Save as dashboard')+'</button></div>';
+    var u=usage(x.id);
+    h+='<div class="rbx-sub">'+esc(t(x.dFa,x.dEn))+'</div><div class="i8-tmeta">'+useLine(u.n, u.last)+'</div>';
+    if (!sv) h+='<div class="rbx-callout tg-nosave" id="capNoSave">'+ic('lock-simple')+'<span>'+t(NO_SAVE[0], NO_SAVE[1])+'</span></div>';
+    if (done) h+='<div class="rbx-callout good" id="capSaved">'+ic('check-circle')+'<span>'+t('داشبورد «'+esc(done.name)+'» در «'+esc(done.spFa)+'» ساخته شد؛ نمودارهایش مال شماست. ','Dashboard “'+esc(done.name)+'” was created in “'+esc(done.spEn)+'”; its charts are yours. ')+
+      '<a class="cap-link" href="'+esc(done.href)+'">'+t('باز کردن در گزارش‌ساز','Open in the report builder')+'</a></span></div>';
+    if (rbNoData()) h+='<div class="rbx-callout warn">'+ic('info')+'<span>'+t('این پروژه هنوز داده‌ای ندارد؛ نمودارها با رسیدن اولین داده خودشان پر می‌شوند.','This project has no data yet; the charts fill in on their own once the first data arrives.')+'</span></div>';
+    if (miss.length) h+='<div class="rbx-callout warn tg-blocked">'+ic('warning')+'<span>'+t('برای ذخیره، به هر نقش یک ایونت بدهید. ','Give every role an event to save. ')+t('نقش‌های خالی: ','Empty roles: ')+miss.map(function(r){ return '«'+esc(t(r.fa,r.en))+'»'; }).join(t('، ',', '))+'</span></div>';
+    h+='<div class="tg-split solo"><aside class="tg-roles" aria-label="'+esc(t('ایونت‌های قالب','Template events'))+'"><div class="tg-rolesh"><b'+
+      tip("<span class='tip-title'>ایونت‌های قالب</span>هر نقش جای یک ایونت است. اگر این پروژه ایونت استاندارد نقش را بفرستد خودکار وصل می‌شود؛ وگرنه از ایونت‌های همین پروژه یکی را انتخاب کنید.",
+          "<span class='tip-title'>Template events</span>Each role is a slot for one event. If this project sends the role’s standard event it binds itself; otherwise pick one of this project’s events.")+'>'+t('ایونت‌های قالب','Template events')+'</b></div>'+
+      (x.roles.length ? x.roles.map(function(r){ return roleCardT(x, r); }).join('') : '<div class="tg-rdef">'+t('این قالب فقط ایونت‌هایی را می‌خواهد که کد شاهین خودش جمع می‌کند؛ تنظیمی لازم ندارد.','This template only needs events the Shahin snippet collects on its own; there is nothing to set.')+'</div>')+
+      '</aside></div>';
+    return h; }
+
+  /* ── the event picker of a role: suggestions (the role's own registry events the project sends), then every event the project sends ── */
+  function overlay(title, sub, body, foot){
+    closeModal();
+    var ov=document.createElement('div'); ov.className='rbx-ov'; ov.id='capOv';
+    ov.innerHTML='<div class="rbx-modal" role="dialog" aria-modal="true" aria-labelledby="capMTitle"><div class="rbx-mhead"><span class="rbx-mtitle" id="capMTitle">'+title+'</span><button class="rbx-mx" type="button" data-mclose="1" aria-label="'+esc(t('بستن','Close'))+'">×</button></div>'+
+      (sub?'<div class="rbx-msub">'+sub+'</div>':'')+'<div class="rbx-mbody">'+body+'</div><div class="rbx-mfoot"><span class="rbx-spacer"></span>'+foot+'</div></div>';
+    document.body.appendChild(ov); requestAnimationFrame(function(){ ov.classList.add('show'); });
+    ov.addEventListener('mousedown', function(e){ if (e.target===ov) closeModal(); });
+    ov.addEventListener('click', function(e){ if (e.target.closest('[data-mclose]')) closeModal(); });
+    modalClose=closeModal; return ov; }
+  function picker(x, r){
+    var b=bindings(x).b, Q='';
+    function list(){
+      var sug=r.prefer.filter(rbSent), rest=rbSentList().filter(function(e){ return sug.indexOf(e.id)<0; }), q=Q.toLowerCase();
+      function hit(e){ return !q || (e.fa+' '+e.en+' '+e.id).toLowerCase().indexOf(q)>-1; }
+      function row(e, s){ return '<button class="rbx-pickrow tg-pickrow'+(b[r.id]===e.id?' on':'')+'" data-ev="'+esc(e.id)+'" type="button">'+ic(s?'star':'lightning')+'<span class="grow">'+esc(t(e.fa,e.en))+'</span><span class="tg-evid" dir="ltr">'+esc(e.id)+'</span></button>'; }
+      var S1=sug.map(function(id){ return RB.evById(id); }).filter(hit), S2=rest.filter(hit), h='';
+      if (S1.length) h+='<div class="tg-pickh">'+t('پیشنهاد برای این نقش','Suggested for this role')+'</div>'+S1.map(function(e){ return row(e, true); }).join('');
+      if (S2.length) h+='<div class="tg-pickh">'+t('همه ایونت‌های این پروژه','All of this project’s events')+'</div>'+S2.map(function(e){ return row(e, false); }).join('');
+      return h || '<div class="sh-state"><div class="sh-state-title">'+t('ایونتی پیدا نشد','No events found')+'</div><div class="sh-state-hint">'+t('این پروژه هنوز ایونتی با این نام نفرستاده.','This project hasn’t sent an event by that name yet.')+'</div></div>'; }
+    var ov=overlay(esc(t('ایونت نقش «'+r.fa+'»','Event for “'+r.en+'”')), esc(t(r.dFa, r.dEn)),
+      '<input class="sh-input" id="capPickQ" type="search" aria-label="'+esc(t('جستجوی ایونت','Search events'))+'" placeholder="'+esc(t('جستجوی ایونت…','Search events…'))+'"/><div class="rbx-pick tg-picklist" id="capPickL">'+list()+'</div>',
+      '<button class="sh-btn ghost compact" type="button" data-mclose="1">'+t('انصراف','Cancel')+'</button>');
+    ov.addEventListener('click', function(e){ var y=e.target.closest('[data-ev]'); if (!y) return; setPick(x, r.id, y.getAttribute('data-ev')); closeModal(); paint(); });
+    $('capPickQ').addEventListener('input', function(e){ Q=e.target.value; $('capPickL').innerHTML=list(); });
+    setTimeout(function(){ var f=$('capPickQ'); if (f) f.focus(); }, 60); }
+
+  /* ── a customer template's ⋯ menu (TG-14 copy here; editing, publishing and removing open the template dashboard in the builder) ── */
+  function closeMenu(){ var m=$('capMenu'); if (m && m.parentNode) m.parentNode.removeChild(m); }
+  function orgMenu(anchor, o){
+    closeMenu();
+    var cp=canSave(), m=document.createElement('div'); m.className='i8-menu'; m.id='capMenu'; m.setAttribute('role','menu');
+    function it(k, icon, fa, en, dis, hint){ return '<button class="i8-mi" type="button" role="menuitem" data-mi="'+k+'"'+(dis?' disabled':'')+'>'+ic(icon)+'<span class="grow">'+t(fa,en)+(hint?'<small>'+t(hint[0],hint[1])+'</small>':'')+'</span></button>'; }
+    m.innerHTML=it('open','arrow-square-out','باز کردن قالب در گزارش‌ساز','Open the template in the report builder')+
+      it('link','link','کپی لینک','Copy link')+
+      it('copy','copy','کپی به پروژه دیگر…','Copy to another project…', !cp, !cp?['فقط مالک یا ادمین پروژه','Project owner or admin only']:null)+
+      '<div class="i8-msep"></div>'+it('edit','pencil-simple','ویرایش، انتشار یا برداشتن قالب','Edit, publish or remove the template', false, ['در صفحه قالب در گزارش‌ساز','On the template’s page in the report builder']);
+    document.body.appendChild(m);
+    var r=anchor.getBoundingClientRect(), w=m.offsetWidth, rtl=document.documentElement.dir==='rtl';
+    m.style.top=(r.bottom+window.scrollY+4)+'px';
+    m.style.left=Math.max(8, Math.min(window.innerWidth-w-8, rtl ? r.left+window.scrollX : r.right+window.scrollX-w))+'px';
+    m.addEventListener('click', function(e){ var y=e.target.closest('[data-mi]'); if (!y || y.disabled) return; var k=y.getAttribute('data-mi'); closeMenu();
+      if (k==='open' || k==='edit') location.href=boardHref(o.id);
+      else if (k==='link') copyText(location.origin+location.pathname.replace(/events-start\/[^/]*$/,'report-builder/v12.html')+'?board='+encodeURIComponent(o.id), 'لینک قالب کپی شد؛ فقط اعضای همین پروژه بازش می‌کنند','Template link copied; only members of this project can open it');
+      else if (k==='copy') copyModal(o); });
+    setTimeout(function(){ var f=m.querySelector('[data-mi]'); if (f) f.focus(); }, 0); }
+  function copyText(s, fa, en){ try{ var pr=navigator.clipboard && navigator.clipboard.writeText(s); if (pr && pr.catch) pr.catch(function(){}); }catch(e){} toast(fa, en); }
+  /* TG-14: the copy carries the charts, text, instructions and replacements; in the target project its events bind again */
+  function snapshot(o){
+    var cards=o.cards.map(function(c){ if (c.k==='text') return { k:'text', w:c.w||12, fa:c.fa, en:c.en||c.fa };
+      return c.q ? { w:c.w||6, fa:c.fa, en:c.en, type:c.type, q:JSON.parse(JSON.stringify(c.q)) } : { w:6, fa:c.fa, en:c.en, type:c.type, q:{ amp:JSON.parse(JSON.stringify(c.amp)), range:c.range||'7d', filters:[] } }; });
+    var evs=[]; cards.forEach(function(c){ if (c.q) evIdsOf(c.q, evs); }); evs=evs.filter(function(e, i){ return evs.indexOf(e)===i; });
+    var x=o.tpl;
+    return { id:'tplx'+PROJ+'_'+String(o.id).replace(/[^\w-]/g,'')+'_'+Date.now().toString(36), fa:o.fa, en:o.en, descFa:'', descEn:'', cards:cards, evs:evs,
+      instr:x.instr||'', events:(x.events||[]).slice(), props:(x.props||[]).slice(), texts:(x.texts||[]).slice(), from:PROJ, at:Date.now() }; }
+  function copyModal(o){
+    if (!canSave()){ toast('فقط مالک یا ادمین پروژه','Project owner or admin only'); return; }
+    var tg=PROJ_NAMES.map(function(p, i){ return i; }).filter(function(i){ return i!==PROJ; });
+    overlay(t('کپی به پروژه دیگر','Copy to another project'), t('قالب با همان نمودارها، راهنما و جایگزینی‌ها در پروژه مقصد ساخته می‌شود. این قالب و داشبوردش تغییری نمی‌کنند.','The template is created in the target project with the same charts, instructions and replacements. This template and its dashboard don’t change.'),
+      '<label class="rbx-field"><span>'+t('پروژه مقصد','Target project')+'</span><select class="sh-input" id="capXProj">'+tg.map(function(p){ return '<option value="'+p+'">'+esc(t(PROJ_NAMES[p][0], PROJ_NAMES[p][1]))+'</option>'; }).join('')+'</select>'+
+        '<span class="rbx-note">'+t('فقط پروژه‌هایی که عضوشان هستید.','Only projects you’re a member of.')+'</span></label>'+
+      '<div class="rbx-callout">'+ic('info')+'<span>'+t('در پروژه مقصد، هر ایونتی که آن پروژه می‌فرستد خودکار وصل می‌شود. برای ایونتی که آن پروژه نمی‌فرستد، همان‌جا پیش از ذخیره جایگزین انتخاب می‌کنید.','In the target project, each event that project sends is bound automatically. For an event it doesn’t send, you pick a replacement there before saving.')+'</span></div>',
+      '<button class="sh-btn ghost compact" type="button" data-mclose="1">'+t('انصراف','Cancel')+'</button><button class="sh-btn primary compact" type="button" id="capXGo">'+t('کپی','Copy')+'</button>');
+    $('capXGo').addEventListener('click', function(){
+      var p=+$('capXProj').value;
+      if (!CATL.writeCopies(p, CATL.readCopies(p).concat([snapshot(o)]))){ toast('کپی انجام نشد؛ دوباره تلاش کنید','The copy failed; try again'); return; }
+      closeModal(); var nm=t(o.fa, o.en), pn=t(PROJ_NAMES[p][0], PROJ_NAMES[p][1]);
+      toast('قالب «'+nm+'» در پروژه «'+pn+'» کپی شد؛ ایونت‌هایی که آن پروژه می‌فرستد خودکار وصل می‌شوند','Template “'+nm+'” copied to “'+pn+'”; events that project sends are bound automatically'); }); }
+
+  /* ─────────── paint (never calls Shahin.i18n → no lang loop) ─────────── */
+  function paint(){
+    var main=$('capMain'), q=$('capQ'), hadFocus=q && document.activeElement===q, pos=hadFocus?q.selectionStart:0;
+    main.innerHTML = S.view==='gallery' ? galleryView() : S.view.indexOf('tpl:')===0 ? tplView() : starterView();
+    if (window.Shahin && Shahin.tooltips) Shahin.tooltips();
+    if (hadFocus){ var q2=$('capQ'); if (q2){ q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} } }
+  }
+  function openCat(id, packId){
+    if (!CATMAP[id]) return;
+    S.view=id; S.recent=[id].concat(S.recent.filter(function(x){ return x!==id; })).slice(0,6);
+    if (packId) S.packOpen[packId]=true;
+    paint(); window.scrollTo(0,0);
+  }
+  function gotoRole(k){
+    var pid=k.split('__')[0]; S.packOpen[pid]=true; paint();
+    var el=$('role-'+k); if (!el) return;
+    el.scrollIntoView({ block:'center' }); el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 1600);
+  }
+  function toggleImpl(k){
+    var m=impl(); m[k]=!m[k];
+    var n=k.split('__')[1];
+    if (m[k]) toast('افزودن کد ایونت «'+n+'» ثبت شد؛ منتظر اولین داده این ایونت هستیم و به‌محض رسیدن به شما خبر می‌دهیم.',
+                    'Code for “'+n+'” marked as added; we’re waiting for this event’s first data and will let you know when it arrives.');
+    paint();
+  }
+
+  /* ─────────── project switch: re-render in place (no reload), keep ?project= in step ─────────── */
+  window.shahinBeforeProjectSwitch = function(pick){
+    pick();
+    PROJ = readProject(true);
+    if (qs.get('project')!=null){ qs.set('project', String(PROJ)); try{ history.replaceState(null, '', location.pathname+'?'+qs.toString()); }catch(e){} }
+    paint();
+  };
+
+  /* ─────────── interactions (delegated) ─────────── */
+  function openTpl(id){ S.view='tpl:'+id; S.recent=[S.view].concat(S.recent.filter(function(x){ return x!==S.view; })).slice(0,6); paint(); window.scrollTo(0,0); }
+  function curTpl(){ return S.view.indexOf('tpl:')===0 ? utpl(S.view.slice(4)) : null; }
+  /* the use-case template in the save modal's own shape (a category's fields) */
+  function tplSave(x){ return { id:'tpl:'+x.id, tpl:x.id, fa:x.fa, en:x.en, dFa:x.dFa, dEn:x.dEn, tiles:CATL.charts(x).map(function(c){ return { fa:c.fa, en:c.en, type:c.type }; }) }; }
+  document.addEventListener('mousedown', function(e){ if ($('capMenu') && !e.target.closest('#capMenu') && !e.target.closest('[data-omenu]')) closeMenu(); });
+  $('capMain').addEventListener('keydown', function(e){ var x=e.target.closest('[data-orgo]'); if (x && e.key==='Enter' && e.target===x) location.href=boardHref(x.getAttribute('data-orgo')); });
+  $('capMain').addEventListener('click', function(e){
+    var x;
+    if ((x=e.target.closest('[data-omenu]'))){ e.stopPropagation(); var o=orgById(x.getAttribute('data-omenu')); if ($('capMenu')) closeMenu(); else if (o) orgMenu(x, o); return; }
+    if ((x=e.target.closest('[data-orgo]'))){ location.href=boardHref(x.getAttribute('data-orgo')); return; }
+    if ((x=e.target.closest('[data-tplo]'))){ openTpl(x.getAttribute('data-tplo')); return; }
+    if ((x=e.target.closest('[data-tplink]'))){ copyText(location.origin+location.pathname+'?tpl='+encodeURIComponent(x.getAttribute('data-tplink')), 'لینک قالب کپی شد؛ فقط اعضای همین پروژه بازش می‌کنند','Template link copied; only members of this project can open it'); return; }
+    if ((x=e.target.closest('[data-copytrack]'))){ copyText(track(x.getAttribute('data-copytrack')), 'کد کپی شد','Code copied'); return; }
+    if ((x=e.target.closest('[data-pick]')) && curTpl()){ var ct=curTpl(), r=ct.roles.filter(function(y){ return y.id===x.getAttribute('data-pick'); })[0]; if (r) picker(ct, r); return; }
+    if ((x=e.target.closest('[data-clear]')) && curTpl()){ setPick(curTpl(), x.getAttribute('data-clear'), ''); paint(); return; }
+    if ((x=e.target.closest('.cap-copy'))){ e.stopPropagation(); var code=x.getAttribute('data-code'); try{ var pr=navigator.clipboard && navigator.clipboard.writeText(code); if (pr && pr.catch) pr.catch(function(){}); }catch(er){} toast('اسکیما کپی شد.', 'Schema copied.'); return; }
+    if ((x=e.target.closest('[data-impl]'))){ toggleImpl(x.getAttribute('data-impl')); return; }
+    if ((x=e.target.closest('[data-sch]'))){ var k=x.getAttribute('data-sch'); S.sch[k]=!S.sch[k]; paint(); return; }
+    if ((x=e.target.closest('[data-goto]'))){ gotoRole(x.getAttribute('data-goto')); return; }
+    if ((x=e.target.closest('[data-packh]'))){ var p=x.getAttribute('data-packh'), cur=x.getAttribute('aria-expanded')==='true'; S.packOpen[p]=!cur; paint(); return; }
+    if ((x=e.target.closest('[data-open]'))){ openCat(x.getAttribute('data-open'), x.getAttribute('data-pack')); return; }
+    if ((x=e.target.closest('[data-ind]'))){ S.ind=x.getAttribute('data-ind'); paint(); return; }
+    if ((x=e.target.closest('[data-use]'))){ S.use=x.getAttribute('data-use'); paint(); return; }
+    if ((x=e.target.closest('[data-sec]'))){ S.sec=x.getAttribute('data-sec'); S.q=''; paint(); return; }
+    if ((x=e.target.closest('[data-back]'))){ S.view='gallery'; paint(); return; }
+    if ((x=e.target.closest('#capSave'))){ var ct2=curTpl();
+      if (x.disabled){ if (ct2 && canSave()) toast('برای ذخیره، به هر نقش یک ایونت بدهید.','Give every role an event to save.'); else toast(NO_SAVE[0], NO_SAVE[1]); return; }
+      saveModal(ct2 ? tplSave(ct2) : CATMAP[S.view]); return; }
+  });
+  $('capMain').addEventListener('input', function(e){ if (e.target.id==='capQ'){ S.q=e.target.value; paint(); } });
+  addEventListener('keydown', function(e){
+    if (e.key!=='Escape') return;
+    if ($('capMenu')){ closeMenu(); return; }
+    if (modalClose){ modalClose(); return; }
+    if (S.view!=='gallery' && !document.querySelector('#gtt[style*="block"]')){ S.view='gallery'; paint(); } });
+  $('capRetry').addEventListener('click', function(){ mode('main'); paint(); });
+  /* keep dynamic bilingual text in sync when language flips (handler ONLY re-paints) */
+  document.addEventListener('shahin:lang', function(){ paint(); });
+  document.querySelectorAll('[data-ic]').forEach(function(el){ el.innerHTML=ic(el.getAttribute('data-ic')); });
+
+  /* ─────────── view mode ─────────── */
+  function mode(m){
+    $('capLoading').hidden = (m!=='loading');
+    $('capError').hidden   = (m!=='error');
+    $('capDenied').hidden  = (m!=='denied');
+    $('capMain').hidden    = (m!=='main');
+  }
+
+  /* ─────────── boot: QA deep links (?state=loading|error|denied, ?tpl=commerce|content|cross|exchange or a use-case template id,
+     ?sec=all|recent|biz|usecase|project|mine|full|wait, ?prole=…, ?project=0–3) ─────────── */
+  var st = qs.get('state');
+  if (st==='loading'){ mode('loading'); }
+  else if (st==='error'){ mode('error'); }
+  else if (st==='denied'){ mode('denied'); }
+  else {
+    mode('main');
+    if (qs.get('tpl') && CATMAP[qs.get('tpl')]){ S.view=qs.get('tpl'); S.recent=[S.view]; }
+    else if (qs.get('tpl') && CATS.some(function(c){ return c.tpl===qs.get('tpl'); })){ S.view=CATS.filter(function(c){ return c.tpl===qs.get('tpl'); })[0].id; S.recent=[S.view]; }   /* the builder's id (store, media, video, exchange) */
+    else if (qs.get('tpl') && !SCOPE_BIZ && utpl(qs.get('tpl'))){ S.view='tpl:'+qs.get('tpl'); S.recent=[S.view]; }
+    if (qs.get('sec') && inScope(qs.get('sec')) && ['all','recent','biz','usecase','project','mine','full','wait'].indexOf(qs.get('sec'))>-1) S.sec=qs.get('sec');
+    paint();
+  }
+  window.CAPv7 = { state:S, stats:allStats, canSave:canSave, prole:PROLE, project:function(){ return PROJ; } };   /* QA */
+})();
+</script>
+<script src="../assets/shahin-responsive.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<svg width="5760" height="6480" viewBox="0 0 5760 6480" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g style="mix-blend-mode:luminosity">
+<g style="mix-blend-mode:multiply" opacity="0.25">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1152 6480L1152 1524L3456 1524L3456 6480L1152 6480Z" fill="#A9AEB9"/>
+</g>
+<g style="mix-blend-mode:multiply" opacity="0.25">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000107482 6480L0 4272L2304 4272L2304 6480L0.000107482 6480Z" fill="#A9AEB9"/>
+</g>
+<g style="mix-blend-mode:multiply" opacity="0.25">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2304 6480L2304 0L4608 -9.55444e-05L4608 6480L2304 6480Z" fill="#969CA7"/>
+</g>
+<g style="mix-blend-mode:multiply" opacity="0.25">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3456 6480L3456 3054L5760 3054L5760 6480L3456 6480Z" fill="#969CA7"/>
+</g>
+</g>
+</svg>
